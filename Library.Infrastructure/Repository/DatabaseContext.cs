@@ -34,5 +34,6 @@ namespace Library.Infrastructure.Repository
             }
         }
         public DbSet<EStudent> Students { get; set; }  
+        public DbSet<EBook> Books { get; set; }
     }
 }

@@ -9,14 +9,14 @@ namespace Library.Domain.Entities
 {
     public class EIssueTable
     {
-        public int Issue_Id { get; set; }
-        public DateTime Issued_Date{ get; set; }
-        public DateTime Return_Date{ get; set; }
+        public int Id { get; set; }
+        public DateTime IssuedDate{ get; set; }
+        public DateTime ReturnDate{ get; set; }
         public IssuedStatus IssuedStatus{ get; set; }
         //Foreign Key
-        public int Book_Id { get; set; }
-        public int Student_Id { get; set; }
-        public int Staff_Id { get; set; }
+        public int BookId { get; set; }
+        public int StudentId { get; set; }
+        public int StaffId { get; set; }
     }
 
    

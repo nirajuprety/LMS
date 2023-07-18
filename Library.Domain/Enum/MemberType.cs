@@ -4,9 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Library.Domain.Entities
+namespace Library.Domain.Enum
 {
-    internal class FileName
+    public  enum MemberType
     {
+        Staff,
+        Student
     }
 }

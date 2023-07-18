@@ -32,7 +32,7 @@ namespace Library.Application.Manager.Implementation
                     Faculty = studentRequest.Faculty,
                     RollNo = studentRequest.RollNo,
                     StudentCode = studentRequest.StudentCode,
-                };
+                }; 
                 var result = await _service.CreateStudent(parse);
                 return result;
             } catch (Exception ex) {

@@ -1,4 +1,5 @@
-﻿using Library.Domain.Interface;
+﻿using Library.Domain.Enum;
+using Library.Domain.Interface;
 using Library.Infrastructure.Repository;
 using Library.Infrastructure.Service;
 using Microsoft.EntityFrameworkCore;
@@ -21,6 +22,7 @@ namespace Library.Infrastructure
 
             services.AddScoped<IStudentService, StudentService>();
             services.AddScoped<IBookService, BookService>();
+       
         
             return services;
         }

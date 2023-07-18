@@ -33,6 +33,7 @@ namespace Library.Infrastructure.Repository
                 optionsBuilder.UseNpgsql(connectionString);
             }
         }
-        public DbSet<EStudent> Students { get; set; }  
+        public DbSet<EStudent> Students { get; set; }
+        public DbSet<EStaff> Staffs { get; set;}
     }
 }

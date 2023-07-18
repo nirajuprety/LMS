@@ -16,6 +16,7 @@ namespace Library.Application
         public static IServiceCollection AddInApplicationServices(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddScoped<IStudentManager, StudentManager>();
+            services.AddScoped<IBookManager,BookManager>();
 
             return services;
         }

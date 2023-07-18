@@ -137,7 +137,7 @@ namespace Library.Infrastructure.Repository
         }
         public IServiceReprository<t> GetInstance<t>() where t : class
         {
-            return new ServiceRepository<t>(db);
+            return new ServiceReprository<t>(db);
         }
 
         public void BeginTransaction()

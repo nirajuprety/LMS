@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Library.Domain.Interface
 {
-    public interface IStudent
+    public interface IStudentService
     {
         Task<bool> CreateStudent(EStudent eStudent);
         Task<List<EStudent>> GetStudents();

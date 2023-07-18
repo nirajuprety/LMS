@@ -68,11 +68,9 @@ namespace Library.Infrastructure.Service
             }
             catch (Exception ex)
             {
-               throw ex;
+               throw;
             }
-
         }
-
         public async Task<List<EStudent>> GetStudents()
         {
             try

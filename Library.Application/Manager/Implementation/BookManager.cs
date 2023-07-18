@@ -4,11 +4,11 @@ using Library.Application.DTO.Response;
 using Library.Application.Manager.Interface;
 using Library.Domain.Entities;
 using Library.Domain.Interface;
+using Library.Infrastructure.Service;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
+using static Library.Infrastructure.Service.Common;
 
 namespace Library.Application.Manager.Implementation
 {
@@ -23,8 +23,10 @@ namespace Library.Application.Manager.Implementation
             _mapper = mapper;
         }
 
-        public async Task<bool> AddBook(BookRequest bookRequest)
+        public async Task<ServiceResult<bool>> AddBook(BookRequest bookRequest)
         {
+            var serviceResult = new ServiceResult<bool>();
+
             try
             {
                 var parse = new EBook()
@@ -33,74 +35,136 @@ namespace Library.Application.Manager.Implementation
                     Author = bookRequest.Author,
                     ISBN = bookRequest.ISBN,
                     PublicationDate = bookRequest.PublicationDate,
+                    UpdatedBy = bookRequest.UpdatedBy
                 };
+
                 var result = await _service.AddBook(parse);
-                return result;
+
+                serviceResult.Status = result ? StatusType.Success : StatusType.Failure;
+                serviceResult.Message = result ? "Book added successfully" : "Failed to add book";
+                serviceResult.Data = result;
+
+                return serviceResult;
             }
             catch (Exception ex)
             {
-                return false;
+                serviceResult.Status = StatusType.Failure;
+                serviceResult.Message = "An error occurred while adding the book";
+                serviceResult.Data = false;
+
+                return serviceResult;
             }
         }
 
-        public async Task<bool> DeleteBook(int id)
+        public async Task<ServiceResult<bool>> DeleteBook(int id)
         {
+            var serviceResult = new ServiceResult<bool>();
+
             try
             {
                 var book = await _service.GetBookByBookID(id);
                 if (book == null)
                 {
                     // Book does not exist
-                    return false;
+                    serviceResult.Status = StatusType.Failure;
+                    serviceResult.Message = "Book not found";
+                    serviceResult.Data = false;
+
+                    return serviceResult;
                 }
 
                 var result = await _service.DeleteBook(id);
-                return result;
+
+                serviceResult.Status = result ? StatusType.Success : StatusType.Failure;
+                serviceResult.Message = result ? "Book deleted successfully" : "Failed to delete book";
+                serviceResult.Data = result;
+
+                return serviceResult;
             }
             catch (Exception ex)
             {
-                // Handle any exceptions here
-                return false;
+                serviceResult.Status = StatusType.Failure;
+                serviceResult.Message = "An error occurred while deleting the book";
+                serviceResult.Data = false;
+
+                return serviceResult;
             }
         }
 
-
-
-        public async Task<BookResponse> GetBookById(int id)
+        public async Task<ServiceResult<BookResponse>> GetBookById(int id)
         {
+            var serviceResult = new ServiceResult<BookResponse>();
+
             try
             {
                 var book = await _service.GetBookByBookID(id);
+                if (book == null)
+                {
+                    serviceResult.Status = StatusType.Failure;
+                    serviceResult.Message = "Book not found";
+                    serviceResult.Data = null;
+
+                    return serviceResult;
+                }
+
                 var bookResponse = _mapper.Map<BookResponse>(book);
-                return bookResponse;
+
+                serviceResult.Status = StatusType.Success;
+                serviceResult.Message = "Book retrieved successfully";
+                serviceResult.Data = bookResponse;
+
+                return serviceResult;
             }
             catch (Exception ex)
             {
-                return null;
+                serviceResult.Status = StatusType.Failure;
+                serviceResult.Message = "An error occurred while retrieving the book";
+                serviceResult.Data = null;
+
+                return serviceResult;
             }
         }
 
-        public async Task<List<BookResponse>> GetBooks()
+        public async Task<ServiceResult<List<BookResponse>>> GetBooks()
         {
+            var serviceResult = new ServiceResult<List<BookResponse>>();
+
             try
             {
                 var books = await _service.GetBooks();
                 var bookResponses = _mapper.Map<List<BookResponse>>(books);
-                return bookResponses;
+
+                serviceResult.Status = StatusType.Success;
+                serviceResult.Message = "Books retrieved successfully";
+                serviceResult.Data = bookResponses;
+
+                return serviceResult;
             }
             catch (Exception ex)
             {
-                return null;
+                serviceResult.Status = StatusType.Failure;
+                serviceResult.Message = "An error occurred while retrieving the books";
+                serviceResult.Data = null;
+
+                return serviceResult;
             }
         }
 
-        public async Task<bool> UpdateBook(BookRequest bookRequest)
+        public async Task<ServiceResult<bool>> UpdateBook(BookRequest bookRequest)
         {
+            var serviceResult = new ServiceResult<bool>();
+
             try
             {
                 var book = await _service.GetBookByBookID(bookRequest.Id);
                 if (book == null)
-                    return false;
+                {
+                    serviceResult.Status = StatusType.Failure;
+                    serviceResult.Message = "Book not found";
+                    serviceResult.Data = false;
+
+                    return serviceResult;
+                }
 
                 book.Title = bookRequest.Title;
                 book.Author = bookRequest.Author;
@@ -108,11 +172,20 @@ namespace Library.Application.Manager.Implementation
                 book.PublicationDate = bookRequest.PublicationDate;
 
                 var result = await _service.UpdateBookStatus(book);
-                return result;
+
+                serviceResult.Status = result ? StatusType.Success : StatusType.Failure;
+                serviceResult.Message = result ? "Book updated successfully" : "Failed to update book";
+                serviceResult.Data = result;
+
+                return serviceResult;
             }
             catch (Exception ex)
             {
-                return false;
+                serviceResult.Status = StatusType.Failure;
+                serviceResult.Message = "An error occurred while updating the book";
+                serviceResult.Data = false;
+
+                return serviceResult;
             }
         }
     }

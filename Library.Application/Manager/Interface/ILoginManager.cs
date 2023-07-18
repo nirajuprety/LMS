@@ -10,11 +10,10 @@ namespace Library.Application.Manager.Interface
 {
     public interface ILoginManager
     {
-        public interface ILoginManager
-        {
+        
             Task<ServiceResult<bool>> LoginUser(LoginRequest request);
             Task<string> GetToken(LoginRequest request);
 
-        }
+        
     }
 }

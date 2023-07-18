@@ -14,13 +14,13 @@ using static Library.Infrastructure.Service.Common;
 namespace Library.Application.Manager.Implementation
 {
 
-    public class SatffManager:IStaffManager
+    public class StaffManager : IStaffManager
     {
         private readonly IStaffService _service = null;
-        //private readonly IloginService _serviceLogin = null;
+        private readonly ILoginService _serviceLogin = null;
         private readonly IMapper _mapper = null;
 
-        public SatffManager(IStaffService service, IMapper mapper, IloginService serviceLogin)
+        public StaffManager(IStaffService service, IMapper mapper, ILoginService serviceLogin)
         {
             _service = service;
             _mapper = mapper;
@@ -31,12 +31,34 @@ namespace Library.Application.Manager.Implementation
         {
             var vm = _mapper.Map<EStaff>(staffRequest);
 
-            var result = await _service.CreateStaff(vm);
-            return new ServiceResult<bool>()
+            //EStaff vm = new EStaff()
+            //{
+            //    IsActive = true,
+            //    CreatedDate = DateTime.Now,
+            //    Email = staffRequest.Email,
+            //    IsDeleted = false,
+            //    Name = staffRequest.Name,
+            //    Password = staffRequest.Password,
+            //    StaffCode = staffRequest.StaffCode,
+            //    StaffType = Domain.Enum.StaffType.Staff,
+            //    UpdatedDate = DateTime.Now,
+            //    Username = staffRequest.Username,
+            //};
+
+            int staffId = await _service.CreateStaff(vm);
+            ELogin login = new ELogin()
             {
-                Data = true,
-                Message = "Staff Signedup succesfully!",
-                Status = ResultStatus.Ok
+                Email = staffRequest.Email,
+                Password = staffRequest.Password,
+                StaffId = staffId
+            };
+            bool staffLogin = await _service.CreateLogin(login);
+            return new ServiceResult<bool>()
+
+            {
+                Data = staffLogin,
+                Message = staffLogin == true ? "Added successfully" : "unable to add the staff",
+                Status = staffLogin == true ? StatusType.Success : StatusType.Failure
             };
 
         }

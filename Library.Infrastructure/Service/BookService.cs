@@ -79,7 +79,7 @@ namespace Library.Infrastructure.Service
             try
             {
                 var service = _factory.GetInstance<EBook>();
-                var user = await service.FindAsync(eBook.Book_Id);
+                var user = await service.FindAsync(eBook.Id);
                 if (user == null)
                 {
                     return false;
@@ -91,7 +91,10 @@ namespace Library.Infrastructure.Service
                 await service.UpdateAsync(user);
                 return true;
             }
-            catch (Exception ex) { throw ex; }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
 
 

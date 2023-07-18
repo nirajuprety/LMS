@@ -9,6 +9,7 @@ namespace Library.Domain.Interface
 {
     public interface IStaffService
     {
-        Task<bool>CreateStaff(EStaff eStaff);
+        Task<int>CreateStaff(EStaff eStaff);
+        Task<bool> CreateLogin(ELogin log);
     }
 }

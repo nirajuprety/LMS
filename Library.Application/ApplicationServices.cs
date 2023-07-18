@@ -19,6 +19,7 @@ namespace Library.Application
             services.AddScoped<IBookManager, BookManager>();
             services.AddScoped<ILoginManager, LoginManager>();
             services.AddScoped<IStaffManager, StaffManager>();
+            services.AddScoped<IMemberManager, MemberManager>();
 
             return services;
         }

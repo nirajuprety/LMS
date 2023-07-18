@@ -25,6 +25,9 @@ namespace Library.Application.Manager.Implementation
         public async Task<bool> CreateStudent(StudentRequest studentRequest)
         {
             try {
+
+                //var model = _mapper.Map<EStudent>(studentRequest);
+
                 var parse = new EStudent()
                 {
                     FullName = studentRequest.FullName,
@@ -32,6 +35,7 @@ namespace Library.Application.Manager.Implementation
                     Faculty = studentRequest.Faculty,
                     RollNo = studentRequest.RollNo,
                     StudentCode = studentRequest.StudentCode,
+                    UpdatedBy = studentRequest.UpdatedBy
                 };
                 var result = await _service.CreateStudent(parse);
                 return result;

@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Library.Application.DTO.Request;
+using Library.Application.Manager.Interface;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -9,7 +11,8 @@ namespace LibraryManagementSystem.Controllers
     [ApiController]
     public class LoginController : ControllerBase
     {
-
+        private readonly ILoginManager _manager = null;
+        private readonly IConfiguration _configuration = null;
         public LoginController(ILoginManager manager, IConfiguration configuration)
         {
             _manager = manager;

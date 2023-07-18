@@ -17,6 +17,7 @@ namespace Library.Application
         {
             services.AddScoped<IStudentManager, StudentManager>();
             services.AddScoped<IBookManager,BookManager>();
+            services.AddScoped<ILoginManager,LoginManager>();
 
             return services;
         }

@@ -17,7 +17,7 @@ namespace Library.Domain.Entities
         public bool IsActive { get; set; }
         public bool IsDeleted { get; set; }
         public DateTime CreatedDate { get; set; }
-        public string UpdatedBy { get; set; }
+        public string UpdatedBy { get; set; } = "default";
 
     }
 }

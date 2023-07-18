@@ -22,7 +22,7 @@ namespace Library.Infrastructure.Service
             var users = _factory.GetInstance<ELogin>();
             var parse = new ELogin()
             {
-                Email = login.Email,
+                Username = login.Username,
                 Password = login.Password,
             };
             await users.AddAsync(parse);
@@ -45,14 +45,14 @@ namespace Library.Infrastructure.Service
         public async Task<bool> LoginUser(ELogin eLogin)
         {
             var user = _factory.GetInstance<ELogin>().ListAsync();
-            var userEmail = user.Result.Any(x => x.Email == eLogin.Email && x.Password == eLogin.Password);
+            var userEmail = user.Result.Any(x => x.Username == eLogin.Username && x.Password == eLogin.Password);
 
             return userEmail;
         }
         public async Task<bool> ValidateEmail(string email)
         {
             var userEmail = _factory.GetInstance<ELogin>().ListAsync();
-            bool IsValidEmail = userEmail.Result.Any(x => x.Email.ToLower() == email.ToLower());
+            bool IsValidEmail = userEmail.Result.Any(x => x.Username.ToLower() == email.ToLower());
             return IsValidEmail;
         }
     }

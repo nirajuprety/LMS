@@ -7,7 +7,7 @@ namespace LibraryManagementSystem.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class StaffController : Controller
+    public class StaffController : ControllerBase
     {
         private readonly IStaffManager _manager = null;
         public StaffController(IStaffManager manager)

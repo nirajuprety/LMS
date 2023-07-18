@@ -8,6 +8,24 @@ namespace Library.Infrastructure.Service
 {
     public class Common
     {
+<<<<<<< HEAD
+        public class ServiceResult<t>
+        {
+            public ResultStatus Status { get; set; }
+
+            public string Message { get; set; }
+
+            public t Data { get; set; }
+        }
+    }
+    public enum ResultStatus
+    {
+        Ok,
+        processError
+    }
+}
+
+=======
 
         public class ServiceResult<t>
         {
@@ -20,5 +38,6 @@ namespace Library.Infrastructure.Service
     {
         Success,
         Failure,
+>>>>>>> f88b524dea2df12d19388929a5d2f7ec55c67df7
     }
 }

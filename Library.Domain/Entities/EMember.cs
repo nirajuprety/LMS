@@ -13,7 +13,8 @@ namespace Library.Domain.Entities
         [Key]
         public int Id { get; set; }
         public string FullName { get; set; }
-        public string Address { get; set; }
+        //here address is change to email
+        public string Email { get; set; }
         public MemberType MemberType { get; set; }
         public int ReferenceId{ get; set; }
         public int MemberCode{ get; set; }

@@ -19,12 +19,14 @@ namespace Library.Application.Manager.Implementation
         private readonly IStaffService _service = null;
         private readonly ILoginService _serviceLogin = null;
         private readonly IMapper _mapper = null;
+        private readonly IMemberService _memberService = null;
 
-        public StaffManager(IStaffService service, IMapper mapper, ILoginService serviceLogin)
+        public StaffManager(IStaffService service, IMapper mapper, ILoginService serviceLogin, IMemberService memberService)
         {
             _service = service;
             _mapper = mapper;
             _serviceLogin = serviceLogin;
+            _memberService = memberService;
         }
 
         public async Task<ServiceResult<bool>> CreateStaff(StaffRequest staffRequest)
@@ -46,6 +48,19 @@ namespace Library.Application.Manager.Implementation
             //};
 
             int staffId = await _service.CreateStaff(vm);
+
+            //adding the staff information in Member table
+            EMember member = new EMember()
+            {
+                Email = staffRequest.Email,
+                FullName = staffRequest.Name,
+                MemberType = Domain.Enum.MemberType.Staff,
+                MemberCode = staffRequest.StaffCode,
+                ReferenceId = staffId,
+            };
+            await _memberService.CreateMember(member);
+            
+            //adding Login details to the LoginTable
             ELogin login = new ELogin()
             {
                 Email = staffRequest.Email,

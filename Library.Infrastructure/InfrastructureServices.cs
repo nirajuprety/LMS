@@ -23,7 +23,8 @@ namespace Library.Infrastructure
             services.AddScoped<IBookService, BookService>();
             services.AddScoped<ILoginService, LoginService>();
             services.AddScoped<IStaffService, StaffService>();
-        
+            services.AddScoped<IMemberService, MemberService>();
+
             return services;
         }
     }

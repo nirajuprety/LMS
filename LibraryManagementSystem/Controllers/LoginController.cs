@@ -39,7 +39,7 @@ namespace LibraryManagementSystem.Controllers
         {
             return new ServiceResult<bool>()
             {
-                Data = true,
+                Data = true, 
                 Message = "",
                 Status = StatusType.Success
             };

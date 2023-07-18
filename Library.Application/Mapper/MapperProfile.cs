@@ -14,6 +14,7 @@ namespace Library.Application.Mapper
         public MapperProfile()
         {
             CreateMap<StudentRequest, EStudent>();
+            CreateMap<StaffRequest, EStaff>();
         }
     }
 }

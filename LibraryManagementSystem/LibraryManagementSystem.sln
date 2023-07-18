@@ -3,13 +3,16 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.6.33723.286
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LibraryManagementSystem", "LibraryManagementSystem.csproj", "{B242C479-7F6B-48FC-B0A1-7A4354316574}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LibraryManagementSystem", "LibraryManagementSystem.csproj", "{B242C479-7F6B-48FC-B0A1-7A4354316574}"
+	ProjectSection(ProjectDependencies) = postProject
+		{0409D8AC-C91B-4C3D-9CA7-6F1EA282F666} = {0409D8AC-C91B-4C3D-9CA7-6F1EA282F666}
+	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Library.Domain", "..\Library.Domain\Library.Domain.csproj", "{DD95A8D8-DDB7-42D2-8A49-21AC789FCB61}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Library.Domain", "..\Library.Domain\Library.Domain.csproj", "{DD95A8D8-DDB7-42D2-8A49-21AC789FCB61}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Library.Infrastructure", "..\Library.Infrastructure\Library.Infrastructure.csproj", "{0409D8AC-C91B-4C3D-9CA7-6F1EA282F666}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Library.Infrastructure", "..\Library.Infrastructure\Library.Infrastructure.csproj", "{0409D8AC-C91B-4C3D-9CA7-6F1EA282F666}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Library.Application", "..\Library.Application\Library.Application.csproj", "{C0FFBDF3-A2D2-4FDF-A210-F6EB38ADFCA0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Library.Application", "..\Library.Application\Library.Application.csproj", "{C0FFBDF3-A2D2-4FDF-A210-F6EB38ADFCA0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

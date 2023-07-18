@@ -14,13 +14,13 @@ using static Library.Infrastructure.Service.Common;
 namespace Library.Application.Manager.Implementation
 {
 
-    public class SatffManager:IStaffManager
+    public class StaffManager:IStaffManager
     {
         private readonly IStaffService _service = null;
         //private readonly IloginService _serviceLogin = null;
         private readonly IMapper _mapper = null;
 
-        public SatffManager(IStaffService service, IMapper mapper, IloginService serviceLogin)
+        public StaffManager(IStaffService service, IMapper mapper, IloginService serviceLogin)
         {
             _service = service;
             _mapper = mapper;
@@ -36,7 +36,7 @@ namespace Library.Application.Manager.Implementation
             {
                 Data = true,
                 Message = "Staff Signedup succesfully!",
-                Status = ResultStatus.Ok
+                Status = StatusType.Success
             };
 
         }

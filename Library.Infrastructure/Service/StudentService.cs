@@ -108,5 +108,11 @@ namespace Library.Infrastructure.Service
                 throw ex;
             }
         }
+        public async Task<bool> IsUniqueEmail(string email)
+        {
+            var student = await _factory.GetInstance<EStudent>().ListAsync();
+            var result = student.Where(student => student.Email == email).Any();
+            return result;
+        }
     }
 }

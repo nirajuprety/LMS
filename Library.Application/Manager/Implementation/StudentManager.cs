@@ -29,6 +29,16 @@ namespace Library.Application.Manager.Implementation
             try
             {
                 var model = _mapper.Map<EStudent>(studentRequest);
+                var CheckEmail = await _service.IsUniqueEmail(studentRequest.Email);
+                if (CheckEmail == true)
+                {
+                    return new ServiceResult<bool>()
+                    {
+                        Data = false,
+                        Status = StatusType.Failure,
+                        Message = "Enter Unique Email"
+                    };
+                }
                 var result = await _service.CreateStudent(model);
                 return new ServiceResult<bool>()
                 {

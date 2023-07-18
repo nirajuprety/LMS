@@ -22,6 +22,7 @@ namespace Library.Infrastructure
             services.AddScoped<IStudentService, StudentService>();
             services.AddScoped<IBookService, BookService>();
             services.AddScoped<ILoginService, LoginService>();
+            services.AddScoped<IStaffService, StaffService>();
         
             return services;
         }

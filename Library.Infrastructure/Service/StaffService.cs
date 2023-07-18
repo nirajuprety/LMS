@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Library.Infrastructure.Service
 {
-    public class StaffService:IStaffService
+    public class StaffService : IStaffService
     {
         private readonly IServiceFactory _factory = null;
 
@@ -19,11 +19,20 @@ namespace Library.Infrastructure.Service
 
         }
 
-        public async Task<bool>CreateStaff(EStaff eStaff)
+        public async Task<int> CreateStaff(EStaff eStaff)
         {
             var add = _factory.GetInstance<EStaff>();
-            await add.AddAsync(eStaff);
-            return true;
+            var staffInfo = await add.AddAsync(eStaff);
+            return staffInfo.Id;
+
         }
+        public async Task<bool> CreateLogin(ELogin log)
+        {
+            var add = _factory.GetInstance<ELogin>();
+            var staffInfo = await add.AddAsync(log);
+            return true;
+
+        }
+
     }
 }

@@ -31,6 +31,22 @@ namespace Library.Infrastructure.Service
             catch (Exception ex) { throw ex; }
         }
 
+        public async Task<bool> BorrowBook(int id, int memberId)
+        {
+            var service = _factory.GetInstance<EBook>();
+            var book=await service.FindAsync(id);
+            if (book == null)
+            {
+                return false;
+            }
+
+            if (!book.IsActive)
+            {
+                return false;
+            }
+            return true;
+        }
+
         public async Task<bool> DeleteBook(int id)
         {
             try

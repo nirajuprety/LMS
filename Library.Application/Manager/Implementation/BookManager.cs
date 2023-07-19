@@ -56,6 +56,11 @@ namespace Library.Application.Manager.Implementation
             }
         }
 
+        public async Task<bool> BorrowBook(int bookId, int memberId)
+        {
+            return await _service.BorrowBook(bookId, memberId);
+        }
+
         public async Task<ServiceResult<bool>> DeleteBook(int id)
         {
             var serviceResult = new ServiceResult<bool>();

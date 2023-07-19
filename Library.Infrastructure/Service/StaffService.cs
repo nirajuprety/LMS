@@ -1,9 +1,11 @@
 ﻿using Library.Domain.Entities;
+using Library.Domain.Enum;
 using Library.Domain.Interface;
 using Library.Infrastructure.Repository;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Metadata;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -19,7 +21,7 @@ namespace Library.Infrastructure.Service
 
         }
 
-        public async Task<int> CreateStaff(EStaff eStaff)
+        public async Task<int> AddStaff(EStaff eStaff)
         {
             var service = _factory.GetInstance<EStaff>();
             var staffInfo = await service.AddAsync(eStaff);
@@ -33,6 +35,7 @@ namespace Library.Infrastructure.Service
             return true;
 
         }
+       
 
         public async Task<List<EStaff>> GetAllStaff()
         {
@@ -48,16 +51,33 @@ namespace Library.Infrastructure.Service
             return staffInfo;
         }
 
-        public Task<bool> UpdateStaff(EStaff eStaff)
+        public async Task<bool> UpdateStaff(EStaff eStaff)
         {
-            throw new NotImplementedException();
+            var service= _factory.GetInstance<EStaff>();
+            var result = await service.FindAsync(eStaff.Id);
+
+            result.Id = eStaff.Id;
+            result.Username = eStaff.Username;
+            result.Password = eStaff.Password;
+            result.Email = eStaff.Email;
+            result.CreatedDate = eStaff.CreatedDate;
+            result.UpdatedDate = eStaff.UpdatedDate;
+            result.IsDeleted = eStaff.IsDeleted;
+            result.IsActive = eStaff.IsActive;
+            result.StaffCode = eStaff.StaffCode;
+            result.StaffType = eStaff.StaffType;
+            return true;
+
+        }
+        public async Task<bool> DeleteStaff(int id)
+        {
+            var service = _factory.GetInstance<EStaff>();
+            var result = await service.FindAsync(id);
+            await service.RemoveAsync(result);
+            return true;
         }
 
-        //    public Task<bool> UpdateStaff(EStaff eStaff)
-        //    {
 
-        //    }
-        //}
     }
 }
 

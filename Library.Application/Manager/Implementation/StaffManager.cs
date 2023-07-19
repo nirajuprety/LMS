@@ -33,42 +33,59 @@ namespace Library.Application.Manager.Implementation
 
         public async Task<ServiceResult<bool>> AddStaff(StaffRequest staffRequest)
         {
-            var vm = _mapper.Map<EStaff>(staffRequest);
-
-            //EStaff vm = new EStaff()
-            //{
-            //    IsActive = true,
-            //    CreatedDate = DateTime.Now,
-            //    Email = staffRequest.Email,
-            //    IsDeleted = false,
-            //    Name = staffRequest.Name,
-            //    Password = staffRequest.Password,
-            //    StaffCode = staffRequest.StaffCode,
-            //    StaffType = Domain.Enum.StaffType.Staff,
-            //    UpdatedDate = DateTime.Now,
-            //    Username = staffRequest.Username,
-            //};
-
-
-            int staffId = await _service.CreateStaff(vm);
-            if(staffRequest.StaffType == Domain.Enum.StaffType.Staff)
+            try
             {
-
-                //adding the staff information in Member table
-                EMember member = new EMember()
+                bool validateEMail = IsEmailValid(staffRequest.Email);
+                if(!validateEMail)
                 {
-                    Email = staffRequest.Email,
-                    FullName = staffRequest.Name,
-                    MemberType = Domain.Enum.MemberType.Staff,
-                    MemberCode = staffRequest.StaffCode,
-                    ReferenceId = staffId,
-                };
-                await _memberService.CreateMember(member);
-            }
-            
+                    return new ServiceResult<bool>()
+                    {
+                        Data = validateEMail,
+                        Message = "Email isnot valid",
+                        Status = StatusType.Failure
+                    };
+                }
 
-           
+                if (!IsPasswordValid(staffRequest.Password))
+                {
+                    return new ServiceResult<bool>()
+                    {
+                        Data = false,
+                        Message = "Password is not valid",
+                        Status = StatusType.Failure
+                    };
+                }
 
+                var isEmailUnique = await _service.IsUniqueEmail(staffRequest.Email);
+                if (isEmailUnique == true)
+                {
+                    return new ServiceResult<bool>()
+                    {
+                        Data = false,
+                        Message = "Email already exist!",
+                        Status = StatusType.Failure
+                    };
+
+                }
+                var vm = _mapper.Map<EStaff>(staffRequest);
+
+                int staffId = await _service.AddStaff(vm);
+                Random rand = new Random();
+               var randomNo =  rand.Next(5);
+                if (staffRequest.StaffType == Domain.Enum.StaffType.Staff)
+                {
+
+                    //adding the staff information in Member table
+                    EMember member = new EMember()
+                    {
+                        Email = staffRequest.Email,
+                        FullName = staffRequest.Name,
+                        MemberType = Domain.Enum.MemberType.Staff,
+                        MemberCode = randomNo,
+                        ReferenceId = staffId,
+                    };
+                    await _memberService.CreateMember(member);
+                }
                 //adding Login details to the LoginTable
                 ELogin login = new ELogin()
                 {
@@ -124,7 +141,7 @@ namespace Library.Application.Manager.Implementation
             }
 
             return true;
-        } 
+        }
 
 
 
@@ -163,7 +180,7 @@ namespace Library.Application.Manager.Implementation
                 return new ServiceResult<StaffResponse>()
                 {
                     Data = new StaffResponse()
-                    { 
+                    {
                         Id = id
                     },
                     Status = StatusType.Failure,
@@ -175,7 +192,7 @@ namespace Library.Application.Manager.Implementation
                 Id = staffList.Id,
                 Username = staffList.Username,
                 Password = staffList.Password,
-                Name= staffList.Name,
+                Name = staffList.Name,
                 Email = staffList.Email,
                 CreatedDate = staffList.CreatedDate,
                 UpdatedDate = staffList.UpdatedDate,
@@ -202,7 +219,7 @@ namespace Library.Application.Manager.Implementation
             {
                 Data = result,
                 Message = result == true ? "Staff Updated Successfully!" : "Unable to Update Staff",
-                Status = result==true? StatusType.Success: StatusType.Failure
+                Status = result == true ? StatusType.Success : StatusType.Failure
             };
         }
         public async Task<ServiceResult<bool>> DeleteStaff(int id)

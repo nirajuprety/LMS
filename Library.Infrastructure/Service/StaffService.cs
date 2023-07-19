@@ -36,21 +36,28 @@ namespace Library.Infrastructure.Service
 
         public async Task<List<EStaff>> GetAllStaff()
         {
-            var service=  _factory.GetInstance<EStaff>();
-            var staffInfo=await service.ListAsync();
+            var service = _factory.GetInstance<EStaff>();
+            var staffInfo = await service.ListAsync();
             return staffInfo;
         }
 
         public async Task<EStaff> GetStaffById(int id)
         {
             var service = _factory.GetInstance<EStaff>();
-            var staffInfo=await service.FindAsync(id);
+            var staffInfo = await service.FindAsync(id);
             return staffInfo;
         }
 
         public Task<bool> UpdateStaff(EStaff eStaff)
         {
-
+            throw new NotImplementedException();
         }
+
+        //    public Task<bool> UpdateStaff(EStaff eStaff)
+        //    {
+
+        //    }
+        //}
     }
 }
+

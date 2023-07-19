@@ -3,16 +3,11 @@ using Library.Application.DTO.Request;
 using Library.Application.DTO.Response;
 using Library.Application.Manager.Interface;
 using Library.Domain.Entities;
-using Library.Domain.Enum;
 using Library.Domain.Interface;
 using Library.Infrastructure.Service;
-using Microsoft.EntityFrameworkCore.Migrations.Operations;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using System.Reflection.Metadata;
 using System.Text;
 using System.Threading.Tasks;
 using static Library.Infrastructure.Service.Common;
@@ -25,12 +20,14 @@ namespace Library.Application.Manager.Implementation
         private readonly IStaffService _service = null;
         private readonly ILoginService _serviceLogin = null;
         private readonly IMapper _mapper = null;
+        private readonly IMemberService _memberService = null;
 
-        public StaffManager(IStaffService service, IMapper mapper, ILoginService serviceLogin)
+        public StaffManager(IStaffService service, IMapper mapper, ILoginService serviceLogin, IMemberService memberService)
         {
             _service = service;
             _mapper = mapper;
             _serviceLogin = serviceLogin;
+            _memberService = memberService;
         }
 
         public async Task<ServiceResult<bool>> CreateStaff(StaffRequest staffRequest)
@@ -52,10 +49,23 @@ namespace Library.Application.Manager.Implementation
             //};
 
             int staffId = await _service.CreateStaff(vm);
-            var login = new ELogin()
+
+            //adding the staff information in Member table
+            EMember member = new EMember()
             {
-                Email = vm.Email,
-                Password = vm.Password,
+                Email = staffRequest.Email,
+                FullName = staffRequest.Name,
+                MemberType = Domain.Enum.MemberType.Staff,
+                MemberCode = staffRequest.StaffCode,
+                ReferenceId = staffId,
+            };
+            await _memberService.CreateMember(member);
+            
+            //adding Login details to the LoginTable
+            ELogin login = new ELogin()
+            {
+                Email = staffRequest.Email,
+                Password = staffRequest.Password,
                 StaffId = staffId
             };
             bool staffLogin = await _service.CreateLogin(login);
@@ -81,19 +91,19 @@ namespace Library.Application.Manager.Implementation
                               Email = s.Email,
                               CreatedDate = s.CreatedDate,
                               UpdatedDate = s.UpdatedDate,
-                              IsDeleted= s.IsDeleted,
-                              IsActive= s.IsActive,
-                              StaffCode=s.StaffCode,
-                              StaffType= s.StaffType
+                              IsDeleted = s.IsDeleted,
+                              IsActive = s.IsActive,
+                              StaffCode = s.StaffCode,
+                              StaffType = s.StaffType
 
                           }).ToList();
             return result;
-
         }
 
         public async Task<StaffResponse> GetStaffById(int id)
         {
-            var staffList=await _service.GetStaffById(id);
+
+            var staffList = await _service.GetStaffById(id);
             var result = new StaffResponse()
             {
                 Id = staffList.Id,
@@ -111,5 +121,3 @@ namespace Library.Application.Manager.Implementation
         }
     }
 }
-    
-

@@ -2,6 +2,7 @@
 using Library.Application.Manager.Implementation;
 using Library.Application.Manager.Interface;
 using Library.Infrastructure.Service;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -19,6 +20,7 @@ namespace LibraryManagementSystem.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> AddBook(BookRequest bookRequest)
         {
             var result = await _bookManager.AddBook(bookRequest);

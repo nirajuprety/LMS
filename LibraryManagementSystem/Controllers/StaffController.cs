@@ -44,13 +44,13 @@ namespace LibraryManagementSystem.Controllers
             return result;
         }
 
-        [HttpPut("UpdateStaff")]
+        //[HttpPut("UpdateStaff")]
 
-        public async Task<bool>UpdateStaff(StaffRequest staffRequest)
-        {
-            var result = await _manager.UpdateStaff(staffRequest);
-                return result;
-        }
+        //public async Task<bool>UpdateStaff(StaffRequest staffRequest)
+        //{
+        //    var result = await _manager.UpdateStaff(staffRequest);
+        //        return result;
+        //}
 
 
         [HttpDelete("DeleteStaff")]

@@ -22,7 +22,7 @@ namespace Library.Application.Manager.Implementation
             _service = bookService;
             _mapper = mapper;
         }
-
+      
         public async Task<ServiceResult<bool>> AddBook(BookRequest bookRequest)
         {
             var serviceResult = new ServiceResult<bool>();

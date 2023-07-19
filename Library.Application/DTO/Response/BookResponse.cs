@@ -10,7 +10,7 @@ namespace Library.Application.DTO.Response
     {
         public string Title { get; set; }
         public string Author { get; set; }
-        public int ISBN { get; set; }
+        public string ISBN { get; set; }
         public DateTime PublicationDate { get; set; }
         public string UpdatedBy { get; set; } = string.Empty;
 

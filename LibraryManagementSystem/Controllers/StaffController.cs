@@ -17,10 +17,10 @@ namespace LibraryManagementSystem.Controllers
         {
             _manager = manager;
         }
-        [HttpPost("CreateStaff")]
-        public async Task<ServiceResult<bool>> CreateStaff(StaffRequest staffRequest)
+        [HttpPost("AddStaff")]
+        public async Task<ServiceResult<bool>> AddStaff(StaffRequest staffRequest)
         {
-            var result = await _manager.CreateStaff(staffRequest);
+            var result = await _manager.AddStaff(staffRequest);
             return new ServiceResult<bool>()
             {
                 Data = result.Data,
@@ -53,6 +53,12 @@ namespace LibraryManagementSystem.Controllers
         }
 
 
+        [HttpDelete("DeleteStaff")]
 
+        public async Task<bool>DeleteStaff(int id)
+        {
+            await _manager.DeleteStaff(id);
+            return true;
+        }
     }
 }

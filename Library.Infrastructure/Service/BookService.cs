@@ -88,6 +88,7 @@ namespace Library.Infrastructure.Service
                 user.Author = eBook.Author;
                 user.ISBN = eBook.ISBN;
                 user.PublicationDate = eBook.PublicationDate;
+                user.UpdatedBy = eBook.UpdatedBy;
                 await service.UpdateAsync(user);
                 return true;
             }

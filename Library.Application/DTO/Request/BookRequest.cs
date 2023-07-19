@@ -13,5 +13,6 @@ namespace Library.Application.DTO.Request
         public string Author { get; set; }
         public int ISBN { get; set; }
         public DateTime PublicationDate { get; set; }
+        public string UpdatedBy { get; set; }
     }
 }

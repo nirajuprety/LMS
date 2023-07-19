@@ -62,7 +62,7 @@ namespace Library.Infrastructure.Service
                 var user = await service.FindAsync(id);
                 if (user == null)
                 {
-                    return null;
+                    return user;
                 }
                 return user;
             }

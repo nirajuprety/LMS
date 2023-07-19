@@ -47,7 +47,7 @@ namespace Library.Infrastructure.Service
         public async Task<EStaff> GetStaffById(int id)
         {
             var service = _factory.GetInstance<EStaff>();
-            var staffInfo = await service.FindAsync(id);
+            var staffInfo =  service.ListAsync().Result.FirstOrDefault(x=>x.IsDeleted==false && x.Id==id);
             return staffInfo;
         }
 
@@ -60,10 +60,11 @@ namespace Library.Infrastructure.Service
             result.Username = eStaff.Username;
             result.Password = eStaff.Password;
             result.Email = eStaff.Email;
-            result.CreatedDate = eStaff.CreatedDate;
-            result.UpdatedDate = eStaff.UpdatedDate;
-            result.IsDeleted = eStaff.IsDeleted;
-            result.IsActive = eStaff.IsActive;
+            //result.CreatedDate = eStaff.CreatedDate;
+           // result.UpdatedDate = eStaff.UpdatedDate;
+            result.UpdatedDate = DateTime.Now;
+            //result.IsDeleted = eStaff.IsDeleted;
+            //result.IsActive = eStaff.IsActive;
             result.StaffCode = eStaff.StaffCode;
             result.StaffType = eStaff.StaffType;
 
@@ -76,8 +77,16 @@ namespace Library.Infrastructure.Service
         {
             var service = _factory.GetInstance<EStaff>();
             var result = await service.FindAsync(id);
-            await service.RemoveAsync(result);
-            return true;
+            //await service.RemoveAsync(result);
+
+            if (result != null)
+            {
+                result.IsDeleted = true;
+                result.IsActive = false;
+                await service.UpdateAsync(result);
+                return true;
+            }
+            return false;
         }
 
         public async Task<bool> IsUniqueEmail(string email)

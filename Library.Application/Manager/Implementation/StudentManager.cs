@@ -33,6 +33,9 @@ namespace Library.Application.Manager.Implementation
             try
             {
                 var model = _mapper.Map<EStudent>(studentRequest);
+                model.IsDeleted = false;
+                model.IsActive = true;
+
                 if (model == null)
                 {
                     return new ServiceResult<bool>()
@@ -130,6 +133,15 @@ namespace Library.Application.Manager.Implementation
                         Message = "User not found"
                     };
                 }
+                if (user.IsDeleted == true)
+                {
+                    return new ServiceResult<StudentResponse>()
+                    {
+                        Data = new StudentResponse() { Id = id },
+                        Status = StatusType.Failure,
+                        Message = "User was deleted"
+                    };
+                }
                 var result = new StudentResponse()
                 {
                     Id = user.Id,
@@ -156,6 +168,7 @@ namespace Library.Application.Manager.Implementation
             {
                 var user = await _service.GetStudents();
                 var result = (from u in user
+                              where u.IsDeleted == false
                               orderby u.Id descending
                               select new StudentResponse()
                               {

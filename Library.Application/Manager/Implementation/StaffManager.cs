@@ -68,6 +68,8 @@ namespace Library.Application.Manager.Implementation
 
                 }
                 var vm = _mapper.Map<EStaff>(staffRequest);
+                vm.IsDeleted = false;
+                vm.IsActive = true;
 
                 int staffId = await _service.AddStaff(vm);
                 Random rand = new Random();
@@ -149,6 +151,7 @@ namespace Library.Application.Manager.Implementation
         {
             var staffList = await _service.GetAllStaff();
             var result = (from s in staffList
+                          where s.IsDeleted == false         //Exclude those which are deleted
                           select new StaffResponse()
                           {
                               Id = s.Id,
@@ -174,32 +177,31 @@ namespace Library.Application.Manager.Implementation
         public async Task<ServiceResult<StaffResponse>> GetStaffById(int id)
         {
 
-            var staffList = await _service.GetStaffById(id);
-            if (staffList == null)
+            var staff = await _service.GetStaffById(id);
+            if(staff==null)
             {
                 return new ServiceResult<StaffResponse>()
                 {
-                    Data = new StaffResponse()
-                    {
-                        Id = id
-                    },
+                    Data = null,
+                    Message = "Staff not found successfully!",
                     Status = StatusType.Failure,
-                    Message = "Staff not found"
                 };
             }
+
+            
             var result = new StaffResponse()
             {
-                Id = staffList.Id,
-                Username = staffList.Username,
-                Password = staffList.Password,
-                Name = staffList.Name,
-                Email = staffList.Email,
-                CreatedDate = staffList.CreatedDate,
-                UpdatedDate = staffList.UpdatedDate,
-                IsDeleted = staffList.IsDeleted,
-                IsActive = staffList.IsActive,
-                StaffCode = staffList.StaffCode,
-                StaffType = staffList.StaffType
+                Id = staff.Id,
+                Username = staff.Username,
+                Password = staff.Password,
+                Name = staff.Name,
+                Email = staff.Email,
+                CreatedDate = staff.CreatedDate,
+                UpdatedDate = staff.UpdatedDate,
+                IsDeleted = staff.IsDeleted,
+                IsActive = staff.IsActive,
+                StaffCode = staff.StaffCode,
+                StaffType = staff.StaffType
             };
             return new ServiceResult<StaffResponse>()
             {
@@ -210,7 +212,7 @@ namespace Library.Application.Manager.Implementation
         }
 
 
-        public async Task<ServiceResult<bool>> UpdateStaff(StaffRequest staffRequest)
+        public async Task<ServiceResult<bool>> UpdateStaff(StaffUpdateRequest staffRequest)
         {
             var staffList = await _service.GetStaffById(staffRequest.Id);
             var vm = _mapper.Map<EStaff>(staffRequest);
@@ -225,7 +227,7 @@ namespace Library.Application.Manager.Implementation
         public async Task<ServiceResult<bool>> DeleteStaff(int id)
         {
             var staffList = await _service.DeleteStaff(id);
-            if (staffList == null)
+            if (staffList == false)
                 return new ServiceResult<bool>()
                 {
                     Data = false,

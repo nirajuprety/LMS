@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Library.Application.DTO.Request;
+using Library.Application.DTO.Response;
 using Library.Domain.Entities;
 using System;
 using System.Collections.Generic;
@@ -15,6 +16,7 @@ namespace Library.Application.Mapper
         {
             CreateMap<StudentRequest, EStudent>();
             CreateMap<StaffRequest, EStaff>();
+            CreateMap<EStudent, StudentResponse>();
         }
     }
 }

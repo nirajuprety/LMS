@@ -62,17 +62,15 @@ namespace Library.Infrastructure.Service
                 var user = await service.FindAsync(id);
                 if (user == null)
                 {
-                    return null;
+                    return user;
                 }
                 return user;
             }
             catch (Exception ex)
             {
-               throw ex;
+               throw;
             }
-
         }
-
         public async Task<List<EStudent>> GetStudents()
         {
             try
@@ -109,6 +107,12 @@ namespace Library.Infrastructure.Service
             catch (Exception ex) {
                 throw ex;
             }
+        }
+        public async Task<bool> IsUniqueEmail(string email)
+        {
+            var student = await _factory.GetInstance<EStudent>().ListAsync();
+            var result = student.Where(student => student.Email == email).Any();
+            return result;
         }
     }
 }

@@ -14,5 +14,6 @@ namespace Library.Domain.Interface
         Task<EStudent> GetStudentByID(int id);
         Task<bool> UpdateStudent(EStudent eStudent);
         Task<bool> DeleteStudent(int id);
+        Task<bool> IsUniqueEmail(string email); 
     }
 }

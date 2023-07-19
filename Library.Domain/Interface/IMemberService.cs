@@ -10,5 +10,7 @@ namespace Library.Domain.Interface
     public interface IMemberService
     {
         Task<int> CreateMember(EMember member);
+        Task<List<EMember>> GetMembers();
+        Task<EMember> GetMemberById(int id);
     }
 }

@@ -26,6 +26,32 @@ namespace Library.Infrastructure.Service
             return memberInfo.Id;
 
         }
-       
+        public async Task<EMember> GetMemberById(int id)
+        {
+            try
+            {
+                var service = _factory.GetInstance<EMember>();
+                var user = await service.FindAsync(id);
+                if (user == null)
+                {
+                    return null;
+                }
+                return user;
+            }
+            catch (Exception ex) { throw ex; }
+
+        }
+
+        public async Task<List<EMember>> GetMembers()
+        {
+            try
+            {
+                var service = _factory.GetInstance<EMember>();
+                var result = await service.ListAsync();
+                return result;
+            }
+            catch (Exception ex) { throw ex; }
+        }
+
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Library.Domain.Entities;
+using Library.Domain.Enum;
 using Library.Domain.Interface;
 using Library.Infrastructure.Repository;
 using System;
@@ -17,7 +18,7 @@ namespace Library.Infrastructure.Service
         {
             _factory = factory;
         }
-        public async Task<bool> AddLogin(ELogin login,int staffId)
+        public async Task<bool> AddLogin(ELogin login, int staffId)
         {
             var users = _factory.GetInstance<ELogin>();
             var parse = new ELogin()
@@ -43,6 +44,15 @@ namespace Library.Infrastructure.Service
                 throw;
             }
         }
+
+        public async Task<StaffType> GetUserRole(string email)
+        {
+            var user = await _factory.GetInstance<EStaff>().ListAsync();
+            var staffRole= user.Where(x => x.Email.Trim() == email.Trim()).Select(x => x.StaffType).FirstOrDefault();
+            return staffRole;
+
+        }
+
         public async Task<bool> LoginUser(ELogin eLogin)
         {
 

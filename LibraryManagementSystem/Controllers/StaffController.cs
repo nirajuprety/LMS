@@ -31,34 +31,54 @@ namespace LibraryManagementSystem.Controllers
 
         [HttpGet("GetStaff")]
 
-        public async Task<List<StaffResponse>> GetAllStaff()
+        public async Task<ServiceResult<List<StaffResponse>>>GetAllStaff()
         {
             var result = await _manager.GetAllStaff();
-            return result;
+            return new ServiceResult<List<StaffResponse>>()
+            {
+                Data = result.Data,
+                Message = result.Message,
+                Status = result.Status
+            };
 
         }
         [HttpGet("GetStaffById")]
-        public async Task<StaffResponse>GetStaffBbyId(int id)
+        public async Task<ServiceResult<StaffResponse>>GetStaffBbyId(int id)
         {
             var result= await _manager.GetStaffById(id);
-            return result;
+            return new ServiceResult<StaffResponse>()
+            {
+                Data = result.Data,
+                Message = result.Message,
+                Status = result.Status
+            };
         }
 
         [HttpPut("UpdateStaff")]
 
-        public async Task<bool>UpdateStaff(StaffRequest staffRequest)
+        public async Task<ServiceResult<bool>>UpdateStaff(StaffRequest staffRequest)
         {
             var result = await _manager.UpdateStaff(staffRequest);
-                return result;
+            return new ServiceResult<bool>()
+            {
+                Data = result.Data,
+                Message = result.Message,
+                Status = result.Status
+            };
         }
 
 
         [HttpDelete("DeleteStaff")]
 
-        public async Task<bool>DeleteStaff(int id)
+        public async Task<ServiceResult<bool>>DeleteStaff(int id)
         {
-            await _manager.DeleteStaff(id);
-            return true;
+           var result= await _manager.DeleteStaff(id);
+            return new ServiceResult<bool>()
+            {
+                Data = result.Data,
+                Message = result.Message,
+                Status = result.Status
+            };
         }
     }
 }

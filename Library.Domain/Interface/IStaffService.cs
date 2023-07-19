@@ -17,7 +17,7 @@ namespace Library.Domain.Interface
 
         Task<bool> DeleteStaff(int id);
 
-
+        Task<bool> IsUniqueEmail(string email);
 
     }
 }

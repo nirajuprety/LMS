@@ -66,6 +66,9 @@ namespace Library.Infrastructure.Service
             result.IsActive = eStaff.IsActive;
             result.StaffCode = eStaff.StaffCode;
             result.StaffType = eStaff.StaffType;
+
+            await service.UpdateAsync(result);
+
             return true;
 
         }
@@ -77,7 +80,13 @@ namespace Library.Infrastructure.Service
             return true;
         }
 
-
+        public async Task<bool> IsUniqueEmail(string email)
+        {
+            var staff= await _factory .GetInstance<EStaff>().ListAsync();
+            var result = staff.Where(staff => staff.Email == email).Any();
+            return result;
+        }
+       
     }
 }
 

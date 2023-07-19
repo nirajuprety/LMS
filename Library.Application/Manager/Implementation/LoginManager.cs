@@ -80,7 +80,7 @@ namespace Library.Application.Manager.Implementation
                     Email = request.Email,
                     Password = request.Password
                 });
-
+                string userRole = _service.GetUserRole(request.Email).Result.ToString();
                 if (user != null)
                 {
                     // create claims details based on the user information
@@ -88,7 +88,8 @@ namespace Library.Application.Manager.Implementation
                         new Claim(JwtRegisteredClaimNames.Sub, _configuration["Jwt:Subject"]),
                         new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                         new Claim(JwtRegisteredClaimNames.Iat, DateTime.UtcNow.ToString()),
-                        new Claim("Email", request.Email.ToString())
+                        new Claim("Email", request.Email.ToString()),
+                        new Claim(ClaimTypes.Role, userRole),
                     };
 
                     var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));

@@ -33,15 +33,16 @@ namespace Library.Infrastructure.Service
 
         public async Task<bool> BorrowBook(int id, int memberId)
         {
-            var service = _factory.GetInstance<EBook>();
-            var book=await service.FindAsync(id);
-            if (book == null)
+            var bookservice = _factory.GetInstance<EBook>();
+            var memberService = _factory.GetInstance<EMember>();
+            var book = await bookservice.FindAsync(id);
+            if (book == null || !book.IsActive) 
             {
                 return false;
             }
 
-            if (!book.IsActive)
-            {
+            var member = await memberService.FindAsync(id);
+            if (member == null) {
                 return false;
             }
             return true;

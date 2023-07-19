@@ -56,9 +56,34 @@ namespace Library.Application.Manager.Implementation
             }
         }
 
-        public async Task<bool> BorrowBook(int bookId, int memberId)
+        public async Task<ServiceResult<bool>> BorrowBook(int bookId, int memberId)
         {
-            return await _service.BorrowBook(bookId, memberId);
+            var serviceResult = new ServiceResult<bool>();
+            bool isBorrowed = await _service.BorrowBook(bookId, memberId);
+            if(isBorrowed)
+            {
+                var book = await _service.GetBookByBookID(bookId);
+                if (book != null)
+                {
+                    serviceResult.Data = true;
+                    serviceResult.Status = StatusType.Success;
+                    serviceResult.Message = $"Book '{book.Title} added successfully";
+                }
+                else
+                {
+                    serviceResult.Data = false;
+                    serviceResult.Status = StatusType.Failure;
+                    serviceResult.Message = "Book not found";
+                }
+
+            }
+            else
+            {
+                serviceResult.Data = false;
+                serviceResult.Status = StatusType.Failure;
+                serviceResult.Message = "Book borrowing failed.";
+            }
+            return serviceResult;
         }
 
         public async Task<ServiceResult<bool>> DeleteBook(int id)

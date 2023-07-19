@@ -89,6 +89,7 @@ namespace LibraryManagementSystem.Controllers
 
             return NotFound(result.Message);
         }
+
         [HttpPost("{bookId}/borrow")]
         [Authorize(Roles = "staff")] 
         public async Task<IActionResult> BorrowBook(int bookId, int memberId)
@@ -96,7 +97,7 @@ namespace LibraryManagementSystem.Controllers
 
             var result = await _bookManager.BorrowBook(bookId, memberId);
 
-            if (!result)
+            if (result.Status == StatusType.Failure)
             {
                 return StatusCode(500, new { Error = "Cannot borrow an inactive book or book not found." });
             }

@@ -12,10 +12,10 @@ namespace Library.Application.Manager.Interface
     public interface IStaffManager
     {
         Task<ServiceResult<bool>> AddStaff(StaffRequest staffRequest);
-        Task<List<StaffResponse>> GetAllStaff();
-        Task<StaffResponse> GetStaffById(int id);
-        Task<bool>UpdateStaff(StaffRequest staffRequest);
-        Task<bool> DeleteStaff(int id);
+        Task<ServiceResult<List<StaffResponse>>> GetAllStaff();
+        Task<ServiceResult<StaffResponse>> GetStaffById(int id);
+        Task<ServiceResult<bool>>UpdateStaff(StaffRequest staffRequest);
+        Task<ServiceResult<bool>>DeleteStaff(int id);
 
                                                                    
     }

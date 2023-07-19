@@ -9,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using static Library.Infrastructure.Service.Common;
 
@@ -68,27 +69,66 @@ namespace Library.Application.Manager.Implementation
 
            
 
-            //adding Login details to the LoginTable
-            ELogin login = new ELogin()
-            {
-                Email = staffRequest.Email,
-                Password = staffRequest.Password,
-                StaffId = staffId
-            };
-            bool staffLogin = await _service.CreateLogin(login);
-            return new ServiceResult<bool>()
+                //adding Login details to the LoginTable
+                ELogin login = new ELogin()
+                {
+                    Email = staffRequest.Email,
+                    Password = staffRequest.Password,
+                    StaffId = staffId
+                };
+                bool staffLogin = await _service.CreateLogin(login);
+                return new ServiceResult<bool>()
 
-            {
-                Data = staffLogin,
-                Message = staffLogin == true ? "Added successfully" : "unable to add the staff",
-                Status = staffLogin == true ? StatusType.Success : StatusType.Failure
-            };
+                {
+                    Data = staffLogin,
+                    Message = staffLogin == true ? "Added successfully" : "unable to add the staff",
+                    Status = staffLogin == true ? StatusType.Success : StatusType.Failure
+                };
 
+            }
+            catch (Exception ex)
+            {
+                return new ServiceResult<bool>()
+                {
+                    Data = false,
+                    Message = ex.Message,
+                    Status = StatusType.Failure
+                };
+            }
+        }
+        private bool IsEmailValid(string email)
+        {
+            const string emailPattern = @"^[^\s@]+@[^\s@]+\.[^\s@]+$";
+            return Regex.IsMatch(email, emailPattern);
         }
 
-        
+        private bool IsPasswordValid(string password)
+        {
+            const int MinimumLength = 5;
+            const string SpecialCharacters = @"!@#$%^&*()-_=+[{]}\|;:'"",<.>/?";
+            const string AlphanumericPattern = @"^(?=.*[a-zA-Z])(?=.*[0-9])";
 
-        public async Task<List<StaffResponse>> GetAllStaff()
+            if (password.Length < MinimumLength)
+            {
+                return false;
+            }
+
+            if (!password.Any(c => SpecialCharacters.Contains(c)))
+            {
+                return false;
+            }
+
+            if (!Regex.IsMatch(password, AlphanumericPattern))
+            {
+                return false;
+            }
+
+            return true;
+        } 
+
+
+
+        public async Task<ServiceResult<List<StaffResponse>>> GetAllStaff()
         {
             var staffList = await _service.GetAllStaff();
             var result = (from s in staffList
@@ -106,18 +146,36 @@ namespace Library.Application.Manager.Implementation
                               StaffType = s.StaffType
 
                           }).ToList();
-            return result;
+            return new ServiceResult<List<StaffResponse>>()
+            {
+                Data = result,
+                Message = "All Staff found successfully!",
+                Status = StatusType.Success,
+            };
         }
 
-        public async Task<StaffResponse> GetStaffById(int id)
+        public async Task<ServiceResult<StaffResponse>> GetStaffById(int id)
         {
 
             var staffList = await _service.GetStaffById(id);
+            if (staffList == null)
+            {
+                return new ServiceResult<StaffResponse>()
+                {
+                    Data = new StaffResponse()
+                    { 
+                        Id = id
+                    },
+                    Status = StatusType.Failure,
+                    Message = "Staff not found"
+                };
+            }
             var result = new StaffResponse()
             {
                 Id = staffList.Id,
                 Username = staffList.Username,
                 Password = staffList.Password,
+                Name= staffList.Name,
                 Email = staffList.Email,
                 CreatedDate = staffList.CreatedDate,
                 UpdatedDate = staffList.UpdatedDate,
@@ -126,23 +184,43 @@ namespace Library.Application.Manager.Implementation
                 StaffCode = staffList.StaffCode,
                 StaffType = staffList.StaffType
             };
-            return result;
+            return new ServiceResult<StaffResponse>()
+            {
+                Data = result,
+                Message = "Staff found successfully!",
+                Status = StatusType.Success,
+            };
         }
 
 
-        public async Task<bool> UpdateStaff(StaffRequest staffRequest)
+        public async Task<ServiceResult<bool>> UpdateStaff(StaffRequest staffRequest)
         {
             var staffList = await _service.GetStaffById(staffRequest.Id);
             var vm = _mapper.Map<EStaff>(staffRequest);
             var result = await _service.UpdateStaff(vm);
-            return result;
+            return new ServiceResult<bool>()
+            {
+                Data = result,
+                Message = result == true ? "Staff Updated Successfully!" : "Unable to Update Staff",
+                Status = result==true? StatusType.Success: StatusType.Failure
+            };
         }
-        public async Task<bool> DeleteStaff(int id)
+        public async Task<ServiceResult<bool>> DeleteStaff(int id)
         {
             var staffList = await _service.DeleteStaff(id);
-            if(staffList==null) 
-            return false;
-            return true;
+            if (staffList == null)
+                return new ServiceResult<bool>()
+                {
+                    Data = false,
+                    Message = "Unable to delete staff",
+                    Status = StatusType.Failure
+                };
+            return new ServiceResult<bool>()
+            {
+                Data = true,
+                Message = "Staff deleted successfully!",
+                Status = StatusType.Success
+            };
 
         }
     }

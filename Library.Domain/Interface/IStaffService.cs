@@ -11,5 +11,10 @@ namespace Library.Domain.Interface
     {
         Task<int>CreateStaff(EStaff eStaff);
         Task<bool> CreateLogin(ELogin log);
+        Task<List<EStaff>> GetAllStaff();
+        Task<EStaff> GetStaffById(int id);
+        Task<bool>UpdateStaff(EStaff eStaff);
+
+
     }
 }

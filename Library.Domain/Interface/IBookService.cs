@@ -14,5 +14,6 @@ namespace Library.Domain.Interface
         Task<EBook> GetBookByBookID(int id);
         Task<bool> UpdateBookStatus(EBook eBook);
         Task<bool> DeleteBook(int id);
+        Task<bool> BorrowBook(int id, int memberId);
     }
 }

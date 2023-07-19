@@ -30,7 +30,7 @@ namespace Library.Application.Manager.Implementation
             _memberService = memberService;
         }
 
-        public async Task<ServiceResult<bool>> CreateStaff(StaffRequest staffRequest)
+        public async Task<ServiceResult<bool>> AddStaff(StaffRequest staffRequest)
         {
             var vm = _mapper.Map<EStaff>(staffRequest);
 
@@ -48,6 +48,7 @@ namespace Library.Application.Manager.Implementation
             //    Username = staffRequest.Username,
             //};
 
+
             int staffId = await _service.CreateStaff(vm);
             if(staffRequest.StaffType == Domain.Enum.StaffType.Staff)
             {
@@ -64,6 +65,9 @@ namespace Library.Application.Manager.Implementation
                 await _memberService.CreateMember(member);
             }
             
+
+           
+
             //adding Login details to the LoginTable
             ELogin login = new ELogin()
             {
@@ -81,6 +85,8 @@ namespace Library.Application.Manager.Implementation
             };
 
         }
+
+        
 
         public async Task<List<StaffResponse>> GetAllStaff()
         {
@@ -121,6 +127,23 @@ namespace Library.Application.Manager.Implementation
                 StaffType = staffList.StaffType
             };
             return result;
+        }
+
+
+        public async Task<bool> UpdateStaff(StaffRequest staffRequest)
+        {
+            var staffList = await _service.GetStaffById(staffRequest.Id);
+            var vm = _mapper.Map<EStaff>(staffRequest);
+            var result = await _service.UpdateStaff(vm);
+            return result;
+        }
+        public async Task<bool> DeleteStaff(int id)
+        {
+            var staffList = await _service.DeleteStaff(id);
+            if(staffList==null) 
+            return false;
+            return true;
+
         }
     }
 }

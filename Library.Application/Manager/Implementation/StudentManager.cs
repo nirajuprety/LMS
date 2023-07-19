@@ -86,6 +86,15 @@ namespace Library.Application.Manager.Implementation
             {
                 var user = await _service.GetStudentByID(id);
                 //var model = _mapper.Map<EStudent>(StudentResponse);
+                if (user == null)
+                {
+                    return new ServiceResult<StudentResponse>()
+                    {
+                        Data = new StudentResponse() { Id = id},
+                        Status = StatusType.Failure,
+                        Message = "User not found"
+                    };
+                }
                 var result = new StudentResponse()
                 {
                     Id = user.Id,
@@ -95,15 +104,7 @@ namespace Library.Application.Manager.Implementation
                     RollNo = user.RollNo,
                     StudentCode = user.StudentCode,
                 };
-                if (result == null)
-                {
-                    return new ServiceResult<StudentResponse>()
-                    {
-                        Data = result,
-                        Status = StatusType.Failure,
-                        Message = "User not found"
-                    };
-                }
+                
                 return new ServiceResult<StudentResponse>()
                 {
                     Data = result,
@@ -119,6 +120,7 @@ namespace Library.Application.Manager.Implementation
             try {
                 var user = await _service.GetStudents();
                 var result = (from u in user
+                              orderby u.Id descending
                               select new StudentResponse()
                               {
                                   Id = u.Id,

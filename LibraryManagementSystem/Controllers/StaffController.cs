@@ -54,7 +54,7 @@ namespace LibraryManagementSystem.Controllers
             };
         }
 
-        [HttpPut("UpdateStaff")]
+        //[HttpPut("UpdateStaff")]
 
         public async Task<ServiceResult<bool>>UpdateStaff(StaffRequest staffRequest)
         {

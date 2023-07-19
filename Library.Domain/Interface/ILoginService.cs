@@ -1,4 +1,5 @@
 ﻿using Library.Domain.Entities;
+using Library.Domain.Enum;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,5 +14,6 @@ namespace Library.Domain.Interface
         Task<bool> AddLogin(ELogin login, int staffId);
         Task<bool> LoginUser(ELogin eLogin);
         Task<bool> ValidateEmail(string email);
+        Task<StaffType> GetUserRole(string email);
     }
 }

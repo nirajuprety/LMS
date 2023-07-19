@@ -2,8 +2,10 @@
 using Library.Application.Manager.Implementation;
 using Library.Application.Manager.Interface;
 using Library.Infrastructure.Service;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Data;
 
 namespace LibraryManagementSystem.Controllers
 {
@@ -19,6 +21,7 @@ namespace LibraryManagementSystem.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> AddBook(BookRequest bookRequest)
         {
             var result = await _bookManager.AddBook(bookRequest);
@@ -86,6 +89,21 @@ namespace LibraryManagementSystem.Controllers
             }
 
             return NotFound(result.Message);
+        }
+
+        [HttpPost("{bookId}/borrow")]
+        [Authorize(Roles = "staff")] 
+        public async Task<IActionResult> BorrowBook(int bookId, int memberId)
+        {
+
+            var result = await _bookManager.BorrowBook(bookId, memberId);
+
+            if (result.Status == StatusType.Failure)
+            {
+                return StatusCode(500, new { Error = "Cannot borrow an inactive book or book not found." });
+            }
+
+            return Ok(new { Message = $"Book borrowed successfully by Id {memberId}." });
         }
     }
 }

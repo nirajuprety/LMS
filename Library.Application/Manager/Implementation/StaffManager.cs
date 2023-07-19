@@ -33,42 +33,26 @@ namespace Library.Application.Manager.Implementation
 
         public async Task<ServiceResult<bool>> AddStaff(StaffRequest staffRequest)
         {
-            try
+            var vm = _mapper.Map<EStaff>(staffRequest);
+
+            //EStaff vm = new EStaff()
+            //{
+            //    IsActive = true,
+            //    CreatedDate = DateTime.Now,
+            //    Email = staffRequest.Email,
+            //    IsDeleted = false,
+            //    Name = staffRequest.Name,
+            //    Password = staffRequest.Password,
+            //    StaffCode = staffRequest.StaffCode,
+            //    StaffType = Domain.Enum.StaffType.Staff,
+            //    UpdatedDate = DateTime.Now,
+            //    Username = staffRequest.Username,
+            //};
+
+
+            int staffId = await _service.CreateStaff(vm);
+            if(staffRequest.StaffType == Domain.Enum.StaffType.Staff)
             {
-                if (!IsEmailValid(staffRequest.Email))
-                {
-                    return new ServiceResult<bool>()
-                    {
-                        Data = false,
-                        Message = "Email is not valid",
-                        Status = StatusType.Failure
-                    };
-                }
-
-                if (!IsPasswordValid(staffRequest.Password))
-                {
-                    return new ServiceResult<bool>()
-                    {
-                        Data = false,
-                        Message = "Password is not valid",
-                        Status = StatusType.Failure
-                    };
-                }
-                var isEmailUnique = await _service.IsUniqueEmail(staffRequest.Email);
-                if (isEmailUnique == true)
-                {
-                    return new ServiceResult<bool>()
-                    {
-                        Data = false,
-                        Message = "Email already exist!",
-                        Status = StatusType.Failure
-                    };
-
-                }
-
-
-                var vm = _mapper.Map<EStaff>(staffRequest);
-                int staffId = await _service.AddStaff(vm);
 
                 //adding the staff information in Member table
                 EMember member = new EMember()
@@ -80,6 +64,10 @@ namespace Library.Application.Manager.Implementation
                     ReferenceId = staffId,
                 };
                 await _memberService.CreateMember(member);
+            }
+            
+
+           
 
                 //adding Login details to the LoginTable
                 ELogin login = new ELogin()

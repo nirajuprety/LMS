@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Library.Application.DTO.Request;
+using Library.Application.DTO.Response;
 using Library.Application.Manager.Interface;
 using Library.Domain.Entities;
 using Library.Domain.Interface;
@@ -41,5 +42,63 @@ namespace Library.Application.Manager.Implementation
             };
         }
 
+        public async Task<ServiceResult<MemberResponse>> GetMemberById(int id)
+        {
+            var serviceResult = new ServiceResult<MemberResponse>();
+
+            try
+            {
+                var member = await _service.GetMemberById(id);
+                if (member == null)
+                {
+                    serviceResult.Status = StatusType.Failure;
+                    serviceResult.Message = "Member not found";
+                    serviceResult.Data = null;
+
+                    return serviceResult;
+                }
+
+                var memberResponse = _mapper.Map<MemberResponse>(member);
+
+                serviceResult.Status = StatusType.Success;
+                serviceResult.Message = "Member retrieved successfully";
+                serviceResult.Data = memberResponse;
+
+                return serviceResult;
+            }
+            catch (Exception ex)
+            {
+                serviceResult.Status = StatusType.Failure;
+                serviceResult.Message = "An error occurred while retrieving the Member";
+                serviceResult.Data = null;
+
+                return serviceResult;
+            }
+        }
+
+        public async Task<ServiceResult<List<MemberResponse>>> GetMembers()
+        {
+            var serviceResult = new ServiceResult<List<MemberResponse>>();
+
+            try
+            {
+                var members = await _service.GetMembers();
+                var membersResponses = _mapper.Map<List<MemberResponse>>(members);
+
+                serviceResult.Status = StatusType.Success;
+                serviceResult.Message = "Members retrieved successfully";
+                serviceResult.Data = membersResponses;
+
+                return serviceResult;
+            }
+            catch (Exception ex)
+            {
+                serviceResult.Status = StatusType.Failure;
+                serviceResult.Message = "An error occurred while retrieving the members";
+                serviceResult.Data = null;
+
+                return serviceResult;
+            }
+        }
     }
 }

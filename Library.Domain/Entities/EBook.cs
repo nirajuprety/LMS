@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Library.Domain.Enum;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -20,6 +21,7 @@ namespace Library.Domain.Entities
         public bool IsDeleted { get; set; }
         public string UpdatedBy { get; set; } = string.Empty;
         public DateTime CreatedDate { get; set; }
+        public BookStatus BookStatus { get; set; }
 
     }
 }

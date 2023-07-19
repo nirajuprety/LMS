@@ -17,6 +17,7 @@ namespace Library.Application.Mapper
             CreateMap<StudentRequest, EStudent>();
             CreateMap<StaffRequest, EStaff>();
             CreateMap<EStudent, StudentResponse>();
+            CreateMap<EMember, MemberResponse>();
         }
     }
 }

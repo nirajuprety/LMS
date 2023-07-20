@@ -5,6 +5,7 @@ using Library.Infrastructure.Repository;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -52,14 +53,20 @@ namespace Library.Infrastructure.Service
             return staffRole;
 
         }
-
+        private string HashPassword(string password)
+        {
+            using (var sha256 = SHA256.Create())
+            {
+                byte[] passwordBytes = Encoding.UTF8.GetBytes(password);
+                byte[] hashBytes = sha256.ComputeHash(passwordBytes);
+                string hashedPassword = Convert.ToBase64String(hashBytes);
+                return hashedPassword;
+            }
+        }
         public async Task<bool> LoginUser(ELogin eLogin)
         {
-
-
-
             var user = _factory.GetInstance<ELogin>().ListAsync();
-            var userEmail = user.Result.Any(x => x.Email == eLogin.Email && x.Password == eLogin.Password);
+            var userEmail = user.Result.Any(x => x.Email == eLogin.Email && x.Password == HashPassword(eLogin.Password));
 
             return userEmail;
         }

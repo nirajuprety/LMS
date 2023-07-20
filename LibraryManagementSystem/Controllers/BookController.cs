@@ -11,6 +11,8 @@ namespace LibraryManagementSystem.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Roles = "Admin")]
+
     public class BookController : ControllerBase
     {
         private readonly IBookManager _bookManager;
@@ -21,7 +23,6 @@ namespace LibraryManagementSystem.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> AddBook(BookRequest bookRequest)
         {
             var result = await _bookManager.AddBook(bookRequest);
@@ -92,7 +93,7 @@ namespace LibraryManagementSystem.Controllers
         }
 
         [HttpPost("{bookId}/borrow")]
-        [Authorize(Roles = "staff")] 
+        //[Authorize(Roles = "staff")] 
         public async Task<IActionResult> BorrowBook(int bookId, int memberId)
         {
 

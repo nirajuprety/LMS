@@ -70,7 +70,7 @@ namespace Library.Infrastructure.Service
             {
                 var service = _factory.GetInstance<EBook>();
                 var user = await service.FindAsync(id);
-                if (user == null)
+                if (user == null )
                 {
                     return null;
                 }

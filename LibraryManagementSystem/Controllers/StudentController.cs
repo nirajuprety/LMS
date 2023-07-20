@@ -2,6 +2,7 @@
 using Library.Application.DTO.Response;
 using Library.Application.Manager.Interface;
 using Library.Infrastructure.Service;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using static Library.Infrastructure.Service.Common;
 
@@ -9,6 +10,8 @@ namespace LibraryManagementSystem.Controllers
 {
     [ApiController]
     [Route("/api/[controller]/[action]")]
+    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Staff")]
     public class StudentController : ControllerBase
     {
         private readonly IStudentManager _manager;
@@ -20,6 +23,7 @@ namespace LibraryManagementSystem.Controllers
         [HttpPost]
         public async Task<ServiceResult<bool>> CreateStudent(StudentRequest studentRequest)
         {
+
             var result = await _manager.CreateStudent(studentRequest);
             return new ServiceResult<bool>()
             {
@@ -29,7 +33,7 @@ namespace LibraryManagementSystem.Controllers
             };
         }
 
-        [HttpDelete]
+        [HttpPut]
         public async Task<ServiceResult<bool>> DeleteStudent(int id)
         {
             var result = await _manager.DeleteStudent(id);

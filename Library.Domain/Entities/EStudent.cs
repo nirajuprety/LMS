@@ -21,5 +21,6 @@ namespace Library.Domain.Entities
         public DateTime CreatedDate { get; set; }
         public string UpdatedBy { get; set; }
 
+
     }
 }

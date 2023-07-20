@@ -8,27 +8,56 @@ using Library.Infrastructure.Service;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using static Library.Infrastructure.Service.Common;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Library.Application.Manager.Implementation
 {
     public class StudentManager : IStudentManager
     {
         private readonly IStudentService _service;
+        private readonly IMemberService _memberService;
         private readonly IMapper _mapper;
 
-        public StudentManager(IStudentService studentService, IMapper mapper)
+        public StudentManager(IStudentService studentService, IMapper mapper, IMemberService memberService)
         {
             _service = studentService;
             _mapper = mapper;
+            _memberService = memberService;
         }
         public async Task<ServiceResult<bool>> CreateStudent(StudentRequest studentRequest)
         {
             try
             {
                 var model = _mapper.Map<EStudent>(studentRequest);
+                model.IsDeleted = false;
+                model.IsActive = true;
+                //var adminId = HttpContext.User.FindFirstValue("id");
+                //var userID = HttpContent
+
+                if (model == null)
+                {
+                    return new ServiceResult<bool>()
+                    {
+                        Data = false,
+                        Status = StatusType.Failure,
+                        Message = "Error while parsing"
+                    };
+                }
+                if (!IsValidEmail(model.Email))
+                {
+                    return new ServiceResult<bool>()
+                    {
+                        Data = false,
+                        Status = StatusType.Failure,
+                        Message = "Email need to have special character."
+                    };
+                }
+
                 var CheckEmail = await _service.IsUniqueEmail(studentRequest.Email);
                 if (CheckEmail == true)
                 {
@@ -40,6 +69,18 @@ namespace Library.Application.Manager.Implementation
                     };
                 }
                 var result = await _service.CreateStudent(model);
+
+                //adding the staff information in Member table
+                EMember member = new EMember()
+                {
+                    Email = studentRequest.Email,
+                    FullName = studentRequest.FullName,
+                    MemberType = Domain.Enum.MemberType.Student,
+                    //may not store Id
+                    MemberCode = studentRequest.StudentCode,
+                    ReferenceId = studentRequest.Id,
+                };
+                await _memberService.CreateMember(member);
                 return new ServiceResult<bool>()
                 {
                     Data = result,
@@ -90,9 +131,18 @@ namespace Library.Application.Manager.Implementation
                 {
                     return new ServiceResult<StudentResponse>()
                     {
-                        Data = new StudentResponse() { Id = id},
+                        Data = new StudentResponse() { Id = id },
                         Status = StatusType.Failure,
                         Message = "User not found"
+                    };
+                }
+                if (user.IsDeleted == true)
+                {
+                    return new ServiceResult<StudentResponse>()
+                    {
+                        Data = new StudentResponse() { Id = id },
+                        Status = StatusType.Failure,
+                        Message = "User was deleted"
                     };
                 }
                 var result = new StudentResponse()
@@ -104,7 +154,7 @@ namespace Library.Application.Manager.Implementation
                     RollNo = user.RollNo,
                     StudentCode = user.StudentCode,
                 };
-                
+
                 return new ServiceResult<StudentResponse>()
                 {
                     Data = result,
@@ -117,9 +167,11 @@ namespace Library.Application.Manager.Implementation
 
         public async Task<ServiceResult<List<StudentResponse>>> GetStudents()
         {
-            try {
+            try
+            {
                 var user = await _service.GetStudents();
                 var result = (from u in user
+                              where u.IsDeleted == false
                               orderby u.Id descending
                               select new StudentResponse()
                               {
@@ -137,7 +189,8 @@ namespace Library.Application.Manager.Implementation
                     Status = StatusType.Success,
                     Message = "Users List"
                 };
-            } catch (Exception ex) { throw; } 
+            }
+            catch (Exception ex) { throw; }
         }
 
         public async Task<ServiceResult<bool>> UpdateStudent(StudentRequest studentRequest)
@@ -151,6 +204,12 @@ namespace Library.Application.Manager.Implementation
                 Status = user == true ? StatusType.Success : StatusType.Failure,
                 Message = user == true ? "Student updated successfull" : "Student not found"
             };
+        }
+
+        private bool IsValidEmail(string email)
+        {
+            const string emailPattern = @"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$";
+            return Regex.IsMatch(email, emailPattern);
         }
     }
 }

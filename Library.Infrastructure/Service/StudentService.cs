@@ -41,12 +41,17 @@ namespace Library.Infrastructure.Service
             {
                 var service = _factory.GetInstance<EStudent>();
                 var user = await service.FindAsync(id);
+
                 if (user == null)
                 {
                     return false;
                 }
-                await service.RemoveAsync(user);
+                user.IsDeleted = true;
+                user.IsActive = false;
+
+                await service.UpdateAsync(user);
                 return true;
+
             }
             catch (Exception ex)
             {
@@ -68,7 +73,7 @@ namespace Library.Infrastructure.Service
             }
             catch (Exception ex)
             {
-               throw;
+                throw;
             }
         }
         public async Task<List<EStudent>> GetStudents()
@@ -96,6 +101,10 @@ namespace Library.Infrastructure.Service
                 {
                     return false;
                 }
+                if (user.IsDeleted == true)
+                {
+                    return false;
+                }
                 user.FullName = eStudent.FullName;
                 user.Email = eStudent.Email;
                 user.Faculty = eStudent.Faculty;
@@ -104,7 +113,8 @@ namespace Library.Infrastructure.Service
                 await service.UpdateAsync(user);
                 return true;
             }
-            catch (Exception ex) {
+            catch (Exception ex)
+            {
                 throw ex;
             }
         }

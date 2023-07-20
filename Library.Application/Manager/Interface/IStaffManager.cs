@@ -14,7 +14,7 @@ namespace Library.Application.Manager.Interface
         Task<ServiceResult<bool>> AddStaff(StaffRequest staffRequest);
         Task<ServiceResult<List<StaffResponse>>> GetAllStaff();
         Task<ServiceResult<StaffResponse>> GetStaffById(int id);
-        Task<ServiceResult<bool>>UpdateStaff(StaffRequest staffRequest);
+        Task<ServiceResult<bool>>UpdateStaff(StaffUpdateRequest staffRequest);
         Task<ServiceResult<bool>>DeleteStaff(int id);
 
                                                                    

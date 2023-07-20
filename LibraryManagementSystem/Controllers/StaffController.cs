@@ -2,14 +2,17 @@
 using Library.Application.DTO.Response;
 using Library.Application.Manager.Interface;
 using Library.Domain.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Reflection.Metadata.Ecma335;
 using static Library.Infrastructure.Service.Common;
 
 namespace LibraryManagementSystem.Controllers
 {
+
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Roles = "Admin")]
     public class StaffController : ControllerBase
     {
         private readonly IStaffManager _manager = null;
@@ -17,6 +20,7 @@ namespace LibraryManagementSystem.Controllers
         {
             _manager = manager;
         }
+
         [HttpPost("AddStaff")]
         public async Task<ServiceResult<bool>> AddStaff(StaffRequest staffRequest)
         {
@@ -56,7 +60,7 @@ namespace LibraryManagementSystem.Controllers
 
         [HttpPut("UpdateStaff")]
 
-        public async Task<ServiceResult<bool>>UpdateStaff(StaffRequest staffRequest)
+        public async Task<ServiceResult<bool>>UpdateStaff(StaffUpdateRequest staffRequest)
         {
             var result = await _manager.UpdateStaff(staffRequest);
             return new ServiceResult<bool>()

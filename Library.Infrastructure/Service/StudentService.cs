@@ -101,7 +101,7 @@ namespace Library.Infrastructure.Service
                 {
                     return false;
                 }
-                if (user.IsDeleted == false)
+                if (user.IsDeleted == true)
                 {
                     return false;
                 }

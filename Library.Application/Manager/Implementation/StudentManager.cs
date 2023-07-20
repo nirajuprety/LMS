@@ -8,6 +8,7 @@ using Library.Infrastructure.Service;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -35,6 +36,8 @@ namespace Library.Application.Manager.Implementation
                 var model = _mapper.Map<EStudent>(studentRequest);
                 model.IsDeleted = false;
                 model.IsActive = true;
+                //var adminId = HttpContext.User.FindFirstValue("id");
+                //var userID = HttpContent
 
                 if (model == null)
                 {

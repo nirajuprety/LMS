@@ -58,7 +58,9 @@ namespace Library.Infrastructure.Service
                 {
                     return false;
                 }
-                await service.RemoveAsync(user);
+                user.IsDeleted = true;
+                user.IsActive = false;
+                await service.UpdateAsync(user);
                 return true;
             }
             catch (Exception ex) { throw ex; }

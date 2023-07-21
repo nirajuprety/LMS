@@ -301,6 +301,18 @@ namespace Library.Application.Manager.Implementation
             var vm = _mapper.Map<EStaff>(staffRequest);
             var result = await _service.UpdateStaff(vm);
 
+            if (staffRequest.StaffType != StaffType.Admin)
+            {
+                var staffMemberMapper = _mapper.Map<EMember>(staffRequest);
+                staffMemberMapper.MemberCode = staffRequest.StaffCode;
+                staffMemberMapper.FullName = staffRequest.Name;
+                staffMemberMapper.ReferenceId = staffRequest.Id;
+                await _memberService.UpdateMember(staffMemberMapper);               
+            }
+            var staffLoginMapper = _mapper.Map<ELogin>(staffRequest);
+            staffLoginMapper.StaffId = staffRequest.Id;
+            await _service.UpdateUser(staffLoginMapper);
+
             return new ServiceResult<bool>()
             {
                 Data = result,
@@ -311,6 +323,8 @@ namespace Library.Application.Manager.Implementation
         public async Task<ServiceResult<bool>> DeleteStaff(int id)
         {
             var staffList = await _service.DeleteStaff(id);
+            await _memberService.DeleteMember(id);
+            await _service.DeleteUser(id);
             if (staffList == false)
                 return new ServiceResult<bool>()
                 {

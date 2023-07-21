@@ -100,6 +100,37 @@ namespace Library.Application.Manager.Implementation
                 return serviceResult;
             }
         }
+
+        //public async Task<ServiceResult<bool>> UpdateMember(MemberRequest memberRequest)
+        //{
+        //    var staffList = await _service.GetStaffById(memberRequest.Id);
+        //    var vm = _mapper.Map<EStaff>(memberRequest);
+        //    var result = await _service.UpdateStaff(vm);
+        //    return new ServiceResult<bool>()
+        //    {
+        //        Data = result,
+        //        Message = result == true ? "Staff Updated Successfully!" : "Unable to Update Staff",
+        //        Status = result == true ? StatusType.Success : StatusType.Failure
+        //    };
+        //}
+        //public async Task<ServiceResult<bool>> DeleteStaff(int id)
+        //{
+        //    var staffList = await _service.DeleteStaff(id);
+        //    if (staffList == false)
+        //        return new ServiceResult<bool>()
+        //        {
+        //            Data = false,
+        //            Message = "Unable to delete staff",
+        //            Status = StatusType.Failure
+        //        };
+        //    return new ServiceResult<bool>()
+        //    {
+        //        Data = true,
+        //        Message = "Staff deleted successfully!",
+        //        Status = StatusType.Success
+        //    };
+
+        //}
     }
 }
 

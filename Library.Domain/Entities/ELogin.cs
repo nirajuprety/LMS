@@ -16,6 +16,6 @@ namespace Library.Domain.Entities
         public string Password { get; set; }
         [ForeignKey("Staff")]
         public int StaffId { get; set; }
-        public virtual EStaff Staff { get; set; }
+        //public virtual EStaff Staff { get; set; }
     }
 }

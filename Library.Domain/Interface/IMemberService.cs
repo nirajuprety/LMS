@@ -12,5 +12,9 @@ namespace Library.Domain.Interface
         Task<int> CreateMember(EMember member);
         Task<List<EMember>> GetMembers();
         Task<EMember> GetMemberById(int id);
+
+        Task<bool> UpdateMember(EMember eStaff);
+
+        Task<bool> DeleteMember(int id);
     }
 }

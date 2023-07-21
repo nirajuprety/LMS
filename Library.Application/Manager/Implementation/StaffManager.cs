@@ -237,6 +237,10 @@ namespace Library.Application.Manager.Implementation
             var staffList = await _service.GetStaffById(staffRequest.Id);
             var vm = _mapper.Map<EStaff>(staffRequest);
             var result = await _service.UpdateStaff(vm);
+
+            var staffMemberMapper = _mapper.Map<EMember>(staffRequest);
+            
+            await _memberService.UpdateMember(staffMemberMapper);
             return new ServiceResult<bool>()
             {
                 Data = result,
@@ -247,6 +251,7 @@ namespace Library.Application.Manager.Implementation
         public async Task<ServiceResult<bool>> DeleteStaff(int id)
         {
             var staffList = await _service.DeleteStaff(id);
+            await _memberService.DeleteMember(id);
             if (staffList == false)
                 return new ServiceResult<bool>()
                 {

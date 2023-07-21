@@ -5,11 +5,13 @@ using Library.Application.Manager.Interface;
 using Library.Domain.Entities;
 using Library.Domain.Interface;
 using Library.Infrastructure.Service;
+using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Text;
+using System.Text.Json;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using static Library.Infrastructure.Service.Common;
@@ -36,9 +38,7 @@ namespace Library.Application.Manager.Implementation
                 var model = _mapper.Map<EStudent>(studentRequest);
                 model.IsDeleted = false;
                 model.IsActive = true;
-                //var adminId = HttpContext.User.FindFirstValue("id");
-                //var userID = HttpContent
-
+               
                 if (model == null)
                 {
                     return new ServiceResult<bool>()
@@ -61,6 +61,7 @@ namespace Library.Application.Manager.Implementation
                 var CheckEmail = await _service.IsUniqueEmail(studentRequest.Email);
                 if (CheckEmail == true)
                 {
+                    Log.Error("Enter Unique Email: {Student}", JsonSerializer.Serialize(studentRequest));
                     return new ServiceResult<bool>()
                     {
                         Data = false,

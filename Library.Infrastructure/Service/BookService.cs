@@ -60,6 +60,7 @@ namespace Library.Infrastructure.Service
                 }
                 user.IsDeleted = true;
                 user.IsActive = false;
+                user.BookStatus = Domain.Enum.BookStatus.Unavailable;
                 await service.UpdateAsync(user);
                 return true;
             }

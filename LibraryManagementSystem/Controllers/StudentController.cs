@@ -30,8 +30,16 @@ namespace LibraryManagementSystem.Controllers
         {
 
             var result = await _manager.CreateStudent(studentRequest);
+            if (result.Status == StatusType.Failure)
+            {
+                return new ServiceResult<bool>()
+                {
+                    Data = result.Data,
+                    Status = result.Status,
+                    Message = result.Message
+                };
+            }
             Log.Information("Student Created Successfull: {Student}", JsonSerializer.Serialize(studentRequest));
-
             return new ServiceResult<bool>()
             {
                 Data = result.Data,
@@ -44,6 +52,15 @@ namespace LibraryManagementSystem.Controllers
         public async Task<ServiceResult<bool>> DeleteStudent(int id)
         {
             var result = await _manager.DeleteStudent(id);
+            if (result.Status == StatusType.Failure)
+            {
+                return new ServiceResult<bool>()
+                {
+                    Data = result.Data,
+                    Status = result.Status,
+                    Message = result.Message
+                };
+            }
             Log.Information("Student Deleted Successfull: {Student}", JsonSerializer.Serialize(result.Data));
             return new ServiceResult<bool>()
             {
@@ -57,7 +74,15 @@ namespace LibraryManagementSystem.Controllers
         public async Task<ServiceResult<StudentResponse>> GetStudentById(int id)
         {
             var result = await _manager.GetStudentByID(id);
-
+            if (result.Status == StatusType.Failure)
+            {
+                return new ServiceResult<StudentResponse>()
+                {
+                    Data = result.Data,
+                    Status = result.Status,
+                    Message = result.Message
+                };
+            }
             Log.Information("Student get by ID: {Student}", JsonSerializer.Serialize(result.Data));
             return new ServiceResult<StudentResponse>()
             {
@@ -70,7 +95,15 @@ namespace LibraryManagementSystem.Controllers
         public async Task<ServiceResult<List<StudentResponse>>> GetStudents()
         {
             var result = await _manager.GetStudents();
-
+            if (result.Status == StatusType.Failure)
+            {
+                return new ServiceResult<List<StudentResponse>>()
+                {
+                    Data = result.Data,
+                    Status = result.Status,
+                    Message = result.Message
+                };
+            }
             Log.Information("Students Lists: {Student}", JsonSerializer.Serialize(result.Data));
             return new ServiceResult<List<StudentResponse>>()
             {
@@ -83,7 +116,15 @@ namespace LibraryManagementSystem.Controllers
         public async Task<ServiceResult<bool>> UpdateStudent(StudentRequest studentRequest)
         {
             var result = await _manager.UpdateStudent(studentRequest);
-
+            if (result.Status == StatusType.Failure)
+            {
+                return new ServiceResult<bool>()
+                {
+                    Data = result.Data,
+                    Status = result.Status,
+                    Message = result.Message
+                };
+            }
             Log.Information("Student Updated Successfull: {Student}", JsonSerializer.Serialize(result.Data));
             return new ServiceResult<bool>()
             {

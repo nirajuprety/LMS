@@ -18,18 +18,14 @@ namespace LibraryManagementSystem.Controllers
 
     [Route("api/[controller]")]
     [ApiController]
-   // [Authorize(Roles = "Admin")]
+    // [Authorize(Roles = "Admin")]
     public class StaffController : ControllerBase
     {
         private readonly IStaffManager _manager = null;
-        private readonly ILogger<StaffController> _logger;
-        public StaffController(IStaffManager manager, ILogger<StaffController> logger)
+        public StaffController(IStaffManager manager)
         {
             _manager = manager;
-            _logger = logger;
         }
-        
-       
 
         [HttpPost("AddStaff")]
         public async Task<ServiceResult<bool>> AddStaff(StaffRequest staffRequest)
@@ -54,10 +50,10 @@ namespace LibraryManagementSystem.Controllers
 
         [HttpGet("GetStaff")]
 
-        public async Task<ServiceResult<List<StaffResponse>>>GetAllStaff()
+        public async Task<ServiceResult<List<StaffResponse>>> GetAllStaff()
         {
             var result = await _manager.GetAllStaff();
-            if(result.Status == StatusType.Success)
+            if (result.Status == StatusType.Success)
             {
                 Log.Information("All staff retrieved successfully:" + JsonSerializer.Serialize(result.Data));
             }
@@ -65,8 +61,6 @@ namespace LibraryManagementSystem.Controllers
             {
                 Log.Error("Unable to retrieve all staff. Error: " + result.Message);
             }
-
-
             return new ServiceResult<List<StaffResponse>>()
             {
                 Data = result.Data,
@@ -76,9 +70,9 @@ namespace LibraryManagementSystem.Controllers
 
         }
         [HttpGet("GetStaffById")]
-        public async Task<ServiceResult<StaffResponse>>GetStaffBbyId(int id)
+        public async Task<ServiceResult<StaffResponse>> GetStaffBbyId(int id)
         {
-            var result= await _manager.GetStaffById(id);
+            var result = await _manager.GetStaffById(id);
 
             if (result.Status == StatusType.Success)
             {
@@ -97,7 +91,7 @@ namespace LibraryManagementSystem.Controllers
         }
 
         [HttpPut("UpdateStaff")]
-        public async Task<ServiceResult<bool>>UpdateStaff(StaffUpdateRequest staffRequest)
+        public async Task<ServiceResult<bool>> UpdateStaff(StaffUpdateRequest staffRequest)
         {
             var result = await _manager.UpdateStaff(staffRequest);
 
@@ -120,9 +114,9 @@ namespace LibraryManagementSystem.Controllers
 
         [HttpDelete("DeleteStaff")]
 
-        public async Task<ServiceResult<bool>>DeleteStaff(int id)
+        public async Task<ServiceResult<bool>> DeleteStaff(int id)
         {
-           var result= await _manager.DeleteStaff(id);
+            var result = await _manager.DeleteStaff(id);
             return new ServiceResult<bool>()
             {
                 Data = result.Data,

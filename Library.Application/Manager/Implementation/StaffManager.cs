@@ -35,7 +35,7 @@ namespace Library.Application.Manager.Implementation
             _mapper = mapper;
             _serviceLogin = serviceLogin;
             _memberService = memberService;
-           
+
         }
 
         public async Task<ServiceResult<bool>> AddStaff(StaffRequest staffRequest)
@@ -43,7 +43,7 @@ namespace Library.Application.Manager.Implementation
             try
             {
                 bool validateEMail = IsEmailValid(staffRequest.Email);
-               
+
                 if (!validateEMail)
                 {
                     Log.Information("Email validation failed for: " + staffRequest.Email);
@@ -81,7 +81,7 @@ namespace Library.Application.Manager.Implementation
 
                 // Check if the StaffCode is unique
                 var isStaffCodeUnique = await _service.IsUniqueStaffCode(staffRequest.StaffCode);
-                if (isStaffCodeUnique == true) 
+                if (isStaffCodeUnique == true)
                 {
                     return new ServiceResult<bool>()
                     {
@@ -133,7 +133,7 @@ namespace Library.Application.Manager.Implementation
                 vm.UpdatedDate = DateTime.Now;
 
                 int staffId = await _service.AddStaff(vm);
-                
+
                 if (staffRequest.StaffType == Domain.Enum.StaffType.Staff)
                 {
                     //adding the staff information in Member table
@@ -156,7 +156,7 @@ namespace Library.Application.Manager.Implementation
                 bool staffLogin = await _service.CreateLogin(login);
 
 
-               Log.Information("Staff added successfully M: " + JsonSerializer.Serialize(staffRequest));
+                Log.Information("Staff added successfully!: " + JsonSerializer.Serialize(staffRequest));
                 return new ServiceResult<bool>()
 
                 {
@@ -176,7 +176,7 @@ namespace Library.Application.Manager.Implementation
                 };
             }
         }
-        
+
         private bool IsEmailValid(string email)
         {
             const string emailPattern = @"^[^\s@]+@[^\s@]+\.[^\s@]+$";
@@ -217,7 +217,7 @@ namespace Library.Application.Manager.Implementation
             }
         }
 
-         
+
         public async Task<ServiceResult<List<StaffResponse>>> GetAllStaff()
         {
             var staffList = await _service.GetAllStaff();
@@ -249,7 +249,7 @@ namespace Library.Application.Manager.Implementation
         {
 
             var staff = await _service.GetStaffById(id);
-            if(staff==null)
+            if (staff == null)
             {
                 return new ServiceResult<StaffResponse>()
                 {
@@ -259,7 +259,7 @@ namespace Library.Application.Manager.Implementation
                 };
             }
 
-            
+
             var result = new StaffResponse()
             {
                 Id = staff.Id,
@@ -297,21 +297,7 @@ namespace Library.Application.Manager.Implementation
             }
             var vm = _mapper.Map<EStaff>(staffRequest);
             var result = await _service.UpdateStaff(vm);
-            //var result = await _service.UpdateStaff(vm);
 
-            //if (staffRequest.StaffType == Domain.Enum.StaffType.Staff)
-            //{
-            //    //adding the staff information in Member table
-            //    EMember member = new EMember()
-            //    {
-            //        Email = staffRequest.Email,
-            //        FullName = staffRequest.Name,
-            //        MemberType = Domain.Enum.MemberType.Staff,
-            //        MemberCode = staffRequest.StaffCode,
-            //        ReferenceId = ,
-            //    };
-            //    await _memberService.CreateMember(member);
-            //}
             return new ServiceResult<bool>()
             {
                 Data = result,

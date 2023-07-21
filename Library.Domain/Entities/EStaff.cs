@@ -21,7 +21,7 @@ namespace Library.Domain.Entities
         public DateTime CreatedDate{ get; set; }
         public DateTime UpdatedDate { get; set; }
         public int StaffCode{ get; set;}
-        public StaffType StaffType { get; set; }
+        public StaffType StaffType { get; set; } 
 
     }    
     }

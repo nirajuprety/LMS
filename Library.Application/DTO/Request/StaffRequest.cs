@@ -20,10 +20,10 @@ namespace Library.Application.DTO.Request
 
         [Required(ErrorMessage = "Email Required.")]
         public string Email { get; set; }
-        public bool IsDeleted { get; set; }
-        public bool IsActive { get; set; }
-        public DateTime CreatedDate { get; set; }
-        public DateTime UpdatedDate { get; set; }
+        //public bool IsDeleted { get; set; }
+        //public bool IsActive { get; set; }
+        //public DateTime CreatedDate { get; set; }
+        //public DateTime UpdatedDate { get; set; }
         public int StaffCode { get; set; }
         public StaffType StaffType { get; set; }
     }

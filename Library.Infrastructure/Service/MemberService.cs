@@ -55,13 +55,11 @@ namespace Library.Infrastructure.Service
         public async Task<bool> UpdateMember(EMember member)
         {
             var service = _factory.GetInstance<EMember>();
-            var result = await service.FindAsync(member.Id);
+            var result =  service.ListAsync().Result.Where(x=>x.ReferenceId == member.ReferenceId).FirstOrDefault();
 
-            result.Id = member.Id;
             result.FullName = member.FullName;
             result.Email = member.Email;
             result.MemberType = member.MemberType;
-            result.ReferenceId = member.ReferenceId;
             result.MemberCode = member.MemberCode;
             
             await service.UpdateAsync(result);

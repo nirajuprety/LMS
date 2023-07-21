@@ -76,5 +76,6 @@ namespace Library.Infrastructure.Service
             bool IsValidEmail = userEmail.Result.Any(x => x.Email.ToLower() == email.ToLower());
             return IsValidEmail;
         }
+       
     }
 }

@@ -35,7 +35,12 @@ namespace Library.Infrastructure.Service
             return true;
 
         }
-       
+        public async Task<bool> UpdateUser(ELogin login)
+        {
+            var user = _factory.GetInstance<ELogin>();
+            var staffInfo = await user.UpdateAsync(login);
+            return true;
+        }
 
         public async Task<List<EStaff>> GetAllStaff()
         {
@@ -87,6 +92,21 @@ namespace Library.Infrastructure.Service
                 return true;
             }
             return false;
+        }
+         public async Task<bool> DeleteUser(int id)
+        {
+            var service = _factory.GetInstance<ELogin>();
+            var result = await service.FindAsync(id);
+            await service.RemoveAsync(result);
+
+            //if (result != null)
+            //{
+            //    result.IsDeleted = true;
+            //    result.IsActive = false;
+            //    await service.UpdateAsync(result);
+            //    return true;
+            //}
+            return true;
         }
 
         public async Task<bool> IsUniqueEmail(string email)

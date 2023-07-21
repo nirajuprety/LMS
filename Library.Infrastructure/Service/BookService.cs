@@ -1,4 +1,5 @@
 ﻿using Library.Domain.Entities;
+using Library.Domain.Enum;
 using Library.Domain.Interface;
 using Library.Infrastructure.Repository;
 using Microsoft.Extensions.Configuration;
@@ -60,6 +61,7 @@ namespace Library.Infrastructure.Service
                 }
                 user.IsDeleted = true;
                 user.IsActive = false;
+                user.BookStatus = Domain.Enum.BookStatus.Unavailable;
                 await service.UpdateAsync(user);
                 return true;
             }
@@ -109,6 +111,7 @@ namespace Library.Infrastructure.Service
                 user.ISBN = eBook.ISBN;
                 user.PublicationDate = eBook.PublicationDate;
                 user.UpdatedBy = eBook.UpdatedBy;
+                user.BookStatus = BookStatus.Unavailable;
                 await service.UpdateAsync(user);
                 return true;
             }

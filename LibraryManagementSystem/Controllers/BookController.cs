@@ -38,7 +38,7 @@ namespace LibraryManagementSystem.Controllers
                 return Ok(result.Message);
             }
             Log.Error("Error adding book: {ErrorMessage}", JsonSerializer.Serialize(result.Message));
-
+            
             return BadRequest(result.Message);
         }
 
@@ -65,7 +65,7 @@ namespace LibraryManagementSystem.Controllers
 
             if (result.Status == StatusType.Success)
             {
-                Log.Information($"{result.Data}");
+                Log.Information("Book information : {info}", JsonSerializer.Serialize(result.Data));
                 return Ok(result.Data);
             }
             Log.Warning(result.Message);
@@ -79,7 +79,7 @@ namespace LibraryManagementSystem.Controllers
 
             if (result.Status == StatusType.Success)
             {
-                Log.Information($"Books: {result.Data}");
+                Log.Information("Books: {Book}",JsonSerializer.Serialize(result.Data));
                 return Ok(result.Data);
             }
             Log.Information (result.Message);
@@ -99,7 +99,7 @@ namespace LibraryManagementSystem.Controllers
 
             if (result.Status == StatusType.Success)
             {
-                Log.Information(result.Message);
+                Log.Information("The book has been updated : {updated}", JsonSerializer.Serialize(result.Message));
                 return Ok(result.Message);
             }
             Log.Warning(result.Message);

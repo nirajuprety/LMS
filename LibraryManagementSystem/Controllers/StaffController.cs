@@ -12,7 +12,7 @@ namespace LibraryManagementSystem.Controllers
 
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Roles = "Admin")]
+   // [Authorize(Roles = "Admin")]
     public class StaffController : ControllerBase
     {
         private readonly IStaffManager _manager = null;

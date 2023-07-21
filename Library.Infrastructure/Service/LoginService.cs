@@ -62,6 +62,8 @@ namespace Library.Infrastructure.Service
                 string hashedPassword = Convert.ToBase64String(hashBytes);
                 return hashedPassword;
             }
+
+
         }
         public async Task<bool> LoginUser(ELogin eLogin)
         {

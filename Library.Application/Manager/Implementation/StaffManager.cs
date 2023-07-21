@@ -3,6 +3,7 @@ using Library.Application.DTO.Request;
 using Library.Application.DTO.Response;
 using Library.Application.Manager.Interface;
 using Library.Domain.Entities;
+using Library.Domain.Enum;
 using Library.Domain.Interface;
 using Library.Infrastructure.Service;
 using System;
@@ -37,7 +38,7 @@ namespace Library.Application.Manager.Implementation
             try
             {
                 bool validateEMail = IsEmailValid(staffRequest.Email);
-                if(!validateEMail)
+                if (!validateEMail)
                 {
                     return new ServiceResult<bool>()
                     {
@@ -46,8 +47,6 @@ namespace Library.Application.Manager.Implementation
                         Status = StatusType.Failure
                     };
                 }
-
-
 
                 if (!IsPasswordValid(staffRequest.Password))
                 {
@@ -58,9 +57,9 @@ namespace Library.Application.Manager.Implementation
                         Status = StatusType.Failure
                     };
                 }
+
                 // Hash the password before storing it
                 string hashedPassword = HashPassword(staffRequest.Password);
-
                 var isEmailUnique = await _service.IsUniqueEmail(staffRequest.Email);
                 if (isEmailUnique == true)
                 {
@@ -70,7 +69,51 @@ namespace Library.Application.Manager.Implementation
                         Message = "Email already exist!",
                         Status = StatusType.Failure
                     };
+                }
 
+                // Check if the StaffCode is unique
+                var isStaffCodeUnique = await _service.IsUniqueStaffCode(staffRequest.StaffCode);
+                if (isStaffCodeUnique == true) 
+                {
+                    return new ServiceResult<bool>()
+                    {
+                        Data = false,
+                        Message = "The provided StaffCode already exists in the system",
+                        Status = StatusType.Failure
+                    };
+                }
+
+                //Check if stafftype is admin or staff.
+                if (staffRequest.StaffType != StaffType.Admin && staffRequest.StaffType != StaffType.Staff)
+                {
+                    return new ServiceResult<bool>()
+                    {
+                        Data = false,
+                        Message = "Invalid StaffType value. StaffType can only be 0 (admin) or 1 (staff).",
+                        Status = StatusType.Failure
+                    };
+                }
+
+                // Validate that the first character of the name starts with a capital letter
+                if (!char.IsUpper(staffRequest.Name.FirstOrDefault()))
+                {
+                    return new ServiceResult<bool>()
+                    {
+                        Data = false,
+                        Message = "Name should start with a capital letter",
+                        Status = StatusType.Failure
+                    };
+                }
+
+                // Validate that the first character of the username starts with a capital letter
+                if (!char.IsUpper(staffRequest.Username.FirstOrDefault()))
+                {
+                    return new ServiceResult<bool>()
+                    {
+                        Data = false,
+                        Message = "Username should start with a capital letter",
+                        Status = StatusType.Failure
+                    };
                 }
 
 
@@ -78,13 +121,14 @@ namespace Library.Application.Manager.Implementation
                 vm.IsDeleted = false;
                 vm.Password = hashedPassword;
                 vm.IsActive = true;
+                //vm.CreatedDate = DateTime.Now;
+                //vm.UpdatedDate = DateTime.Now;
 
                 int staffId = await _service.AddStaff(vm);
                 Random rand = new Random();
                var randomNo =  rand.Next(5);
                 if (staffRequest.StaffType == Domain.Enum.StaffType.Staff)
                 {
-
                     //adding the staff information in Member table
                     EMember member = new EMember()
                     {
@@ -150,9 +194,9 @@ namespace Library.Application.Manager.Implementation
             {
                 return false;
             }
-
             return true;
         }
+
         private string HashPassword(string password)
         {
             using (var sha256 = SHA256.Create())
@@ -165,8 +209,6 @@ namespace Library.Application.Manager.Implementation
         }
 
          
-
-
         public async Task<ServiceResult<List<StaffResponse>>> GetAllStaff()
         {
             var staffList = await _service.GetAllStaff();
@@ -235,8 +277,32 @@ namespace Library.Application.Manager.Implementation
         public async Task<ServiceResult<bool>> UpdateStaff(StaffUpdateRequest staffRequest)
         {
             var staffList = await _service.GetStaffById(staffRequest.Id);
+            if (staffList == null)
+            {
+                return new ServiceResult<bool>()
+                {
+                    Data = false,
+                    Message = "Staff not found!",
+                    Status = StatusType.Failure
+                };
+            }
             var vm = _mapper.Map<EStaff>(staffRequest);
             var result = await _service.UpdateStaff(vm);
+            //var result = await _service.UpdateStaff(vm);
+
+            //if (staffRequest.StaffType == Domain.Enum.StaffType.Staff)
+            //{
+            //    //adding the staff information in Member table
+            //    EMember member = new EMember()
+            //    {
+            //        Email = staffRequest.Email,
+            //        FullName = staffRequest.Name,
+            //        MemberType = Domain.Enum.MemberType.Staff,
+            //        MemberCode = staffRequest.StaffCode,
+            //        ReferenceId = ,
+            //    };
+            //    await _memberService.CreateMember(member);
+            //}
             return new ServiceResult<bool>()
             {
                 Data = result,

@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Library.Infrastructure.Repository
 {
-    public class DatabaseContext: DbContext
+    public class DatabaseContext : DbContext
     {
         public DatabaseContext(DbContextOptions<DatabaseContext> options) : base(options)
         {
@@ -34,10 +34,10 @@ namespace Library.Infrastructure.Repository
             }
         }
         public DbSet<EStudent> Students { get; set; }
-        public DbSet<EStaff> Staffs { get; set;}
-        public DbSet<EBook> Books { get; set;}
-        public DbSet<ELogin> Logins { get; set;}
-        public DbSet<EMember> Members{ get; set;}
-        public DbSet<EIssueTable> IssueTables{ get; set;}
+        public DbSet<EStaff> Staffs { get; set; }
+        public DbSet<EBook> Books { get; set; }
+        public DbSet<ELogin> Logins { get; set; }
+        public DbSet<EMember> Members { get; set; }
+        public DbSet<EIssueTable> IssueTables { get; set; }
     }
 }

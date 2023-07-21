@@ -19,5 +19,7 @@ namespace Library.Domain.Interface
 
         Task<bool> IsUniqueEmail(string email);
 
+        Task<bool> IsUniqueStaffCode(int StaffCode);
+
     }
 }

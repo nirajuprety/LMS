@@ -6,11 +6,14 @@ using Library.Domain.Entities;
 using Library.Domain.Enum;
 using Library.Domain.Interface;
 using Library.Infrastructure.Service;
+using Microsoft.Extensions.Logging;
+using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
+using System.Text.Json;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using static Library.Infrastructure.Service.Common;
@@ -25,12 +28,14 @@ namespace Library.Application.Manager.Implementation
         private readonly IMapper _mapper = null;
         private readonly IMemberService _memberService = null;
 
+
         public StaffManager(IStaffService service, IMapper mapper, ILoginService serviceLogin, IMemberService memberService)
         {
             _service = service;
             _mapper = mapper;
             _serviceLogin = serviceLogin;
             _memberService = memberService;
+
         }
 
         public async Task<ServiceResult<bool>> AddStaff(StaffRequest staffRequest)
@@ -38,8 +43,10 @@ namespace Library.Application.Manager.Implementation
             try
             {
                 bool validateEMail = IsEmailValid(staffRequest.Email);
+
                 if (!validateEMail)
                 {
+                    Log.Information("Email validation failed for: " + staffRequest.Email);
                     return new ServiceResult<bool>()
                     {
                         Data = validateEMail,
@@ -50,6 +57,7 @@ namespace Library.Application.Manager.Implementation
 
                 if (!IsPasswordValid(staffRequest.Password))
                 {
+                    Log.Information("Password validation failed for: " + staffRequest.Password);
                     return new ServiceResult<bool>()
                     {
                         Data = false,
@@ -105,6 +113,7 @@ namespace Library.Application.Manager.Implementation
                     };
                 }
 
+
                 // Validate that the first character of the username starts with a capital letter
                 if (!char.IsUpper(staffRequest.Username.FirstOrDefault()))
                 {
@@ -121,12 +130,13 @@ namespace Library.Application.Manager.Implementation
                 vm.IsDeleted = false;
                 vm.Password = hashedPassword;
                 vm.IsActive = true;
-                //vm.CreatedDate = DateTime.Now;
-                //vm.UpdatedDate = DateTime.Now;
+
+                vm.CreatedDate = DateTime.Now;
+                vm.UpdatedDate = DateTime.Now;
+
 
                 int staffId = await _service.AddStaff(vm);
-                Random rand = new Random();
-               var randomNo =  rand.Next(5);
+
                 if (staffRequest.StaffType == Domain.Enum.StaffType.Staff)
                 {
                     //adding the staff information in Member table
@@ -135,7 +145,6 @@ namespace Library.Application.Manager.Implementation
                         Email = staffRequest.Email,
                         FullName = staffRequest.Name,
                         MemberType = Domain.Enum.MemberType.Staff,
-                        MemberCode = randomNo,
                         ReferenceId = staffId,
                     };
                     await _memberService.CreateMember(member);
@@ -148,6 +157,9 @@ namespace Library.Application.Manager.Implementation
                     StaffId = staffId
                 };
                 bool staffLogin = await _service.CreateLogin(login);
+
+
+                Log.Information("Staff added successfully!: " + JsonSerializer.Serialize(staffRequest));
                 return new ServiceResult<bool>()
 
                 {
@@ -167,7 +179,7 @@ namespace Library.Application.Manager.Implementation
                 };
             }
         }
-        
+
         private bool IsEmailValid(string email)
         {
             const string emailPattern = @"^[^\s@]+@[^\s@]+\.[^\s@]+$";
@@ -208,7 +220,7 @@ namespace Library.Application.Manager.Implementation
             }
         }
 
-         
+
         public async Task<ServiceResult<List<StaffResponse>>> GetAllStaff()
         {
             var staffList = await _service.GetAllStaff();
@@ -240,7 +252,7 @@ namespace Library.Application.Manager.Implementation
         {
 
             var staff = await _service.GetStaffById(id);
-            if(staff==null)
+            if (staff == null)
             {
                 return new ServiceResult<StaffResponse>()
                 {
@@ -250,7 +262,7 @@ namespace Library.Application.Manager.Implementation
                 };
             }
 
-            
+
             var result = new StaffResponse()
             {
                 Id = staff.Id,
@@ -288,21 +300,7 @@ namespace Library.Application.Manager.Implementation
             }
             var vm = _mapper.Map<EStaff>(staffRequest);
             var result = await _service.UpdateStaff(vm);
-            //var result = await _service.UpdateStaff(vm);
 
-            //if (staffRequest.StaffType == Domain.Enum.StaffType.Staff)
-            //{
-            //    //adding the staff information in Member table
-            //    EMember member = new EMember()
-            //    {
-            //        Email = staffRequest.Email,
-            //        FullName = staffRequest.Name,
-            //        MemberType = Domain.Enum.MemberType.Staff,
-            //        MemberCode = staffRequest.StaffCode,
-            //        ReferenceId = ,
-            //    };
-            //    await _memberService.CreateMember(member);
-            //}
             return new ServiceResult<bool>()
             {
                 Data = result,

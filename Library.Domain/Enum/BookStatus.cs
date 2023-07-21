@@ -8,7 +8,7 @@ namespace Library.Domain.Enum
 {
     public enum BookStatus
     {
-        Active,
-        Inactive,
+        Available=0,
+        Unavailable=1,
     }
 }

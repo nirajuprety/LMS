@@ -5,6 +5,8 @@ using Library.Application.Manager.Interface;
 using Library.Domain.Entities;
 using Library.Domain.Interface;
 using Library.Infrastructure.Service;
+using Microsoft.Extensions.Logging;
+using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -16,6 +18,7 @@ namespace Library.Application.Manager.Implementation
     {
         private readonly IBookService _service;
         private readonly IMapper _mapper;
+
 
         public BookManager(IBookService bookService, IMapper mapper)
         {
@@ -43,7 +46,7 @@ namespace Library.Application.Manager.Implementation
                 serviceResult.Status = result ? StatusType.Success : StatusType.Failure;
                 serviceResult.Message = result ? "Book added successfully" : "Failed to add book";
                 serviceResult.Data = result;
-
+                //Log.Information($"Book added successfully :{result}");
                 return serviceResult;
             }
             catch (Exception ex)
@@ -51,7 +54,7 @@ namespace Library.Application.Manager.Implementation
                 serviceResult.Status = StatusType.Failure;
                 serviceResult.Message = "An error occurred while adding the book";
                 serviceResult.Data = false;
-
+                //Log.Warning("Error occured");
                 return serviceResult;
             }
         }

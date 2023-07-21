@@ -58,7 +58,9 @@ namespace Library.Infrastructure.Service
                 {
                     return false;
                 }
-                await service.RemoveAsync(user);
+                user.IsDeleted = true;
+                user.IsActive = false;
+                await service.UpdateAsync(user);
                 return true;
             }
             catch (Exception ex) { throw ex; }
@@ -70,7 +72,7 @@ namespace Library.Infrastructure.Service
             {
                 var service = _factory.GetInstance<EBook>();
                 var user = await service.FindAsync(id);
-                if (user == null)
+                if (user == null )
                 {
                     return null;
                 }
@@ -91,6 +93,7 @@ namespace Library.Infrastructure.Service
             catch (Exception ex) { throw ex; }
         }
 
+       
         public async Task<bool> UpdateBookStatus(EBook eBook)
         {
             try

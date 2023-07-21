@@ -2,15 +2,19 @@ using AutoMapper;
 using Library.Application;
 using Library.Application.Mapper;
 using Library.Infrastructure;
+using Library.Infrastructure.Service;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Serilog;
 using Swashbuckle.AspNetCore.Filters;
 using System.Text;
 using Test.Infrastructure.Mapper;
 
 var builder = WebApplication.CreateBuilder(args);
-
+//Logger Configuration
+Log.Logger = new LoggerConfiguration()
+    .ReadFrom.Configuration(builder.Configuration).CreateLogger();
 // Add services to the container.
 
 builder.Services.AddControllers();

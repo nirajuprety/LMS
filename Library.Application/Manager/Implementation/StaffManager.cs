@@ -81,7 +81,7 @@ namespace Library.Application.Manager.Implementation
 
                 // Check if the StaffCode is unique
                 var isStaffCodeUnique = await _service.IsUniqueStaffCode(staffRequest.StaffCode);
-                if (isStaffCodeUnique == true)
+                if (isStaffCodeUnique == true) 
                 {
                     return new ServiceResult<bool>()
                     {
@@ -113,6 +113,7 @@ namespace Library.Application.Manager.Implementation
                     };
                 }
 
+
                 // Validate that the first character of the username starts with a capital letter
                 if (!char.IsUpper(staffRequest.Username.FirstOrDefault()))
                 {
@@ -129,8 +130,10 @@ namespace Library.Application.Manager.Implementation
                 vm.IsDeleted = false;
                 vm.Password = hashedPassword;
                 vm.IsActive = true;
+
                 vm.CreatedDate = DateTime.Now;
                 vm.UpdatedDate = DateTime.Now;
+
 
                 int staffId = await _service.AddStaff(vm);
 

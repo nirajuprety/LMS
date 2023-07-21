@@ -18,5 +18,7 @@ namespace Library.Domain.Entities
         public MemberType MemberType { get; set; }
         public int ReferenceId{ get; set; }
         public int MemberCode{ get; set; }
+
+
     }
 }

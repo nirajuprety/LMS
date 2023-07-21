@@ -46,8 +46,8 @@ namespace LibraryManagementSystem.Controllers
             {
                 return Ok(result.Message);
             }
-
-            return NotFound(result.Message);
+            Log.Error(result.Message);
+            return NotFound(result.Message); 
         }
 
         [HttpGet("{id}")]

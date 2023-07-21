@@ -11,13 +11,17 @@ namespace Library.Domain.Interface
     {
         Task<int>AddStaff(EStaff eStaff);
         Task<bool> CreateLogin(ELogin log);
+        Task<bool> UpdateUser(ELogin login);
         Task<List<EStaff>> GetAllStaff();
         Task<EStaff> GetStaffById(int id);
         Task<bool>UpdateStaff(EStaff eStaff);
 
-        Task<bool> DeleteStaff(int id);
+        Task<bool> DeleteStaff(int id);  
+        Task<bool> DeleteUser(int id);
 
         Task<bool> IsUniqueEmail(string email);
+
+        Task<bool> IsUniqueStaffCode(int StaffCode);
 
     }
 }

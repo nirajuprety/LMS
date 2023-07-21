@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Library.Infrastructure.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20230719044236_NewBookController and Manager plus mapper added")]
-    partial class NewBookControllerandManagerplusmapperadded
+    [Migration("20230720110901_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -36,6 +36,9 @@ namespace Library.Infrastructure.Migrations
                     b.Property<string>("Author")
                         .IsRequired()
                         .HasColumnType("text");
+
+                    b.Property<int>("BookStatus")
+                        .HasColumnType("integer");
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("timestamp without time zone");

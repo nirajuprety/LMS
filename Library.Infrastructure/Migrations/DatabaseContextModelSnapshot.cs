@@ -118,8 +118,6 @@ namespace Library.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("StaffId");
-
                     b.ToTable("Logins");
                 });
 
@@ -242,17 +240,6 @@ namespace Library.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Students");
-                });
-
-            modelBuilder.Entity("Library.Domain.Entities.ELogin", b =>
-                {
-                    b.HasOne("Library.Domain.Entities.EStaff", "Staff")
-                        .WithMany()
-                        .HasForeignKey("StaffId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Staff");
                 });
 #pragma warning restore 612, 618
         }

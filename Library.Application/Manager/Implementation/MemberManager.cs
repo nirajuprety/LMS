@@ -31,7 +31,7 @@ namespace Library.Application.Manager.Implementation
         {
             //mapper
             var vm = _mapper.Map<EMember>(request);
-            
+
             int memberId = await _service.CreateMember(vm);
             return new ServiceResult<bool>()
 
@@ -133,3 +133,5 @@ namespace Library.Application.Manager.Implementation
         //}
     }
 }
+
+        

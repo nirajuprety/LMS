@@ -20,6 +20,8 @@ namespace Library.Application.Mapper
             CreateMap<EBook, BookResponse>();
             CreateMap<BookRequest, EBook>();
             CreateMap<StaffUpdateRequest, EStaff>();
+            CreateMap<StaffUpdateRequest, EMember>();
+            CreateMap<StaffUpdateRequest, ELogin>();
         }
     }
 }

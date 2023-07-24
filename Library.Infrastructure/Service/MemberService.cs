@@ -52,6 +52,35 @@ namespace Library.Infrastructure.Service
             }
             catch (Exception ex) { throw ex; }
         }
+        public async Task<bool> UpdateMember(EMember member)
+        {
+            var service = _factory.GetInstance<EMember>();
+            var result =  service.ListAsync().Result.Where(x=>x.ReferenceId == member.ReferenceId).FirstOrDefault();
 
+            result.FullName = member.FullName;
+            result.Email = member.Email;
+            result.MemberType = member.MemberType;
+            result.MemberCode = member.MemberCode;
+            
+            await service.UpdateAsync(result);
+
+            return true;
+
+        }
+        public async Task<bool> DeleteMember(int id)
+        {
+            var service = _factory.GetInstance<EMember>();
+            var result = await service.FindAsync(id);
+            await service.RemoveAsync(result);
+
+            //if (result != null)
+            //{
+            //    result.IsDeleted = true;
+            //    result.IsActive = false;
+            //    await service.UpdateAsync(result);
+            //    return true;
+            //}
+            return true;
+        }
     }
 }

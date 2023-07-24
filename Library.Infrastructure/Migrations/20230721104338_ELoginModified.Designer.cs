@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Library.Infrastructure.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20230719072718_BookBorrowDetails")]
-    partial class BookBorrowDetails
+    [Migration("20230721104338_ELoginModified")]
+    partial class ELoginModified
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -43,8 +43,9 @@ namespace Library.Infrastructure.Migrations
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("timestamp without time zone");
 
-                    b.Property<int>("ISBN")
-                        .HasColumnType("integer");
+                    b.Property<string>("ISBN")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("boolean");
@@ -119,8 +120,6 @@ namespace Library.Infrastructure.Migrations
                         .HasColumnType("integer");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("StaffId");
 
                     b.ToTable("Logins");
                 });
@@ -244,17 +243,6 @@ namespace Library.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Students");
-                });
-
-            modelBuilder.Entity("Library.Domain.Entities.ELogin", b =>
-                {
-                    b.HasOne("Library.Domain.Entities.EStaff", "Staff")
-                        .WithMany()
-                        .HasForeignKey("StaffId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Staff");
                 });
 #pragma warning restore 612, 618
         }

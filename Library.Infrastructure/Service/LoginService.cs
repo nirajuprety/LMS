@@ -62,6 +62,8 @@ namespace Library.Infrastructure.Service
                 string hashedPassword = Convert.ToBase64String(hashBytes);
                 return hashedPassword;
             }
+
+
         }
         public async Task<bool> LoginUser(ELogin eLogin)
         {
@@ -76,5 +78,6 @@ namespace Library.Infrastructure.Service
             bool IsValidEmail = userEmail.Result.Any(x => x.Email.ToLower() == email.ToLower());
             return IsValidEmail;
         }
+       
     }
 }

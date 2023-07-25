@@ -14,12 +14,12 @@ namespace Library.Infrastructure.Service
     public class BookService : IBookService
     {
         private readonly IServiceFactory _factory;
-        private readonly IConfiguration _configuration;
+        //private readonly IConfiguration _configuration;
 
-        public BookService(IServiceFactory factory, IConfiguration configuration)
+        public BookService(IServiceFactory factory)
         {
             _factory = factory;
-            _configuration = configuration;
+            //_configuration = configuration;
         }
         public async Task<bool> AddBook(EBook eBook)
         {
@@ -37,13 +37,14 @@ namespace Library.Infrastructure.Service
             var bookservice = _factory.GetInstance<EBook>();
             var memberService = _factory.GetInstance<EMember>();
             var book = await bookservice.FindAsync(id);
-            if (book == null || !book.IsActive) 
+            if (book == null || !book.IsActive)
             {
                 return false;
             }
 
             var member = await memberService.FindAsync(id);
-            if (member == null) {
+            if (member == null)
+            {
                 return false;
             }
             return true;
@@ -74,7 +75,7 @@ namespace Library.Infrastructure.Service
             {
                 var service = _factory.GetInstance<EBook>();
                 var user = await service.FindAsync(id);
-                if (user == null )
+                if (user == null)
                 {
                     return null;
                 }
@@ -95,7 +96,7 @@ namespace Library.Infrastructure.Service
             catch (Exception ex) { throw ex; }
         }
 
-       
+
         public async Task<bool> UpdateBookStatus(EBook eBook)
         {
             try

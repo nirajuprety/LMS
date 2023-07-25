@@ -14,12 +14,12 @@ namespace Library.Infrastructure.Service
     public class BookService : IBookService
     {
         private readonly IServiceFactory _factory;
-        private readonly IConfiguration _configuration;
+        //private readonly IConfiguration _configuration;
 
-        public BookService(IServiceFactory factory, IConfiguration configuration)
+        public BookService(IServiceFactory factory)
         {
             _factory = factory;
-            _configuration = configuration;
+            //_configuration = configuration;
         }
         public async Task<bool> AddBook(EBook eBook)
         {

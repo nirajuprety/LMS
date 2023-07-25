@@ -122,9 +122,10 @@ namespace Library.Infrastructure.Repository
         {
             db = new DatabaseContext();
         }
-        public ServiceFactory(DatabaseContext db)
+        public ServiceFactory(DatabaseContext db, bool isforTest)
         {
             this.db = db;
+            this._isforTest = isforTest;
         }
         public void Dispose()
         {

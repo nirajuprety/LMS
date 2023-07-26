@@ -13,12 +13,12 @@ namespace Library.Infrastructure.Service
     public class StudentService : IStudentService
     {
         private readonly IServiceFactory _factory;
-        private readonly IConfiguration _configuration;
+        //private readonly IConfiguration _configuration;
 
-        public StudentService(IServiceFactory factory, IConfiguration configuration)
+        public StudentService(IServiceFactory factory)
         {
             _factory = factory;
-            _configuration = configuration;
+            //_configuration = configuration;
         }
 
         public async Task<bool> CreateStudent(EStudent eStudent)

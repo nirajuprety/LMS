@@ -35,10 +35,20 @@ namespace Library.Application.Manager.Implementation
         {
             try
             {
-                var model = _mapper.Map<EStudent>(studentRequest);
-                model.IsDeleted = false;
-                model.IsActive = true;
-               
+                //var model = _mapper.Map<EStudent>(studentRequest);
+                var model = new EStudent()
+                {
+                    FullName = studentRequest.FullName,
+                    IsActive = true,
+                    IsDeleted = false,
+                    CreatedDate = DateTime.Now,
+                    Email = studentRequest.Email,
+                    Faculty = studentRequest.Faculty,
+                    RollNo = studentRequest.RollNo,
+                    StudentCode = studentRequest.StudentCode,
+                    UpdatedBy = studentRequest.UpdatedBy,
+                };
+
                 if (model == null)
                 {
                     return new ServiceResult<bool>()
@@ -84,7 +94,7 @@ namespace Library.Application.Manager.Implementation
                 await _memberService.CreateMember(member);
                 return new ServiceResult<bool>()
                 {
-                    Data = result,
+                    Data = true,
                     Status = StatusType.Success,
                     Message = "User Created Successfull"
                 };
@@ -196,15 +206,34 @@ namespace Library.Application.Manager.Implementation
 
         public async Task<ServiceResult<bool>> UpdateStudent(StudentRequest studentRequest)
         {
-            var model = _mapper.Map<EStudent>(studentRequest);
-            model.Id = studentRequest.Id;
-            var user = await _service.UpdateStudent(model);
-            return new ServiceResult<bool>()
+            try
             {
-                Data = user,
-                Status = user == true ? StatusType.Success : StatusType.Failure,
-                Message = user == true ? "Student updated successfull" : "Student not found"
-            };
+                //var model = _mapper.Map<EStudent>(studentRequest);
+                //model.Id = studentRequest.Id;
+
+                var model = new EStudent()
+                {
+                    Id = studentRequest.Id,
+                    Email = studentRequest.Email,
+                    FullName = studentRequest.FullName,
+                    Faculty = studentRequest.Faculty,
+                    RollNo = studentRequest.RollNo,
+                    StudentCode = studentRequest.StudentCode,
+                    UpdatedBy = studentRequest.UpdatedBy,
+                };
+
+                var user = await _service.UpdateStudent(model);
+                return new ServiceResult<bool>()
+                {
+                    Data = true,
+                    Status = user == true ? StatusType.Success : StatusType.Failure,
+                    Message = user == true ? "Student updated successfull" : "Student not found"
+                };
+
+            }
+            catch (Exception ex)
+            { throw; }
+
         }
 
         private bool IsValidEmail(string email)

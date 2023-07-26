@@ -23,10 +23,9 @@ namespace Library.UnitTest.Api.Controller
         private readonly Mock<ILogger<BookController>> _logger = new Mock<ILogger<BookController>>();
         public BookSettingControllerTest()
         {
-            _bookController = new BookController(_bookManger.Object, _logger.Object);
+            _bookController = new BookController(_bookManger.Object);
 
         }
-
 
         [Fact]
         public async Task AddBook_Success_ReturnsOkResult()

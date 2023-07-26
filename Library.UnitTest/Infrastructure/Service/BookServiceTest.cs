@@ -21,15 +21,13 @@ namespace Library.UnitTest.Infrastructure.Service
                 var service = new BookService(factory);
                 //arrange
                 var requestresult = BookSettingDataInfo.SuccessBookSetting;
-                bool EXPECTED_RESULT = true;
+                bool EXPECTED_RESULT = true;    
                 //act
                 var result = await service.AddBook(requestresult);
                 //assert
 
                 Assert.Equivalent(EXPECTED_RESULT, result);
-
             }
-
         }
 
         [Fact]

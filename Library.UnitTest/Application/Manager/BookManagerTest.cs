@@ -45,7 +45,8 @@ namespace Library.UnitTest.Application.Manager
             };
 
 
-            _bookServiceMock.Setup(service => service.AddBook(requestResult));
+            _bookServiceMock
+                .Setup(service => service.AddBook(requestResult));
 
             // Act
             var result = await _bookManager.AddBook(request);
@@ -70,7 +71,8 @@ namespace Library.UnitTest.Application.Manager
                 Status = StatusType.Failure
             };
 
-            _bookServiceMock.Setup(service => service.AddBook(requestResult));
+            _bookServiceMock
+                .Setup(service => service.AddBook(requestResult));
 
             // Act
             var result = await _bookManager.AddBook(request);
@@ -78,58 +80,79 @@ namespace Library.UnitTest.Application.Manager
             // Assert
             Assert.Equivalent(expectedResult, result);
         }
+        [Fact]
+        public async Task GetBookById_ExistingBook_ReturnsBookResponse()
+        {
+            // Arrange
+            var bookId = 1;
+            var expectedBook = new EBook { Id = bookId, Title = "Sample Book" };
+            var expectedBookResponse = new BookResponse { Id = bookId, Title = "Sample Book" };
 
+            _bookServiceMock
+                .Setup(service => service.GetBookByBookID(bookId))
+                .ReturnsAsync(expectedBook);
+            _mapperMock
+                .Setup(mapper => mapper.Map<BookResponse>(expectedBook))
+                .Returns(expectedBookResponse);
 
-        //[Fact]
-        //public async Task AddBook_OnSuccess_ReturnsTrue()
-        //{
-        //    // Arrange
-        //    var bookRequest = new BookRequest
-        //    {
-        //        Title = "Sample Book",
-        //        Author = "John Doe",
-        //        ISBN = "1234567890",
-        //        PublicationDate = DateTime.Now,
-        //        UpdatedBy = "User123"
-        //    };
+            // Act
+            var result = await _bookManager.GetBookById(bookId);
 
-        //    _bookServiceMock.Setup(service => service.AddBook(It.IsAny<EBook>())).ReturnsAsync(true);
+            // Assert
+            Assert.NotNull(result);
+            Assert.Equal(StatusType.Success, result.Status);
+            Assert.Equal(expectedBookResponse, result.Data);
+        }
+        [Fact]
+        public async Task UpdateBook_OnSuccess_ReturnsTrue()
+        {
+            // Arrange
+            var request = new BookRequest { Id = 1, Title = "Updated Book" };
+            var expectedBook = new EBook { Id = 1, Title = "Sample Book" };
 
-        //    // Act
-        //    var result = await _bookManager.AddBook(bookRequest);
+            _bookServiceMock
+                .Setup(service => service.GetBookByBookID(request.Id))
+                .ReturnsAsync(expectedBook);
+            _mapperMock.
+                Setup(mapper => mapper.Map(request, expectedBook))
+                .Returns(expectedBook);
+            _bookServiceMock
+                .Setup(service => service.UpdateBookStatus(expectedBook))
+                .ReturnsAsync(true);
 
-        //    // Assert
-        //    Assert.True(result.Data);
-        //    Assert.Equal("Book added successfully", result.Message);
+            // Act
+            var result = await _bookManager.UpdateBook(request);
 
-        //}
+            // Assert
+            Assert.NotNull(result);
+            Assert.Equal(StatusType.Success, result.Status);
+            Assert.True(result.Data);
+        }
+        [Fact]
+        public async Task GetAllBooks_ReturnsListOfBookResponses()
+        {
+            // Arrange
+            var expectedBooks = new List<EBook>
+            {
+                new EBook { Id = 1, Title = "Book 1" },
+                new EBook { Id = 2, Title = "Book 2" }
+            };
+            var expectedBookResponses = expectedBooks.Select(book => new BookResponse { Id = book.Id, Title = book.Title }).ToList();
 
+            _bookServiceMock
+                .Setup(service => service.GetBooks())
+                .ReturnsAsync(expectedBooks);
+            _mapperMock
+                .Setup(mapper => mapper.Map<List<BookResponse>>(expectedBooks))
+                .Returns(expectedBookResponses);
 
+            // Act
+            var result = await _bookManager.GetBooks();
 
-        //[Fact]
-        //public async Task AddBook_OnFailure_ReturnsFalse()
-        //{
-        //    // Arrange
-        //    var bookRequest = new BookRequest
-        //    {
-        //        Title = "Sample Book",
-        //        Author = "John Doe",
-        //        ISBN = "1234567890",
-        //        PublicationDate = DateTime.Now,
-        //        UpdatedBy = "User123"
-        //    };
-
-        //    _bookServiceMock.Setup(service => service.AddBook(It.IsAny<EBook>())).ReturnsAsync(false);
-
-        //    // Act
-        //    var result = await _bookManager.AddBook(bookRequest);
-
-        //    // Assert
-        //    Assert.False(result.Data);
-        //    Assert.Equal("Failed to add book", result.Message);
-
-        //}
-
-
+            // Assert
+            Assert.NotNull(result);
+            Assert.Equal(StatusType.Success, result.Status);
+            Assert.Equal(expectedBookResponses, result.Data);
+        }
     }
 }

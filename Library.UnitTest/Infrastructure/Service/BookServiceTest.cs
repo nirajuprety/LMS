@@ -51,5 +51,26 @@ namespace Library.UnitTest.Infrastructure.Service
             }
 
         }
+        [Fact]
+        public async Task GetBookById_ExistingBook_ReturnsData()
+        {
+            //Arrange
+            DatabaseFixture _fixture = new DatabaseFixture();
+            using (var factory = new ServiceFactory(_fixture.mockDbContext, true))
+            {
+                var service = new BookService(factory);
+                var bookId = 1;
+                //Act
+                var result = await service.GetBookByBookID(bookId);
+
+                //Assert
+                Assert.NotNull(result);
+                Assert.Equal(bookId, result.Id);
+                Assert.NotNull(result.Title);
+
+            }
+        }
+        
+
     }
 }

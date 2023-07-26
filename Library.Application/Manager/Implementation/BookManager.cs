@@ -6,10 +6,12 @@ using Library.Domain.Entities;
 using Library.Domain.Interface;
 using Library.Infrastructure.Service;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using Serilog;
 using System;
 using System.Collections.Generic;
-using System.Text.Json;
+using System.Net.Http.Json;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using static Library.Infrastructure.Service.Common;
 
@@ -19,14 +21,16 @@ namespace Library.Application.Manager.Implementation
     {
         private readonly IBookService _service;
         private readonly IMapper _mapper;
+        private readonly ILogger<BookManager> _logger;
 
 
-        public BookManager(IBookService bookService, IMapper mapper)
+        public BookManager(IBookService bookService, IMapper mapper, ILogger<BookManager> logger)
         {
             _service = bookService;
             _mapper = mapper;
+            _logger = logger;
         }
-      
+
         public async Task<ServiceResult<bool>> AddBook(BookRequest bookRequest)
         {
             var serviceResult = new ServiceResult<bool>();
@@ -43,19 +47,19 @@ namespace Library.Application.Manager.Implementation
                 };
 
                 var result = await _service.AddBook(parse);
+                _logger.LogInformation("Book added Successfully" + JsonConvert.SerializeObject(parse));
 
                 serviceResult.Status = result ? StatusType.Success : StatusType.Failure;
                 serviceResult.Message = result ? "Book added successfully" : "Failed to add book";
                 serviceResult.Data = result;
-                Log.Information($"Book added successfully :{result}", JsonSerializer.Serialize(serviceResult.Data));
                 return serviceResult;
             }
             catch (Exception ex)
             {
+                _logger.LogInformation("Something Went wrong");
                 serviceResult.Status = StatusType.Failure;
                 serviceResult.Message = "An error occurred while adding the book";
                 serviceResult.Data = false;
-                Log.Warning("Error occured");
                 return serviceResult;
             }
         }
@@ -64,7 +68,7 @@ namespace Library.Application.Manager.Implementation
         {
             var serviceResult = new ServiceResult<bool>();
             bool isBorrowed = await _service.BorrowBook(bookId, memberId);
-            if(isBorrowed)
+            if (isBorrowed)
             {
                 var book = await _service.GetBookByBookID(bookId);
                 if (book != null)

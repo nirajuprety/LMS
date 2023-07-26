@@ -1,4 +1,5 @@
-﻿using Library.Infrastructure.Repository;
+﻿using Library.Domain.Entities;
+using Library.Infrastructure.Repository;
 using Library.Infrastructure.Service;
 using Library.UnitTest.Application.DTO.Request;
 using System;
@@ -12,6 +13,7 @@ namespace Library.UnitTest.Infrastructure.Service
 {
     public class BookSettingServiceTest : IClassFixture<DatabaseFixture>
     {
+
         [Fact]
         public async Task AddBook_OnSuccess_ReturnsData()
         {
@@ -60,6 +62,7 @@ namespace Library.UnitTest.Infrastructure.Service
             {
                 var service = new BookService(factory);
                 var bookId = 1;
+
                 //Act
                 var result = await service.GetBookByBookID(bookId);
 
@@ -70,7 +73,44 @@ namespace Library.UnitTest.Infrastructure.Service
 
             }
         }
-        
+        [Fact]
+        public async Task GetBooks_ReturnsListOfBook()
+        {
+            // Arrange
+            DatabaseFixture _fixture = new DatabaseFixture();
+            using (var factory = new ServiceFactory(_fixture.mockDbContext, true))
+            {
+                var service = new BookService(factory);
+                // Act
+                var result = await service.GetBooks();
+
+                // Assert
+                Assert.NotNull(result);
+            }
+        }
+        [Fact]
+        public async Task DeleteBook_SetsIsDeletedToTrue()
+        {
+            DatabaseFixture _fixture = new DatabaseFixture();
+            using (var factory = new ServiceFactory(_fixture.mockDbContext, true))
+            {
+                var service = new BookService(factory);
+
+                // Arrange
+                int bookIdToDelete = 1; 
+
+                // Act
+                await service.DeleteBook(bookIdToDelete);
+
+                // Assert
+                
+                var deletedBook = _fixture.mockDbContext.Books.FirstOrDefault(b => b.Id == bookIdToDelete);
+                Assert.NotNull(deletedBook);
+                Assert.True(deletedBook.IsDeleted);
+            }
+        }
+
+
 
     }
 }

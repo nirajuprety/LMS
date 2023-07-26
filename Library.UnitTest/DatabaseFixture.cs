@@ -29,13 +29,13 @@ namespace Library.UnitTest
 
             var databaseContext = new DatabaseContext(builder.Options);
             databaseContext.Database.EnsureCreated();
-
+            
             #region Feed BookInfo Data
             BookSettingDataInfo.Init();
             var bookSettings = BookSettingDataInfo.BookSetting;
             databaseContext.Books.AddRange(bookSettings);
             #endregion
-
+            
             databaseContext.SaveChanges();
 
             mockDbContext = databaseContext;

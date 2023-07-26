@@ -36,7 +36,7 @@ namespace Library.UnitTest.Application.Manager
             // Arrange
             var requestResult = BookSettingDataInfo.SuccessBookSetting;
             var request = BookSettingDataInfo.BookRequest;
-            var expecteredResult = new ServiceResult<bool>()
+            var expectedResult = new ServiceResult<bool>()
             {
                 Data = true,
                 Message = "Book Added Succefully",
@@ -46,13 +46,19 @@ namespace Library.UnitTest.Application.Manager
 
 
             _bookServiceMock
-                .Setup(service => service.AddBook(requestResult));
+                .Setup(service => service.AddBook(requestResult))
+                .ReturnsAsync(true);
 
             // Act
             var result = await _bookManager.AddBook(request);
+            // Assert
+            Assert.True(result.Data);
+            Assert.Equivalent(expectedResult.Data, result.Data);
 
             // Assert
-            Assert.Equivalent(expecteredResult.Data, result.Data);
+            //Assert.Equal(expectedResult.Data, result.Data);
+            //Assert.Equal(expectedResult.Message, result.Message);
+            //Assert.Equal(expectedResult.Status, result.Status);
 
         }
 
@@ -66,7 +72,7 @@ namespace Library.UnitTest.Application.Manager
             var request = BookSettingDataInfo.BookRequest;
             var expectedResult = new ServiceResult<bool>()
             {
-                Data = false, // The expected result for failure scenario
+                Data = false, 
                 Message = "Failed to add book",
                 Status = StatusType.Failure
             };

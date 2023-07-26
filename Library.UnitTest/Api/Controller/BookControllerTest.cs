@@ -4,6 +4,7 @@ using Library.Application.Manager.Interface;
 using Library.Infrastructure.Service;
 using Library.UnitTest.Application.DTO.Request;
 using LibraryManagementSystem.Controllers;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Moq;
@@ -107,11 +108,35 @@ namespace Library.UnitTest.Api.Controller
             Assert.Equal(expectedBooks.Count, bookList.Count);
 
         }
+        [Fact]
+        public async Task UpdateBook_ReturnsUpdatedBookList()
+        {
+            //Arrange
+            BookSettingDataInfo.Init();
+            var IdToUpdate = 1;
+            var updatedBookRequest = new BookRequest
+            {
+                Id = IdToUpdate,
+                Title = "Updated Book Title"
+            };
 
+            var expectedResult = new ServiceResult<bool>
+            {
+                Data = true,
+                Message = "Book Updated Successfully",
+                Status = StatusType.Success
+            };
+            _bookManger.Setup(service => service.UpdateBook(updatedBookRequest)).ReturnsAsync(expectedResult);
 
+            //Act
+            var result = await _bookController.UpdateBook(IdToUpdate, updatedBookRequest) as OkObjectResult;
 
+            //Assert
+            Assert.NotNull(result);
+            Assert.Equal(StatusCodes.Status200OK, result.StatusCode);
+            Assert.Equal(expectedResult.Message, result.Value);
 
-
-
+        }
+        
     }
 }

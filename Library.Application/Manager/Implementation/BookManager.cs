@@ -38,11 +38,13 @@ namespace Library.Application.Manager.Implementation
             {
                 var parse = new EBook()
                 {
+                    Id=bookRequest.Id,
                     Title = bookRequest.Title,
                     Author = bookRequest.Author,
                     ISBN = bookRequest.ISBN,
                     PublicationDate = bookRequest.PublicationDate,
-                    UpdatedBy = bookRequest.UpdatedBy
+                    UpdatedBy = bookRequest.UpdatedBy,
+                    BookStatus=Domain.Enum.BookStatus.Available
                 };
 
                 var result = await _service.AddBook(parse);

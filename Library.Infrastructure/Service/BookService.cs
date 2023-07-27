@@ -14,9 +14,9 @@ namespace Library.Infrastructure.Service
     public class BookService : IBookService
     {
         private readonly IServiceFactory _factory;
-        //private readonly IConfiguration _configuration;
+        private readonly IConfiguration _configuration;
 
-        public BookService(IServiceFactory factory)
+        public BookService(IServiceFactory factory/* IConfiguration configuration*/)
         {
             _factory = factory;
             //_configuration = configuration;
@@ -62,7 +62,9 @@ namespace Library.Infrastructure.Service
                 }
                 user.IsDeleted = true;
                 user.IsActive = false;
+                user.CreatedDate = DateTime.Now.ToUniversalTime();
                 user.BookStatus = Domain.Enum.BookStatus.Unavailable;
+                user.PublicationDate = DateTime.Now.ToUniversalTime();
                 await service.UpdateAsync(user);
                 return true;
             }
@@ -103,7 +105,7 @@ namespace Library.Infrastructure.Service
             {
                 var service = _factory.GetInstance<EBook>();
                 var user = await service.FindAsync(eBook.Id);
-                if (user == null)
+                if (user == null || user.IsDeleted ==true )
                 {
                     return false;
                 }
@@ -112,7 +114,9 @@ namespace Library.Infrastructure.Service
                 user.ISBN = eBook.ISBN;
                 user.PublicationDate = eBook.PublicationDate;
                 user.UpdatedBy = eBook.UpdatedBy;
-                user.BookStatus = BookStatus.Unavailable;
+                user.BookStatus = BookStatus.Available;
+                user.CreatedDate = DateTime.Now.ToUniversalTime();
+                user.PublicationDate=eBook.PublicationDate;
                 await service.UpdateAsync(user);
                 return true;
             }

@@ -81,6 +81,7 @@ namespace Library.UnitTest.Infrastructure.Service
             using (var factory = new ServiceFactory(_fixture.mockDbContext, true))
             {
                 var service = new BookService(factory);
+
                 // Act
                 var result = await service.GetBooks();
 
@@ -102,8 +103,7 @@ namespace Library.UnitTest.Infrastructure.Service
                 // Act
                 await service.DeleteBook(bookIdToDelete);
 
-                // Assert
-                
+                // Assert 
                 var deletedBook = _fixture.mockDbContext.Books.FirstOrDefault(b => b.Id == bookIdToDelete);
                 Assert.NotNull(deletedBook);
                 Assert.True(deletedBook.IsDeleted);

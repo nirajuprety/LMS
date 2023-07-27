@@ -1,5 +1,6 @@
 ﻿using Library.Application.DTO.Request;
 using Library.Application.DTO.Response;
+using Library.Application.Manager.Implementation;
 using Library.Application.Manager.Interface;
 using Library.Infrastructure.Service;
 using Library.UnitTest.Application.DTO.Request;
@@ -137,6 +138,55 @@ namespace Library.UnitTest.Api.Controller
             Assert.Equal(expectedResult.Message, result.Value);
 
         }
-        
+        [Fact]
+        public async Task GetBooksById_ReturnsBook()
+        {
+            // Arrange
+            BookSettingDataInfo.Init();
+            int bookId = 1;
+            var response = new BookResponse
+            {
+                Id = 1,
+                Title = "Sample Book",
+                Author = "XYZ",
+                PublicationDate = DateTime.Now,
+                ISBN="12345",
+                CreatedDate = DateTime.Now,
+            };
+
+            var expectedResult = new ServiceResult<BookResponse>
+            {
+                Data = response
+            };
+            
+            //Act
+            _bookManger.Setup(x => x.GetBookById(bookId)).ReturnsAsync(expectedResult);
+            var ActualResult = await _bookController.GetBookById(bookId) as OkObjectResult;
+
+            //Assert
+            Assert.Equal(expectedResult.Data, ActualResult.Value);
+        }
+
+        [Fact]
+        public async Task DeleteBooks_OnSuccess_ReturnsTrue()
+        {
+            //Arrange
+            int id = 1;
+            var expectedResult = new ServiceResult<bool>
+            {
+                Data = true,
+                Message = "Book deleted successfully",
+                Status = StatusType.Success,
+            };
+            //Act
+            _bookManger.Setup(x=>x.DeleteBook(id)).ReturnsAsync(expectedResult);
+            var ActualResult = await _bookController.DeleteBook(id) as OkObjectResult;
+
+            //Assert
+            Assert.Equivalent(expectedResult.Message, ActualResult.Value);
+        }
+
     }
+
+
 }

@@ -39,27 +39,18 @@ namespace Library.UnitTest.Application.Manager
             var expectedResult = new ServiceResult<bool>()
             {
                 Data = true,
-                Message = "Book Added Succefully",
+                Message = "Book added successfully",
                 Status = StatusType.Success
 
             };
-
-
             _bookServiceMock
-                .Setup(service => service.AddBook(requestResult))
+                .Setup(service => service.AddBook(It.IsAny<EBook>()))
                 .ReturnsAsync(true);
 
             // Act
             var result = await _bookManager.AddBook(request);
             // Assert
-            Assert.True(result.Data);
-            Assert.Equivalent(expectedResult.Data, result.Data);
-
-            // Assert
-            //Assert.Equal(expectedResult.Data, result.Data);
-            //Assert.Equal(expectedResult.Message, result.Message);
-            //Assert.Equal(expectedResult.Status, result.Status);
-
+            Assert.Equivalent(expectedResult, result);
         }
 
 
@@ -86,6 +77,7 @@ namespace Library.UnitTest.Application.Manager
             // Assert
             Assert.Equivalent(expectedResult, result);
         }
+
         [Fact]
         public async Task GetBookById_ExistingBook_ReturnsBookResponse()
         {
@@ -109,6 +101,7 @@ namespace Library.UnitTest.Application.Manager
             Assert.Equal(StatusType.Success, result.Status);
             Assert.Equal(expectedBookResponse, result.Data);
         }
+
         [Fact]
         public async Task UpdateBook_OnSuccess_ReturnsTrue()
         {
@@ -134,6 +127,7 @@ namespace Library.UnitTest.Application.Manager
             Assert.Equal(StatusType.Success, result.Status);
             Assert.True(result.Data);
         }
+
         [Fact]
         public async Task GetAllBooks_ReturnsListOfBookResponses()
         {

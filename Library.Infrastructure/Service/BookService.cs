@@ -76,7 +76,7 @@ namespace Library.Infrastructure.Service
             try
             {
                 var service = _factory.GetInstance<EBook>();
-                var user = await service.FindAsync(id);
+                var user = service.ListAsync().Result.FirstOrDefault(x=>x.IsDeleted==false && x.Id==id);
                 if (user == null)
                 {
                     return null;

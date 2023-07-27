@@ -69,7 +69,8 @@ namespace Library.UnitTest.Application.Manager
             };
 
             _bookServiceMock
-                .Setup(service => service.AddBook(requestResult));
+                .Setup(service => service.AddBook(It.IsAny<EBook>()))
+                .ReturnsAsync(false);
 
             // Act
             var result = await _bookManager.AddBook(request);

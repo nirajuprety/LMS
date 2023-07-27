@@ -178,6 +178,7 @@ namespace Library.UnitTest.Api.Controller
                 Message = "Book deleted successfully",
                 Status = StatusType.Success,
             };
+
             //Act
             _bookManger.Setup(x=>x.DeleteBook(id)).ReturnsAsync(expectedResult);
             var ActualResult = await _bookController.DeleteBook(id) as OkObjectResult;
@@ -185,6 +186,7 @@ namespace Library.UnitTest.Api.Controller
             //Assert
             Assert.Equivalent(expectedResult.Message, ActualResult.Value);
         }
+        
 
     }
 

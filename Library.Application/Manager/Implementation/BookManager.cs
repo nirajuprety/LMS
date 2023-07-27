@@ -171,11 +171,23 @@ namespace Library.Application.Manager.Implementation
             try
             {
                 var books = await _service.GetBooks();
-                var bookResponses = _mapper.Map<List<BookResponse>>(books);
+                var result = (from s in books
+                              where s.IsDeleted == false
+                              select new BookResponse()
+                              {
+                                  Id = s.Id,
+                                  Title = s.Title,
+                                  Author = s.Author,
+                                  ISBN = s.ISBN,
+                                  CreatedDate = DateTime.Now,
+                                  IsActive = s.IsActive,
+                                  PublicationDate = s.PublicationDate,
+                                  UpdatedBy = s.UpdatedBy,
+                              }).ToList();
 
                 serviceResult.Status = StatusType.Success;
                 serviceResult.Message = "Books retrieved successfully";
-                serviceResult.Data = bookResponses;
+                serviceResult.Data = result;
 
                 return serviceResult;
             }

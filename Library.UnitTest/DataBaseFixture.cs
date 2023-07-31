@@ -39,6 +39,7 @@ namespace Library.UnitTest
             databaseContext.SaveChanges();
 
             mockDbContext = databaseContext;
+            //allows other parts of the test code to access the in-memory database context.
         }
 
         public void Dispose()

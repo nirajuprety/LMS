@@ -51,7 +51,7 @@ namespace Library.UnitTest.Application.Manager
             var result = await _bookManager.AddBook(request);
 
             // Assert
-            Assert.Equivalent(expecteredResult.Data, result.Data);
+            Assert.Equivalent(expecteredResult, result);
 
         }
 

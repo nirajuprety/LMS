@@ -5,7 +5,7 @@
 namespace Library.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class newMigrationWithNewDatabase : Migration
+    public partial class init2 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

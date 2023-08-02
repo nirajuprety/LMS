@@ -19,7 +19,7 @@ namespace Library.Application.Mapper
             CreateMap<EStudent, StudentResponse>();
             CreateMap<EBook, BookResponse>();
             CreateMap<BookRequest, EBook>();
-            CreateMap<StaffUpdateRequest, EStaff>();
+            CreateMap<StaffUpdateRequest, EStaff>(); //
             CreateMap<StaffUpdateRequest, EMember>();
             CreateMap<StaffUpdateRequest, ELogin>();
         }

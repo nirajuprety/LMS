@@ -71,11 +71,8 @@ namespace Library.Infrastructure.Service
             result.Password = eStaff.Password;
             result.Name = eStaff.Name;
             result.Email = eStaff.Email;
-            //result.CreatedDate = eStaff.CreatedDate;
-            // result.UpdatedDate = eStaff.UpdatedDate;
-            result.UpdatedDate = DateTime.Now;
-            //result.IsDeleted = eStaff.IsDeleted;
-            //result.IsActive = eStaff.IsActive;
+            result.UpdatedDate = DateTime.Now.ToUniversalTime();
+            result.CreatedDate =eStaff.CreatedDate.ToUniversalTime();
             result.StaffCode = eStaff.StaffCode;
             result.StaffType = eStaff.StaffType;
 
@@ -83,6 +80,8 @@ namespace Library.Infrastructure.Service
 
             return true;
         }
+
+
 
         public async Task<bool> DeleteStaff(int id)
         {
@@ -99,7 +98,7 @@ namespace Library.Infrastructure.Service
             }
             return false;
         }
-         public async Task<bool> DeleteUser(int id)
+        public async Task<bool> DeleteUser(int id)
         {
             var service = _factory.GetInstance<ELogin>();
             var result = await service.FindAsync(id);

@@ -7,7 +7,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Library.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class init : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -20,7 +20,7 @@ namespace Library.Infrastructure.Migrations
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Title = table.Column<string>(type: "text", nullable: false),
                     Author = table.Column<string>(type: "text", nullable: false),
-                    ISBN = table.Column<int>(type: "integer", nullable: false),
+                    ISBN = table.Column<string>(type: "text", nullable: false),
                     PublicationDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
                     IsActive = table.Column<bool>(type: "boolean", nullable: false),
                     IsDeleted = table.Column<bool>(type: "boolean", nullable: false),
@@ -49,6 +49,21 @@ namespace Library.Infrastructure.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_IssueTables", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Logins",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Email = table.Column<string>(type: "text", nullable: false),
+                    Password = table.Column<string>(type: "text", nullable: false),
+                    StaffId = table.Column<int>(type: "integer", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Logins", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -110,32 +125,6 @@ namespace Library.Infrastructure.Migrations
                 {
                     table.PrimaryKey("PK_Students", x => x.Id);
                 });
-
-            migrationBuilder.CreateTable(
-                name: "Logins",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Email = table.Column<string>(type: "text", nullable: false),
-                    Password = table.Column<string>(type: "text", nullable: false),
-                    StaffId = table.Column<int>(type: "integer", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Logins", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Logins_Staffs_StaffId",
-                        column: x => x.StaffId,
-                        principalTable: "Staffs",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Logins_StaffId",
-                table: "Logins",
-                column: "StaffId");
         }
 
         /// <inheritdoc />
@@ -154,10 +143,10 @@ namespace Library.Infrastructure.Migrations
                 name: "Members");
 
             migrationBuilder.DropTable(
-                name: "Students");
+                name: "Staffs");
 
             migrationBuilder.DropTable(
-                name: "Staffs");
+                name: "Students");
         }
     }
 }

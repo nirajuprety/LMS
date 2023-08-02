@@ -5,7 +5,7 @@
 namespace Library.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class ForMemberEmail : Migration
+    public partial class init1 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

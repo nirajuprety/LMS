@@ -6,6 +6,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Test.Infrastructure.Mapper;
 using System;
+using Library.UnitTest.Infrastructure.Data;
 
 namespace Library.UnitTest
 {
@@ -35,6 +36,13 @@ namespace Library.UnitTest
             var bookSettings = BookSettingDataInfo.BookSetting;
             databaseContext.Books.AddRange(bookSettings);
             #endregion
+
+            //Feed StaffInfo Data
+            StaffDataInfo.Init();
+            var eStaff = StaffDataInfo.eStaffList;
+            databaseContext.Staffs.AddRange(eStaff);
+            var eLogin = StaffDataInfo.eLogin;
+           databaseContext.Logins.AddRange(eLogin);
 
             databaseContext.SaveChanges();
 

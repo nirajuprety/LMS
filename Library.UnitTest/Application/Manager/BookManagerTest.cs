@@ -26,7 +26,7 @@ namespace Library.UnitTest.Application.Manager
 
         public BookManagerTest()
         {
-            _bookManager = new BookManager(_bookServiceMock.Object, _mapperMock.Object, _loggerMock.Object);
+            _bookManager = new BookManager(_bookServiceMock.Object, _mapperMock.Object);
         }
 
         [Fact]
@@ -43,8 +43,6 @@ namespace Library.UnitTest.Application.Manager
                 Status = StatusType.Success
 
             };
-
-
             _bookServiceMock.Setup(service => service.AddBook(requestResult));
 
             // Act

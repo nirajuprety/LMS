@@ -45,7 +45,7 @@ namespace Library.Infrastructure.Repository
                 //ensure that the detailed error text is saved in the Log
                 throw;
             }
-        }
+         }
 
         public async Task<t> FindAsync(int id)
         {

@@ -48,7 +48,7 @@ namespace LibraryManagementSystem.Controllers
             };
         }
 
-        [HttpPut]
+        [HttpDelete]
         public async Task<ServiceResult<bool>> DeleteStudent(int id)
         {
             var result = await _manager.DeleteStudent(id);

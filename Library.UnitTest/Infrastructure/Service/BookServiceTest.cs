@@ -39,7 +39,7 @@ namespace Library.UnitTest.Infrastructure.Service
                 var service = new BookService(factory);
                 //arrange
                 var requestresult = BookSettingDataInfo.SuccessBookSetting;
-                bool EXPECTED_RESULT = false;//false passed
+                bool EXPECTED_RESULT = false; //false passed
                 //act
                 var result = await service.UpdateBookStatus(requestresult);
                 //assert

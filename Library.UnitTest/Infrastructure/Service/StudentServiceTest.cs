@@ -14,7 +14,7 @@ namespace Library.UnitTest.Infrastructure.Service
     public class StudentServiceTest: IClassFixture<DatabaseFixture>
     {
         [Fact]
-        public async Task AddStudent_OnSuccess_ReturnTrue()
+        public async Task AddStudent_OnSuccess_ReturnTrue() 
         { 
             DatabaseFixture _fixture = new DatabaseFixture();
             using (var factory = new ServiceFactory(_fixture.mockDbContext, true))
@@ -41,7 +41,7 @@ namespace Library.UnitTest.Infrastructure.Service
                 var service = new StudentService(factory);
                 //Arrange
                 StudentSettingDataInfo.init();
-                var expectedResult = StudentSettingDataInfo.eStudent; //Need to change eStudentList
+                var expectedResult = StudentSettingDataInfo.eStudentList; //Need to change eStudentList
 
                 //Act
                 var result = await service.GetStudents();
@@ -61,7 +61,7 @@ namespace Library.UnitTest.Infrastructure.Service
                 //Arrange
                 int id = 1;
                 StudentSettingDataInfo.init();
-                var eStudent = StudentSettingDataInfo.eStudent;
+                var eStudent = StudentSettingDataInfo.eStudentWithID;
 
                 var expectedResult = eStudent;
                 //Act
@@ -81,7 +81,7 @@ namespace Library.UnitTest.Infrastructure.Service
                 var service = new StudentService(factory);
                 //Arrange
                 StudentSettingDataInfo.init();
-                var eStudent = StudentSettingDataInfo.eStudent;
+                var eStudent = StudentSettingDataInfo.eStudentWithID;
 
                 var expectedResult = true;
                 //Act
@@ -101,7 +101,7 @@ namespace Library.UnitTest.Infrastructure.Service
                 var service = new StudentService(factory);
                 //Arrange
                 StudentSettingDataInfo.init();
-                var eStudent = StudentSettingDataInfo.eStudent;
+                var eStudent = StudentSettingDataInfo.eStudentWithID;
 
                 var expectedResult = true;
                 //Act
@@ -109,7 +109,6 @@ namespace Library.UnitTest.Infrastructure.Service
 
                 //Assert
                 Assert.Equivalent(expectedResult, Actual_Result);
-
             }
         }
     }

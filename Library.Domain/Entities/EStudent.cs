@@ -18,7 +18,7 @@ namespace Library.Domain.Entities
         public int StudentCode{ get; set; }
         public bool IsActive { get; set; }
         public bool IsDeleted { get; set; }
-        public DateTime CreatedDate { get; set; }
+        public DateTime CreatedDate { get; set; } = DateTime.Today.ToUniversalTime();
         public string UpdatedBy { get; set; }
 
 

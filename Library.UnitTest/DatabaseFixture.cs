@@ -38,10 +38,10 @@ namespace Library.UnitTest
             databaseContext.Books.AddRange(bookSettings);
             #endregion
 
-            //feed StudentInfo Data
+            //feed StudentInfo Datalist
             StudentSettingDataInfo.init();
-            var eStudent = StudentSettingDataInfo.eStudent;
-            databaseContext.Students.AddRange(eStudent);
+            var eStudentList = StudentSettingDataInfo.eStudentList;
+            databaseContext.Students.AddRange(eStudentList);
                        
             databaseContext.SaveChanges();
 

@@ -35,19 +35,10 @@ namespace Library.Application.Manager.Implementation
         {
             try
             {
-                //var model = _mapper.Map<EStudent>(studentRequest);
-                var model = new EStudent()
-                {
-                    FullName = studentRequest.FullName,
-                    IsActive = true,
-                    IsDeleted = false,
-                    CreatedDate = DateTime.Now,
-                    Email = studentRequest.Email,
-                    Faculty = studentRequest.Faculty,
-                    RollNo = studentRequest.RollNo,
-                    StudentCode = studentRequest.StudentCode,
-                    UpdatedBy = studentRequest.UpdatedBy,
-                };
+                var model = _mapper.Map<EStudent>(studentRequest);
+                model.IsActive = true;
+                model.IsDeleted = false;
+                model.CreatedDate = DateTime.Now.ToUniversalTime();  //Done due to handle UTC Exceptions
 
                 if (model == null)
                 {
@@ -137,7 +128,6 @@ namespace Library.Application.Manager.Implementation
             try
             {
                 var user = await _service.GetStudentByID(id);
-                //var model = _mapper.Map<EStudent>(StudentResponse);
                 if (user == null)
                 {
                     return new ServiceResult<StudentResponse>()

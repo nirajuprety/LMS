@@ -48,6 +48,7 @@ namespace Library.Infrastructure.Service
                 }
                 user.IsDeleted = true;
                 user.IsActive = false;
+                user.CreatedDate = DateTime.Now.ToUniversalTime(); // this is done to fix issue with "timestamp with time zone"
 
                 await service.UpdateAsync(user);
                 return true;
@@ -109,6 +110,7 @@ namespace Library.Infrastructure.Service
                 user.Email = eStudent.Email;
                 user.Faculty = eStudent.Faculty;
                 user.RollNo = eStudent.RollNo;
+                user.CreatedDate = eStudent.CreatedDate;
 
                 await service.UpdateAsync(user);
                 return true;

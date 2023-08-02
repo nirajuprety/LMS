@@ -6,6 +6,7 @@ using Library.Domain.Entities;
 using Library.Domain.Interface;
 using Library.Infrastructure.Service;
 using Library.UnitTest.Infrastructure.Data;
+using LibraryManagementSystem.Controllers;
 using Moq;
 using System;
 using System.Collections.Generic;
@@ -46,12 +47,12 @@ namespace Library.UnitTest.Application.Manager
                 Status = StatusType.Success
             };
 
-            // Map the eStudent entity to the StudentRequest DTO
-            //var mappedRequest = _mapperMock.Object.Map<StudentRequest>(eStudent);
-
-            _serviceStudentMock.Setup(x => x.CreateStudent(eStudent)).ReturnsAsync(true);
             //Act
+            // Map the eStudent entity to the StudentRequest DTO
+            _mapperMock.Setup(x => x.Map<EStudent>(It.IsAny<StudentRequest>())).Returns(eStudent);
+            _serviceStudentMock.Setup(x => x.CreateStudent(eStudent)).ReturnsAsync(true);
             var actualResult = await _studentManager.CreateStudent(request);
+
             //Assert
             Assert.Equivalent(expectedResult, actualResult);
         }
@@ -82,7 +83,7 @@ namespace Library.UnitTest.Application.Manager
             //Arrange
             int id = 1;
             StudentSettingDataInfo.init();
-            var eStudent = StudentSettingDataInfo.eStudent;
+            var eStudent = StudentSettingDataInfo.eStudentWithID;
             var response = StudentSettingDataInfo.studentResponse;
             var expectedResult = new ServiceResult<StudentResponse>()
             {
@@ -138,8 +139,94 @@ namespace Library.UnitTest.Application.Manager
             Assert.Equivalent(expectedResult, actualResult);
         }
 
-        //[Fact]
-        //public async Task IsValidEmail_OnFailure
 
+        [Fact]
+        public async Task AddStudentShouldAddMember_OnSuccess_ReturnTrue()
+        {
+            //Arrange
+            StudentSettingDataInfo.init();
+            var request = StudentSettingDataInfo.studentRequest;
+            var eStudent = StudentSettingDataInfo.eStudent;
+            var eMember = StudentSettingDataInfo.eMember;
+
+            var expectedResult = new ServiceResult<bool>
+            {
+                Data = true,
+                Message = "User Created Successfull",
+                Status = StatusType.Success
+            };
+
+            //
+            _mapperMock.Setup(x => x.Map<EStudent>(It.IsAny<StudentRequest>())).Returns(eStudent);
+            _serviceMemberMock.Setup(x => x.CreateMember(eMember)).ReturnsAsync(eMember.Id);
+            var ActualResult = await _studentManager.CreateStudent(request);
+
+            //Assert
+            Assert.Equivalent(expectedResult, ActualResult);
+        }
+
+        [Fact]
+        public async Task IsValidEmail_OnFailure_ReturnFalse()
+        {
+            //Arrange
+            var request = new StudentRequest() {Email = "mG.com" };
+            var eStudent = StudentSettingDataInfo.eStudent;
+            eStudent.Email = request.Email;
+            var Expected_Result = new ServiceResult<bool>()
+            {
+                Data = false,
+                Status = StatusType.Failure,
+                Message = "Email need to have special character."
+            };
+            //Act
+            _mapperMock.Setup(x => x.Map<EStudent>(It.IsAny<StudentRequest>())).Returns(eStudent);
+            var Actual_Result = await _studentManager.CreateStudent(request);
+            //Assert
+            Assert.Equivalent(Expected_Result, Actual_Result);
+        }
+
+        [Fact]
+        public async Task IsUniqueEmail_OnFailure_ReturnFalse()
+        {
+            //Arrange
+            var request = new StudentRequest() { Email = "m@g.com" };
+            var eStudent = StudentSettingDataInfo.eStudent;
+            eStudent.Email = request.Email;
+            var Expected_Result = new ServiceResult<bool>()
+            {
+                Data = false,
+                Status = StatusType.Failure,
+                Message = "Enter Unique Email"
+            };
+            //Act
+            _mapperMock.Setup(x => x.Map<EStudent>(It.IsAny<StudentRequest>())).Returns(eStudent);
+            _serviceStudentMock.Setup(x => x.IsUniqueEmail(request.Email)).ReturnsAsync(true);
+            var Actual_Result = await _studentManager.CreateStudent(request);
+            //Assert
+            Assert.Equivalent(Expected_Result, Actual_Result);
+        }
+
+        [Fact]
+        public async Task CreateMemberWhileStudentCreation_OnSuccess_ReturnTrue()
+        {
+            //Arrange
+            StudentSettingDataInfo.init();
+            var eStudent = StudentSettingDataInfo.eStudent;
+            var studentRequest = StudentSettingDataInfo.studentRequest;
+            var eMember = StudentSettingDataInfo.eMember;
+            var Expected_Result = new ServiceResult<bool>()
+            {
+                Data = true,
+                Status = StatusType.Success,
+                Message = "User Created Successfull"
+            };
+            //Act
+
+            _mapperMock.Setup(x => x.Map<EStudent>(It.IsAny<StudentRequest>())).Returns(eStudent);
+            _serviceMemberMock.Setup(x => x.CreateMember(eMember)).ReturnsAsync(eMember.Id);
+            var Actual_Result = await _studentManager.CreateStudent(studentRequest);
+            //Assert
+            Assert.Equivalent(Expected_Result, Actual_Result);
+        }
     }
 }

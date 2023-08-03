@@ -5,7 +5,6 @@ using Library.Infrastructure.Service;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using Serilog;
 using System.Data;
 using System.Text.Json;
@@ -14,27 +13,23 @@ namespace LibraryManagementSystem.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    //[Authorize(Roles = "Admin")]
-
     public class BookController : ControllerBase
     {
         private readonly IBookManager _bookManager;
-        private readonly ILogger<BookController> _logger;
 
-        public BookController(IBookManager bookManager, ILogger<BookController> logger)
+        public BookController(IBookManager bookManager)
         {
             _bookManager = bookManager;
-            _logger = logger;
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> AddBook(BookRequest bookRequest)
         {
             var result = await _bookManager.AddBook(bookRequest);
 
             if (result.Status == StatusType.Success)
             {
-                Log.Information("Book added successfully : {Book}", JsonSerializer.Serialize(bookRequest));
                 return Ok(result.Message);
             }
             Log.Error("Error adding book: {ErrorMessage}", JsonSerializer.Serialize(result.Message));
@@ -49,9 +44,7 @@ namespace LibraryManagementSystem.Controllers
 
             if (result.Status == StatusType.Success)
             {
-                Log.Information(result.Message);
                 return Ok(result.Message);
-                
             }
             Log.Error(result.Message);
             return NotFound(result.Message); 
@@ -67,7 +60,7 @@ namespace LibraryManagementSystem.Controllers
                 Log.Information("Book information : {info}", JsonSerializer.Serialize(result.Data));
                 return Ok(result.Data);
             }
-            Log.Warning(result.Message);
+
             return NotFound(result.Message);
         }
 
@@ -81,7 +74,7 @@ namespace LibraryManagementSystem.Controllers
                 Log.Information("Books: {Book}",JsonSerializer.Serialize(result.Data));
                 return Ok(result.Data);
             }
-            Log.Information (result.Message);
+
             return NotFound(result.Message);
         }
 
@@ -90,7 +83,6 @@ namespace LibraryManagementSystem.Controllers
         {
             if (id != bookRequest.Id)
             {
-                Log.Warning("Bad request-Invalid ID");
                 return BadRequest("Invalid book ID");
             }
 
@@ -101,12 +93,12 @@ namespace LibraryManagementSystem.Controllers
                 Log.Information("The book has been updated : {updated}", JsonSerializer.Serialize(result.Message));
                 return Ok(result.Message);
             }
-            Log.Warning(result.Message);
+
             return NotFound(result.Message);
         }
 
         [HttpPost("{bookId}/borrow")]
-        //[Authorize(Roles = "staff")] 
+        [Authorize(Roles = "staff")] 
         public async Task<IActionResult> BorrowBook(int bookId, int memberId)
         {
 

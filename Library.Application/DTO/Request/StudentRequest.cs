@@ -24,6 +24,8 @@ namespace Library.Application.DTO.Request
         public int StudentCode { get; set; }
         public string UpdatedBy { get; set; } = "StudentID";
         public DateTime CreatedDate { get; set; } = DateTime.Now.Date.ToUniversalTime();
+        public bool IsActive{ get; set; } 
+        public bool IsDeleted { get; set; } 
 
     }
 }

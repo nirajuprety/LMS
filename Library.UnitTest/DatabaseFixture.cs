@@ -7,6 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Test.Infrastructure.Mapper;
 using System;
 using Library.UnitTest.Infrastructure.Data;
+using Library.Domain.Entities;
 
 namespace Library.UnitTest
 {
@@ -44,6 +45,11 @@ namespace Library.UnitTest
             var eLogin = StaffDataInfo.eLogin;
            databaseContext.Logins.AddRange(eLogin);
 
+            //feed StudentInfo Datalist
+            StudentSettingDataInfo.init();
+            var eStudentList = StudentSettingDataInfo.eStudentList;
+            databaseContext.Students.AddRange(eStudentList);
+                       
             databaseContext.SaveChanges();
 
             mockDbContext = databaseContext;

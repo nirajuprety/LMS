@@ -18,7 +18,7 @@ namespace Library.Application.DTO.Request
         [RandomNumber]
         public string ISBN { get; set; } = string.Empty;
 
-        public DateTime PublicationDate { get; set; }
+        public DateTime PublicationDate { get; set; }=DateTime.Now.ToUniversalTime();
         public string UpdatedBy { get; set; } = string.Empty;
 
 

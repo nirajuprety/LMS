@@ -6,10 +6,11 @@ using Library.Domain.Entities;
 using Library.Domain.Interface;
 using Library.Infrastructure.Service;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using Serilog;
 using System;
 using System.Collections.Generic;
-using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using static Library.Infrastructure.Service.Common;
 
@@ -19,14 +20,16 @@ namespace Library.Application.Manager.Implementation
     {
         private readonly IBookService _service;
         private readonly IMapper _mapper;
+        private readonly ILogger<BookManager> _logger;
 
 
-        public BookManager(IBookService bookService, IMapper mapper)
+        public BookManager(IBookService bookService, IMapper mapper, ILogger<BookManager> logger)
         {
             _service = bookService;
             _mapper = mapper;
+            _logger = logger;
         }
-      
+
         public async Task<ServiceResult<bool>> AddBook(BookRequest bookRequest)
         {
             var serviceResult = new ServiceResult<bool>();
@@ -35,27 +38,29 @@ namespace Library.Application.Manager.Implementation
             {
                 var parse = new EBook()
                 {
+                    Id=bookRequest.Id,
                     Title = bookRequest.Title,
                     Author = bookRequest.Author,
                     ISBN = bookRequest.ISBN,
                     PublicationDate = bookRequest.PublicationDate,
-                    UpdatedBy = bookRequest.UpdatedBy
+                    UpdatedBy = bookRequest.UpdatedBy,
+                    BookStatus=Domain.Enum.BookStatus.Available
                 };
 
                 var result = await _service.AddBook(parse);
+                _logger.LogInformation("Book added Successfully" + JsonConvert.SerializeObject(parse));
 
                 serviceResult.Status = result ? StatusType.Success : StatusType.Failure;
                 serviceResult.Message = result ? "Book added successfully" : "Failed to add book";
                 serviceResult.Data = result;
-                Log.Information($"Book added successfully :{result}", JsonSerializer.Serialize(serviceResult.Data));
                 return serviceResult;
             }
             catch (Exception ex)
             {
+                _logger.LogInformation("Something Went wrong");
                 serviceResult.Status = StatusType.Failure;
                 serviceResult.Message = "An error occurred while adding the book";
                 serviceResult.Data = false;
-                Log.Warning("Error occured");
                 return serviceResult;
             }
         }
@@ -64,7 +69,7 @@ namespace Library.Application.Manager.Implementation
         {
             var serviceResult = new ServiceResult<bool>();
             bool isBorrowed = await _service.BorrowBook(bookId, memberId);
-            if(isBorrowed)
+            if (isBorrowed)
             {
                 var book = await _service.GetBookByBookID(bookId);
                 if (book != null)
@@ -166,11 +171,23 @@ namespace Library.Application.Manager.Implementation
             try
             {
                 var books = await _service.GetBooks();
-                var bookResponses = _mapper.Map<List<BookResponse>>(books);
+                var result = (from s in books
+                              where s.IsDeleted == false
+                              select new BookResponse()
+                              {
+                                  Id = s.Id,
+                                  Title = s.Title,
+                                  Author = s.Author,
+                                  ISBN = s.ISBN,
+                                  CreatedDate = DateTime.Now,
+                                  IsActive = s.IsActive,
+                                  PublicationDate = s.PublicationDate,
+                                  UpdatedBy = s.UpdatedBy,
+                              }).ToList();
 
                 serviceResult.Status = StatusType.Success;
                 serviceResult.Message = "Books retrieved successfully";
-                serviceResult.Data = bookResponses;
+                serviceResult.Data = result;
 
                 return serviceResult;
             }

@@ -17,11 +17,11 @@ namespace Library.Domain.Entities
         public string Author { get; set; }
         public string ISBN { get; set; }
 
-        public DateTime PublicationDate { get; set; }
-        public bool IsActive { get; set; }
+        public DateTime PublicationDate { get; set;} = DateTime.Now.ToUniversalTime();
+        public bool IsActive { get; set; } = true;
         public bool IsDeleted { get; set; }
         public string UpdatedBy { get; set; } = string.Empty;
-        public DateTime CreatedDate { get; set; } = DateTime.Now;
+        public DateTime CreatedDate { get; set; } = DateTime.Now.ToUniversalTime();
         public BookStatus BookStatus { get; set; }
 
     }

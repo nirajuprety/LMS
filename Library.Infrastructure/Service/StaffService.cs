@@ -16,6 +16,7 @@ namespace Library.Infrastructure.Service
         private readonly IServiceFactory _factory = null;
 
         public StaffService(IServiceFactory factory)
+
         {
             _factory = factory;
 
@@ -60,8 +61,6 @@ namespace Library.Infrastructure.Service
         {
             var service = _factory.GetInstance<EStaff>();
             var result = await service.FindAsync(eStaff.Id);
-
-
             if (result.IsDeleted == true)
             {
                 return false;

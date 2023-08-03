@@ -177,7 +177,7 @@ namespace Library.Application.Manager.Implementation
                 return new ServiceResult<bool>()
                 {
                     Data = false,
-                    Message = ex.Message,
+                    Message = "Something went wrong",
                     Status = StatusType.Failure
                 };
             }

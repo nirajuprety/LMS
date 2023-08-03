@@ -35,16 +35,6 @@ namespace Library.UnitTest.Infrastructure.Data
                 StaffCode = 11,
                 StaffType = Domain.Enum.StaffType.Admin
             };
-            //eStaffRequestWithId = new EStaff()
-            //{
-            //    Id=1,
-            //    Username = "SamikshaPhuyel",
-            //    Email = "Samikshaphuye66@gmail.com",
-            //    Name = "Samiksha",
-            //    Password = "Samiksha123!",
-            //    StaffCode = 2,
-            //    StaffType = Domain.Enum.StaffType.Admin
-            //};
 
             eStaffUpdateRequest = new EStaff()
             {

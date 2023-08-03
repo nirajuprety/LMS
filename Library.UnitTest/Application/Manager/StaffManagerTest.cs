@@ -7,6 +7,7 @@ using Library.Domain.Enum;
 using Library.Domain.Interface;
 using Library.Infrastructure.Service;
 using Library.UnitTest.Infrastructure.Data;
+using LibraryManagementSystem.Controllers;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.Extensions.Logging;
 using Moq;
@@ -209,12 +210,34 @@ namespace Library.UnitTest.Application.Manager
             Assert.Equivalent(expected_result, actual_result);
         }
 
-       
+        [Fact]
+        public async Task AddStaff_OnFailure_ReturnsFailureResult()
+        {
+            //Arrange
+            StaffDataInfo.Init();
+            var eRequest = StaffDataInfo.eStaffRequest;
+            var request = StaffDataInfo.StaffRequest;
+            var response = StaffDataInfo.eStaffResponse;
+            var expected_result = new ServiceResult<bool>()
+            {
+                Data = false,
+                Message = "Something went wrong",
+                Status = StatusType.Failure
+            };
+            _mapperMock.Setup(mapper => mapper.Map<EStaff>(It.IsAny<StaffRequest>())).Returns(response);
+            _staffServiceMock.Setup(x => x.AddStaff(It.IsAny<EStaff>())).ThrowsAsync(new Exception());
+            //_recipientService.Setup(x => x.AddBankRecipient(It.IsAny<ERecipient>())).ThrowsAsync(new Exception("Simulated exception"));
+
+            //act
+            var actual_result = await _staffManager.AddStaff(request);
+
+            //assert
+            Assert.Equivalent(expected_result, actual_result);
+        }
 
         [Fact]
         public async Task GetAllStaff_OnSuccess_ReturnDetails()
         {
-
             //arrange
             StaffDataInfo.Init();
             var response = StaffDataInfo.StaffResponseList;
@@ -225,6 +248,7 @@ namespace Library.UnitTest.Application.Manager
                 Message = "All Staff found successfully!",
                 Status = StatusType.Success
             };
+
             //Act
             _staffServiceMock.Setup(x => x.GetAllStaff()).ReturnsAsync(eStaff);
             var actual_result = await _staffManager.GetAllStaff();

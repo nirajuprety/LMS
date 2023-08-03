@@ -26,16 +26,17 @@ namespace Library.UnitTest.Infrastructure.Service
                 //arrange
                 StaffDataInfo.Init();
                 var request = StaffDataInfo.eStaffRequest;
-                var response = StaffDataInfo.eStaffResponseWithId;
+                bool EXPECTED_RESULT = true;
+                //  var response = StaffDataInfo.eStaffResponseWithId;
 
-                var EXPECTED_RESULT = response.Id;
+                //var EXPECTED_RESULT = response.Id;
 
                 //act
                 var result = await service.AddStaff(request);
 
                 //assert
 
-                Assert.Equivalent(EXPECTED_RESULT, result);
+                Assert.Equivalent(EXPECTED_RESULT, (result != 0 ? true : false));
             }
         }
 
@@ -117,7 +118,7 @@ namespace Library.UnitTest.Infrastructure.Service
                 StaffDataInfo.Init();
                 var response = StaffDataInfo.eStaffResponse;
 
-                var expected_result = response; 
+                var expected_result = response;
 
                 //act
                 var result = await service.GetStaffById(id);

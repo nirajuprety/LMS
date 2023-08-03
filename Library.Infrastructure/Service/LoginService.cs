@@ -52,6 +52,13 @@ namespace Library.Infrastructure.Service
             var staffRole= user.Where(x => x.Email.Trim() == email.Trim()).Select(x => x.StaffType).FirstOrDefault();
             return staffRole;
 
+        } 
+        public async Task<int> GetUserId(string email)
+        {
+            var user = await _factory.GetInstance<EStaff>().ListAsync();
+            int staffId= user.Where(x => x.Email.Trim() == email.Trim()).Select(x => x.Id).FirstOrDefault();
+            return staffId;
+
         }
         public string HashPassword(string password)
         {

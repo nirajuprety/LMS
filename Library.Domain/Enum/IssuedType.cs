@@ -10,6 +10,6 @@ namespace Library.Domain.Enum
     {
         Issued = 1,
         Returned = 2,
-        Available = 3
+        //Available = 3
     }
 }

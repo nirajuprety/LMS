@@ -86,6 +86,7 @@ namespace Library.Application.Manager.Implementation
                         Password = request.Password
                     });
                     string userRole = _service.GetUserRole(request.Email).Result.ToString();
+                    int userId = await _service.GetUserId(request.Email);
                     if (user != null)
                     {
                         // create claims details based on the user information
@@ -95,6 +96,7 @@ namespace Library.Application.Manager.Implementation
                         new Claim(JwtRegisteredClaimNames.Iat, DateTime.UtcNow.ToString()),
                         new Claim("Email", request.Email.ToString()),
                         new Claim(ClaimTypes.Role, userRole),
+                        new Claim("UserId", userId.ToString())
                         //new Claim(ClaimTypes.)
                     };
 

@@ -49,7 +49,7 @@ namespace Library.Application.Manager.Implementation
                     Log.Information("Email validation failed for: " + staffRequest.Email);
                     return new ServiceResult<bool>()
                     {
-                        Data = validateEMail,
+                        Data = false,
                         Message = "Email isnot valid",
                         Status = StatusType.Failure
                     };
@@ -68,6 +68,9 @@ namespace Library.Application.Manager.Implementation
 
                 // Hash the password before storing it
                 string hashedPassword = HashPassword(staffRequest.Password);
+
+
+
                 var isEmailUnique = await _service.IsUniqueEmail(staffRequest.Email);
                 if (isEmailUnique == true)
                 {
@@ -80,8 +83,8 @@ namespace Library.Application.Manager.Implementation
                 }
 
                 // Check if the StaffCode is unique
-                var isStaffCodeUnique = await _service.IsUniqueStaffCode(staffRequest.StaffCode);
-                if (isStaffCodeUnique == true) 
+                var isStaffCodeExist = await _service.IsUniqueStaffCode(staffRequest.StaffCode);
+                if (isStaffCodeExist == true)
                 {
                     return new ServiceResult<bool>()
                     {
@@ -131,8 +134,8 @@ namespace Library.Application.Manager.Implementation
                 vm.Password = hashedPassword;
                 vm.IsActive = true;
 
-                vm.CreatedDate = DateTime.Now;
-                vm.UpdatedDate = DateTime.Now;
+                vm.CreatedDate = DateTime.Now.ToUniversalTime();
+                vm.UpdatedDate = DateTime.Now.ToUniversalTime();
 
 
                 int staffId = await _service.AddStaff(vm);
@@ -174,19 +177,19 @@ namespace Library.Application.Manager.Implementation
                 return new ServiceResult<bool>()
                 {
                     Data = false,
-                    Message = ex.Message,
+                    Message = "Something went wrong",
                     Status = StatusType.Failure
                 };
             }
         }
 
-        private bool IsEmailValid(string email)
+        public bool IsEmailValid(string email)
         {
             const string emailPattern = @"^[^\s@]+@[^\s@]+\.[^\s@]+$";
             return Regex.IsMatch(email, emailPattern);
         }
 
-        private bool IsPasswordValid(string password)
+        public bool IsPasswordValid(string password)
         {
             const int MinimumLength = 5;
             const string SpecialCharacters = @"!@#$%^&*()-_=+[{]}\|;:'"",<.>/?";
@@ -209,7 +212,7 @@ namespace Library.Application.Manager.Implementation
             return true;
         }
 
-        private string HashPassword(string password)
+        public string HashPassword(string password)
         {
             using (var sha256 = SHA256.Create())
             {
@@ -229,6 +232,7 @@ namespace Library.Application.Manager.Implementation
                           select new StaffResponse()
                           {
                               Id = s.Id,
+                              Name = s.Name,
                               Username = s.Username,
                               Password = s.Password,
                               Email = s.Email,
@@ -261,8 +265,6 @@ namespace Library.Application.Manager.Implementation
                     Status = StatusType.Failure,
                 };
             }
-
-
             var result = new StaffResponse()
             {
                 Id = staff.Id,
@@ -299,6 +301,8 @@ namespace Library.Application.Manager.Implementation
                 };
             }
             var vm = _mapper.Map<EStaff>(staffRequest);
+    
+
             var result = await _service.UpdateStaff(vm);
 
             if (staffRequest.StaffType != StaffType.Admin)
@@ -307,7 +311,7 @@ namespace Library.Application.Manager.Implementation
                 staffMemberMapper.MemberCode = staffRequest.StaffCode;
                 staffMemberMapper.FullName = staffRequest.Name;
                 staffMemberMapper.ReferenceId = staffRequest.Id;
-                await _memberService.UpdateMember(staffMemberMapper);               
+                await _memberService.UpdateMember(staffMemberMapper);
             }
             var staffLoginMapper = _mapper.Map<ELogin>(staffRequest);
             staffLoginMapper.StaffId = staffRequest.Id;
@@ -319,7 +323,7 @@ namespace Library.Application.Manager.Implementation
                 Message = result == true ? "Staff Updated Successfully!" : "Unable to Update Staff",
                 Status = result == true ? StatusType.Success : StatusType.Failure
             };
-        }
+        } 
         public async Task<ServiceResult<bool>> DeleteStaff(int id)
         {
             var staffList = await _service.DeleteStaff(id);

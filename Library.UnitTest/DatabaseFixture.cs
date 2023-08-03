@@ -38,6 +38,13 @@ namespace Library.UnitTest
             databaseContext.Books.AddRange(bookSettings);
             #endregion
 
+            //Feed StaffInfo Data
+            StaffDataInfo.Init();
+            var eStaff = StaffDataInfo.eStaffList;
+            databaseContext.Staffs.AddRange(eStaff);
+            var eLogin = StaffDataInfo.eLogin;
+           databaseContext.Logins.AddRange(eLogin);
+
             //feed StudentInfo Datalist
             StudentSettingDataInfo.init();
             var eStudentList = StudentSettingDataInfo.eStudentList;

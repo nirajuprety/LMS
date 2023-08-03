@@ -53,7 +53,7 @@ namespace Library.Infrastructure.Service
             return staffRole;
 
         }
-        private string HashPassword(string password)
+        public string HashPassword(string password)
         {
             using (var sha256 = SHA256.Create())
             {
@@ -67,8 +67,8 @@ namespace Library.Infrastructure.Service
         }
         public async Task<bool> LoginUser(ELogin eLogin)
         {
-            var user = _factory.GetInstance<ELogin>().ListAsync();
-            var userEmail = user.Result.Any(x => x.Email == eLogin.Email && x.Password == HashPassword(eLogin.Password));
+            var userList = await _factory.GetInstance<ELogin>().ListAsync();
+            var userEmail = userList.Any(x => x.Email == eLogin.Email && x.Password == HashPassword(eLogin.Password));
 
             return userEmail;
         }

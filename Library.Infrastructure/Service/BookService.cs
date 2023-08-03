@@ -62,6 +62,7 @@ namespace Library.Infrastructure.Service
                 }
                 user.IsDeleted = true;
                 user.IsActive = false;
+                //user.CreatedDate = DateTime.Now.ToUniversalTime();
                 user.BookStatus = Domain.Enum.BookStatus.Unavailable;
                 await service.UpdateAsync(user);
                 return true;

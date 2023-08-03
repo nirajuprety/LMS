@@ -38,7 +38,7 @@ namespace Library.Application.Manager.Implementation
                     Title = bookRequest.Title,
                     Author = bookRequest.Author,
                     ISBN = bookRequest.ISBN,
-                    PublicationDate = bookRequest.PublicationDate,
+                    PublicationDate = bookRequest.PublicationDate.ToUniversalTime(),
                     UpdatedBy = bookRequest.UpdatedBy
                 };
 

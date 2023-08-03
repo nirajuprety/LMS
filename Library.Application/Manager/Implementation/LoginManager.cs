@@ -22,6 +22,7 @@ namespace Library.Application.Manager.Implementation
         public IConfiguration _configuration;
         private readonly ILoginService _service;
         private readonly IMapper _mapper = null;
+        //private readonly ILogger
 
         public LoginManager(ILoginService service, IMapper mapper, IConfiguration config)
         {
@@ -73,40 +74,50 @@ namespace Library.Application.Manager.Implementation
 
         public async Task<string> GetToken(LoginRequest request)
         {
-            if (request != null && request.Email != null && request.Password != null)
+            try
             {
-                bool user = await _service.LoginUser(new ELogin()
+
+
+                if (request != null && request.Email != null && request.Password != null)
                 {
-                    Email = request.Email,
-                    Password = request.Password
-                });
-                string userRole = _service.GetUserRole(request.Email).Result.ToString();
-                if (user != null)
-                {
-                    // create claims details based on the user information
-                    var claims = new[] {
+                    bool user = await _service.LoginUser(new ELogin()
+                    {
+                        Email = request.Email,
+                        Password = request.Password
+                    });
+                    string userRole = _service.GetUserRole(request.Email).Result.ToString();
+                    if (user != null)
+                    {
+                        // create claims details based on the user information
+                        var claims = new[] {
                         new Claim(JwtRegisteredClaimNames.Sub, _configuration["Jwt:Subject"]),
                         new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                         new Claim(JwtRegisteredClaimNames.Iat, DateTime.UtcNow.ToString()),
                         new Claim("Email", request.Email.ToString()),
                         new Claim(ClaimTypes.Role, userRole),
+                        //new Claim(ClaimTypes.)
                     };
 
-                    var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
-                    var signIn = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-                    var token = new JwtSecurityToken(
-                        _configuration["Jwt:Issuer"],
-                        _configuration["Jwt:Audience"],
-                        claims,
-                        expires: DateTime.UtcNow.AddMinutes(10),
-                        signingCredentials: signIn);
+                        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
+                        var signIn = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+                        var token = new JwtSecurityToken(
+                            _configuration["Jwt:Issuer"],
+                            _configuration["Jwt:Audience"],
+                            claims,
+                            expires: DateTime.UtcNow.AddMinutes(10),
+                            signingCredentials: signIn);
 
-                    var userToken = new JwtSecurityTokenHandler().WriteToken(token);
-                    return userToken;
+                        var userToken = new JwtSecurityTokenHandler().WriteToken(token);
+                        return userToken;
+                    }
+
                 }
-
+                return "";
             }
-            return "";
+            catch (Exception e)
+            {
+                return "";
+            }
         }
     }
 }

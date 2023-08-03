@@ -21,7 +21,7 @@ namespace Library.Domain.Entities
         public bool IsActive { get; set; }
         public bool IsDeleted { get; set; }
         public string UpdatedBy { get; set; } = string.Empty;
-        public DateTime CreatedDate { get; set; } = DateTime.Now;
+        public DateTime CreatedDate { get; set; } = DateTime.Now.ToUniversalTime();
         public BookStatus BookStatus { get; set; }
 
     }

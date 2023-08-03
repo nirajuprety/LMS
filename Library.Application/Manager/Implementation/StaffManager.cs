@@ -131,8 +131,8 @@ namespace Library.Application.Manager.Implementation
                 vm.Password = hashedPassword;
                 vm.IsActive = true;
 
-                vm.CreatedDate = DateTime.Now;
-                vm.UpdatedDate = DateTime.Now;
+                vm.CreatedDate = DateTime.Now.ToUniversalTime();
+                vm.UpdatedDate = DateTime.Now.ToUniversalTime();
 
 
                 int staffId = await _service.AddStaff(vm);
@@ -304,9 +304,7 @@ namespace Library.Application.Manager.Implementation
             if (staffRequest.StaffType != StaffType.Admin)
             {
                 var staffMemberMapper = _mapper.Map<EMember>(staffRequest);
-                staffMemberMapper.MemberCode = staffRequest.StaffCode;
-                staffMemberMapper.FullName = staffRequest.Name;
-                staffMemberMapper.ReferenceId = staffRequest.Id;
+       
                 await _memberService.UpdateMember(staffMemberMapper);               
             }
             var staffLoginMapper = _mapper.Map<ELogin>(staffRequest);

@@ -9,9 +9,10 @@ namespace Library.Application.DTO.Response
 {
     public class MemberResponse
     {
+        public int Id { get; set; }
         public string FullName { get; set; }
-        public string Address { get; set; }
-        public string MemberType { get; set; }
+        public string Email { get; set; }
+        public int MemberType { get; set; }
         public int ReferenceId { get; set; }
         public int MemberCode { get; set; }
     }

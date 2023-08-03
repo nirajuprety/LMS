@@ -6,6 +6,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Test.Infrastructure.Mapper;
 using System;
+using Library.UnitTest.Infrastructure.Data;
 
 namespace Library.UnitTest
 {
@@ -34,6 +35,23 @@ namespace Library.UnitTest
             BookSettingDataInfo.Init();
             var bookSettings = BookSettingDataInfo.BookSetting;
             databaseContext.Books.AddRange(bookSettings);
+            #endregion
+            #region Feed MemberInfo Data
+            MemberEntityData.Init();
+            var member = MemberEntityData.MemberList;
+            databaseContext.Members.AddRange(member);
+            #endregion
+
+            #region Feed LoginInfo Data
+            LoginSettingDataInfo.Init();
+            var LoginUser= LoginSettingDataInfo.LoginData;
+            databaseContext.Logins.AddRange(LoginUser);
+            #endregion 
+            
+            #region Feed LoginInfo Data
+            LoginSettingDataInfo.Init();
+            var LoginStaffUser= LoginSettingDataInfo.LoginStaffData;
+            databaseContext.Logins.AddRange(LoginStaffUser);
             #endregion
 
             databaseContext.SaveChanges();

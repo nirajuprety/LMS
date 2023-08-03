@@ -21,15 +21,16 @@ namespace Library.UnitTest.Infrastructure.Service
             using (var factory = new ServiceFactory(_fixture.mockDbContext, true))
             {
                 var service = new BookService(factory);
+
                 //arrange
                 var requestresult = BookSettingDataInfo.SuccessBookSetting;
                 bool EXPECTED_RESULT = true;
+
                 //act
                 var result = await service.AddBook(requestresult);
+
                 //assert
-
                 Assert.Equivalent(EXPECTED_RESULT, result);
-
             }
 
         }
@@ -109,8 +110,27 @@ namespace Library.UnitTest.Infrastructure.Service
                 Assert.True(deletedBook.IsDeleted);
             }
         }
+        [Fact]
+        public async Task DeleteBook_SetsIsActiveToFalse()
+        {
+            DatabaseFixture _fixture = new DatabaseFixture();
+            using (var factory = new ServiceFactory(_fixture.mockDbContext, true))
+            {
+                var service = new BookService(factory);
 
+                //Arrange
+                int bookIdToDelete = 1;
 
+                //Act
+                await service.DeleteBook(bookIdToDelete);
+
+                //Assert
+                var deletedBook = _fixture.mockDbContext.Books.FirstOrDefault(b=>b.Id == bookIdToDelete);
+                Assert.NotNull(deletedBook);
+                Assert.False(deletedBook.IsActive);
+            }
+        }
+       
 
     }
 }

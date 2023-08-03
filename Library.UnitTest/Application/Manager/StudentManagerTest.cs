@@ -77,7 +77,7 @@ namespace Library.UnitTest.Application.Manager
             Assert.Equivalent(expectedResult, actualResult);
         }
 
-        [Fact]
+		[Fact]
         public async Task GetStudentById_OnSuccess_ReturnResponse()
         {
             //Arrange
@@ -98,8 +98,7 @@ namespace Library.UnitTest.Application.Manager
             Assert.Equivalent(expectedResult, actualResult);
         }
 
-
-        [Fact]
+		[Fact]
         public async Task DeleteStudent_OnSuccess_ReturnTrue()
         {
             //Arrange
@@ -117,7 +116,7 @@ namespace Library.UnitTest.Application.Manager
             Assert.Equivalent(expectedResult, actualResult);
         }
 
-        [Fact]
+		[Fact]
         public async Task UpdateStudent_OnSuccess_ReturnTrue()
         {
             //Arrange
@@ -228,5 +227,122 @@ namespace Library.UnitTest.Application.Manager
             //Assert
             Assert.Equivalent(Expected_Result, Actual_Result);
         }
-    }
+
+
+		[Fact]
+		public async Task AddStudent_OnFailure_ReturnFalse()
+		{
+			//Arrange
+			StudentSettingDataInfo.init();
+			var request = StudentSettingDataInfo.studentRequest;
+			var eStudent = StudentSettingDataInfo.eStudent;
+			var ExpectedResult = new ServiceResult<bool>()
+			{
+				Data = false,
+				Status = StatusType.Failure,
+				Message = "Something went wrong"
+			};
+			_mapperMock.Setup(x => x.Map<EStudent>(It.IsAny<StudentRequest>())).Returns(eStudent);
+			_serviceStudentMock.Setup(x => x.IsUniqueEmail(request.Email)).ReturnsAsync(false);
+			_serviceStudentMock.Setup(x => x.CreateStudent(eStudent)).ThrowsAsync(new Exception());
+
+			//Act
+			var Actual_Result = await _studentManager.CreateStudent(request);
+			//Assert
+			Assert.Equivalent(ExpectedResult, Actual_Result);
+		}
+
+		[Fact]
+		public async Task GetStudent_OnException_ReturnExceptionResponse()
+		{
+			//Arrange
+			var Expected_Result = new ServiceResult<List<StudentResponse>>()
+			{
+				Data = new List<StudentResponse>(),
+				Status = StatusType.Failure,
+				Message = "Something went wrong"
+			};
+			_serviceStudentMock.Setup(x => x.GetStudents()).ThrowsAsync(new Exception());
+			//Act
+			var Actual_Result = await _studentManager.GetStudents();
+			//Assert
+			Assert.Equivalent(Expected_Result, Actual_Result);
+		}
+
+		[Fact]
+		public async Task GetStudentByID_OnException_ReturnExceptionResponse()
+		{
+			//Arrange
+			int id = 1;
+			StudentSettingDataInfo.init();
+			var eStudent = StudentSettingDataInfo.eStudent;
+			var Expected_Result = new ServiceResult<StudentResponse>()
+			{
+				Data = new StudentResponse(),
+				Status = StatusType.Failure,
+				Message = "Something went wrong"
+			};
+			_serviceStudentMock.Setup(x => x.GetStudentByID(id)).ThrowsAsync(new Exception());
+			//Act
+			var Actual_Result = await _studentManager.GetStudentByID(id);
+			//Assert
+			Assert.Equivalent(Expected_Result, Actual_Result);
+		}
+
+		[Fact]
+		public async Task DeleteStudent_OnFailure_ReturnFalse_WithUserNotFoundMsg()
+		{
+			//Arrange
+			int id = 1;
+			var Expected_Result = new ServiceResult<bool>()
+			{
+				Data = false,
+				Status = StatusType.Failure,
+				Message = "User not found"
+			};
+			_serviceStudentMock.Setup(x => x.DeleteStudent(id)).ReturnsAsync(false);
+			//Act
+			var Actual_Result = await _studentManager.DeleteStudent(id);
+			//Assert
+			Assert.Equivalent(Expected_Result, Actual_Result);
+		}
+
+		[Fact]
+		public async Task DeleteStudent_OnFailure_ReturnFalse()
+		{
+			//Arrange
+			int id = 1;
+			var Expected_Result = new ServiceResult<bool>()
+			{
+				Data = false,
+				Status = StatusType.Failure,
+				Message = "Something went wrong"
+			};
+			_serviceStudentMock.Setup(x => x.DeleteStudent(id)).ThrowsAsync(new Exception());
+			//Act
+			var Actual_Result = await _studentManager.DeleteStudent(id);
+			//Assert
+			Assert.Equivalent(Expected_Result, Actual_Result);
+		}
+
+		[Fact]
+		public async Task UpdateStudent_OnFailure_ReturnFalse()
+		{
+            //Arrange
+            StudentSettingDataInfo.init();
+            var request = StudentSettingDataInfo.studentRequest;
+            var eStudent = StudentSettingDataInfo.eStudent;
+			var Expected_Result = new ServiceResult<bool>()
+			{
+				Data = false,
+				Status = StatusType.Failure,
+				Message = "Student not found"
+			};
+			_serviceStudentMock.Setup(x => x.UpdateStudent(eStudent)).ReturnsAsync(false);
+			//Act
+			var Actual_Result = await _studentManager.UpdateStudent(request);
+			//Assert
+			Assert.Equivalent(Expected_Result, Actual_Result);
+		}
+	}
 }

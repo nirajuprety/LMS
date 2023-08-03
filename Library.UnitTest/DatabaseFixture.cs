@@ -6,6 +6,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Test.Infrastructure.Mapper;
 using System;
+using Library.UnitTest.Infrastructure.Data;
+using Library.Domain.Entities;
 
 namespace Library.UnitTest
 {
@@ -28,14 +30,19 @@ namespace Library.UnitTest
             builder.UseApplicationServiceProvider(serviceCollection.BuildServiceProvider());
 
             var databaseContext = new DatabaseContext(builder.Options);
-            databaseContext.Database.EnsureCreated();   
-            
+            databaseContext.Database.EnsureCreated();
+
             #region Feed BookInfo Data
             BookSettingDataInfo.Init();
             var bookSettings = BookSettingDataInfo.BookSetting;
             databaseContext.Books.AddRange(bookSettings);
             #endregion
-            
+
+            //feed StudentInfo Datalist
+            StudentSettingDataInfo.init();
+            var eStudentList = StudentSettingDataInfo.eStudentList;
+            databaseContext.Students.AddRange(eStudentList);
+                       
             databaseContext.SaveChanges();
 
             mockDbContext = databaseContext;

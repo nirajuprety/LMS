@@ -13,12 +13,12 @@ namespace Library.Infrastructure.Service
     public class StudentService : IStudentService
     {
         private readonly IServiceFactory _factory;
-        private readonly IConfiguration _configuration;
+        //private readonly IConfiguration _configuration;
 
-        public StudentService(IServiceFactory factory, IConfiguration configuration)
+        public StudentService(IServiceFactory factory)
         {
             _factory = factory;
-            _configuration = configuration;
+            //_configuration = configuration;
         }
 
         public async Task<bool> CreateStudent(EStudent eStudent)
@@ -48,6 +48,7 @@ namespace Library.Infrastructure.Service
                 }
                 user.IsDeleted = true;
                 user.IsActive = false;
+                user.CreatedDate = DateTime.Now.ToUniversalTime(); // this is done to fix issue with "timestamp with time zone"
 
                 await service.UpdateAsync(user);
                 return true;
@@ -109,6 +110,7 @@ namespace Library.Infrastructure.Service
                 user.Email = eStudent.Email;
                 user.Faculty = eStudent.Faculty;
                 user.RollNo = eStudent.RollNo;
+                user.CreatedDate = eStudent.CreatedDate;
 
                 await service.UpdateAsync(user);
                 return true;

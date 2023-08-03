@@ -31,9 +31,10 @@ namespace Library.Infrastructure.Repository
                    .Build();
                 var connectionString = configuration.GetConnectionString("DefaultConnection");
                 optionsBuilder.UseNpgsql(connectionString);
-                #region remove the line below when going to production enviroment
-                optionsBuilder.EnableSensitiveDataLogging();
-                #endregion
+                
+                //#region remove the line below when going to production enviroment
+                //optionsBuilder.EnableSensitiveDataLogging();
+                //#endregion
             }
         }
         public DbSet<EStudent> Students { get; set; }

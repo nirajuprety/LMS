@@ -13,6 +13,7 @@ using System.Text;
 using Test.Infrastructure.Mapper;
 
 var builder = WebApplication.CreateBuilder(args);
+
 //Logger Configuration
 Log.Logger = new LoggerConfiguration()
     .ReadFrom.Configuration(builder.Configuration).CreateLogger();

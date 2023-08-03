@@ -25,6 +25,7 @@ namespace Library.UnitTest.Application.DTO.Request
                 },
             };
 
+
             SuccessBookSetting = new EBook()
             {
                 Title = "Sample Book",
@@ -39,7 +40,7 @@ namespace Library.UnitTest.Application.DTO.Request
             {
                 Id = 1,
                 Title = "Sample Book",
-                Author = "John Doe",
+                Author = "John Doe",                                  
                 ISBN = "1234567890",
                 PublicationDate = DateTime.Now,
                 UpdatedBy = "User123",
@@ -50,7 +51,11 @@ namespace Library.UnitTest.Application.DTO.Request
             {
                 new BookResponse()
                 {
-                    // Add properties for BookResponse, if needed.
+                Title = "Sample Book",
+                Author = "John Doe",
+                ISBN = "1234567890",
+                PublicationDate = DateTime.Now,
+                UpdatedBy = "User123",
                 }
             };
 
@@ -67,7 +72,11 @@ namespace Library.UnitTest.Application.DTO.Request
 
             BookRequests = new BookRequest()
             {
-                // Add properties for BookRequests, if needed.
+                Title = "Sample Book",
+                Author = "John Doe",
+                ISBN = "1234567890",
+                PublicationDate = DateTime.Now,
+                UpdatedBy = "User123",
             };
         }
 

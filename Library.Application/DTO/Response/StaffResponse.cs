@@ -16,9 +16,11 @@ namespace Library.Application.DTO.Response
         public string Email { get; set; }
         public bool IsDeleted { get; set; }
         public bool IsActive { get; set; }
-        public DateTime CreatedDate { get; set; }
-        public DateTime UpdatedDate { get; set; }
+        public DateTime CreatedDate { get; set; } = DateTime.Today.ToUniversalTime();   
+        public DateTime UpdatedDate { get; set; } = DateTime.Today.ToUniversalTime();
         public int StaffCode { get; set; }
         public StaffType StaffType { get; set; }
+
+       
     }
 }

@@ -6,18 +6,20 @@ using Library.Infrastructure.Service;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Npgsql;
 using Serilog;
 using Swashbuckle.AspNetCore.Filters;
 using System.Text;
 using Test.Infrastructure.Mapper;
 
 var builder = WebApplication.CreateBuilder(args);
+
 //Logger Configuration
 Log.Logger = new LoggerConfiguration()
     .ReadFrom.Configuration(builder.Configuration).CreateLogger();
 // Add services to the container.
 
-builder.Services.AddControllers();
+builder.Services.AddControllers(); 
 builder.Services.AddInInfrastructureServices(builder.Configuration);
 builder.Services.AddInApplicationServices(builder.Configuration);
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

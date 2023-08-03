@@ -43,8 +43,7 @@ namespace Library.Application.Manager.Implementation
                     Author = bookRequest.Author,
                     ISBN = bookRequest.ISBN,
                     PublicationDate = bookRequest.PublicationDate,
-                    UpdatedBy = bookRequest.UpdatedBy,
-                    BookStatus=Domain.Enum.BookStatus.Available
+                    UpdatedBy = bookRequest.UpdatedBy
                 };
 
                 var result = await _service.AddBook(parse);

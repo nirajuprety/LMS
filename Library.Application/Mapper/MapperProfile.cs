@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Library.Application.Mapper
 {
-    public class MapperProfile: Profile
+    public class MapperProfile : Profile
     {
         public MapperProfile()
         {
@@ -19,9 +19,15 @@ namespace Library.Application.Mapper
             CreateMap<EStudent, StudentResponse>();
             CreateMap<EBook, BookResponse>();
             CreateMap<BookRequest, EBook>();
+            CreateMap<StaffUpdateRequest, EStaff>();
+            CreateMap<StaffUpdateRequest, EMember>()
+                .ForMember(dest => dest.MemberCode, opt => opt.MapFrom(src => src.StaffCode))
+                .ForMember(dest => dest.ReferenceId, opt => opt.MapFrom(src => src.Id))
+                .ForMember(dest => dest.FullName, opt => opt.MapFrom(src => src.Name)).ReverseMap();
             CreateMap<StaffUpdateRequest, EStaff>(); //
             CreateMap<StaffUpdateRequest, EMember>();
             CreateMap<StaffUpdateRequest, ELogin>();
+            CreateMap<EMember, MemberResponse>().ForMember(x => x.Id, opt => opt.MapFrom(src => src.Id)).ReverseMap();
         }
     }
 }

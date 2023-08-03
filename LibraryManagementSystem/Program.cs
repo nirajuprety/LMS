@@ -24,7 +24,8 @@ builder.Services.AddInInfrastructureServices(builder.Configuration);
 builder.Services.AddInApplicationServices(builder.Configuration);
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 
-//For Authorize bu
+
+//For Authorize builder
 builder.Services.AddSwaggerGen(options =>
 {
     options.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme

@@ -59,8 +59,8 @@ namespace Library.UnitTest
             StaffDataInfo.Init();
             var eStaff = StaffDataInfo.eStaffList;
             databaseContext.Staffs.AddRange(eStaff);
-            var eLogin = StaffDataInfo.eLogin;
-           databaseContext.Logins.AddRange(eLogin);
+           // var eLogin = StaffDataInfo.eLogin;
+           //databaseContext.Logins.AddRange(eLogin);
 
             //feed StudentInfo Datalist
             StudentSettingDataInfo.init();

@@ -16,5 +16,6 @@ namespace Library.Domain.Interface
         //Task<bool> UpdateUser(ELogin eLogin);
         Task<bool> ValidateEmail(string email);
         Task<StaffType> GetUserRole(string email);
+        Task<int> GetUserId(string email);
     }
 }

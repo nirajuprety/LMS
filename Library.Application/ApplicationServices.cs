@@ -21,6 +21,8 @@ namespace Library.Application
             services.AddScoped<IStaffManager, StaffManager>();
             services.AddScoped<IMemberManager, MemberManager>();
 
+            services.AddScoped<IIssueManager, IssueManager>();
+
             return services;
         }
     }

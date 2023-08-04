@@ -25,6 +25,8 @@ namespace Library.Infrastructure
             services.AddScoped<IStaffService, StaffService>();
             services.AddScoped<IMemberService, MemberService>();
 
+            services.AddScoped<IIssuedService, IssueService>();
+
             return services;
         }
     }

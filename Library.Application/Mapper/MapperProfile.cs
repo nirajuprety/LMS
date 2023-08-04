@@ -28,6 +28,10 @@ namespace Library.Application.Mapper
             CreateMap<StaffUpdateRequest, EMember>();
             CreateMap<StaffUpdateRequest, ELogin>();
             CreateMap<EMember, MemberResponse>().ForMember(x => x.Id, opt => opt.MapFrom(src => src.Id)).ReverseMap();
+
+
+            CreateMap<IssueRequest, EIssueTable>();
+            CreateMap<EIssueTable, IssueResponse>();
         }
     }
 }

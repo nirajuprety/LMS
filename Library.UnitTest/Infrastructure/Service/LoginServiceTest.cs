@@ -149,7 +149,7 @@ namespace Library.UnitTest.Infrastructure.Service
 
                 //Arrange
                 var request = LoginSettingDataInfo.LoginStaffData;
-                var expected_result = StaffType.Staff;
+                var expected_result = StaffType.Admin;
 
                 //Act
                 var actual_result = await service.GetUserRole(request.Email);

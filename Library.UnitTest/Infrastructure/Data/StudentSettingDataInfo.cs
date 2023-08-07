@@ -21,6 +21,7 @@ namespace Library.UnitTest.Infrastructure.Data
                 RollNo = 1,
                 StudentCode = 1234,
                 UpdatedBy = "StaffID",
+                IsDeleted = false,
             };
             eStudentWithID = new EStudent
             {
@@ -60,6 +61,7 @@ namespace Library.UnitTest.Infrastructure.Data
                     FullName = "Manish Nagarkoti",
                     RollNo = 1,
                     StudentCode = 1234
+                    
                 }
             };
             studentResponse = new StudentResponse()
@@ -69,7 +71,7 @@ namespace Library.UnitTest.Infrastructure.Data
                 Faculty = "BSC Hons in Computing",
                 FullName = "Manish Nagarkoti",
                 RollNo = 1,
-                StudentCode = 1234
+                StudentCode = 1234,
             };
             eMember = new EMember()
             {

@@ -14,7 +14,13 @@ namespace Library.Application.DTO.Response
         public DateTime ReturnDate { get; set; }
         public int IssuedStatus { get; set; }
         public int BookId { get; set; }
-        public int StudentId { get; set; }
+
+        public int MemberId { get; set; }
         public int StaffId { get; set; }
+
+        public double FineRate { get; set; }
+        public double FineAmount { get; set; }
+
+        public bool IsDeleted { get; set; }
     }
 }

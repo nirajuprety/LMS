@@ -19,87 +19,85 @@ namespace Library.Infrastructure.Service
         public IssueService(IServiceFactory factory/* IConfiguration configuration*/)
         {
             _factory = factory;
-         
+
         }
         public async Task<bool> AddIssuedService(EIssueTable issue)
         {
-            try
+            if (issue == null)
+            {
+                return false;
+            }
+            else
             {
                 var service = _factory.GetInstance<EIssueTable>();
-               
                 await service.AddAsync(issue);
                 return true;
             }
-            catch (Exception ex) { throw ex; }
+
         }
 
         public async Task<bool> DeleteIssuedService(int id)
         {
-            try
+
+            var service = _factory.GetInstance<EIssueTable>();
+            var issue = await service.FindAsync(id);
+            if (issue == null)
             {
-                var service = _factory.GetInstance<EIssueTable>();
-                var issue = await service.FindAsync(id);
-                if (issue == null)
-                {
-                    return false;
-                }
-               
-                await service.RemoveAsync(issue);
-                return true;
+                return false;
             }
-            catch (Exception ex) { throw ex; }
+
+            await service.RemoveAsync(issue);
+            return true;
+
         }
 
         public async Task<EIssueTable> GetIssuedServiceById(int id)
-         {
-            try
+        {
+            var service = _factory.GetInstance<EIssueTable>();
+            var user = service.ListAsync().Result.FirstOrDefault(x => x.Id == id && x.IsDeleted == false);
+            if (user == null)
             {
-                var service = _factory.GetInstance<EIssueTable>();
-                var user = service.ListAsync().Result.FirstOrDefault(x =>  x.Id == id);
-                if (user == null)
-                {
-                    return null;
-                }
-                return user;
+                return null;
             }
-            catch (Exception ex) { throw ex; }
+            return user;
+
         }
 
         public async Task<List<EIssueTable>> GetIssuedServices()
         {
-            try
-            {
-                var service = _factory.GetInstance<EIssueTable>();
-                var result = await service.ListAsync();
-                return result;
-            }
-            catch (Exception ex) { throw ex; }
+
+            var service = _factory.GetInstance<EIssueTable>();
+            var result = await service.ListAsync();
+
+            return result;
+
         }
 
         public async Task<bool> UpdateIssuedService(EIssueTable issues)
         {
-            try
-            {
-                var service = _factory.GetInstance<EIssueTable>();
-                var issue = await service.FindAsync(issues.Id);
-                if (issue == null)
-                {
-                    return false;
-                }
-                issue.ReturnDate = DateTime.Now.ToUniversalTime();
-                issue.StudentId = issues.StudentId;
-                issue.StaffId = issues.StaffId;
-                issue.IssuedStatus = issues.IssuedStatus;
-                issue.IssuedDate = issues.IssuedDate.ToUniversalTime();
-                issue.BookId = issues.BookId;
 
-                await service.UpdateAsync(issue);
-                return true;
-            }
-            catch (Exception ex)
+            var service = _factory.GetInstance<EIssueTable>();
+            if (issues == null)
             {
-                throw ex;
+                return false;
             }
+            var issue = await service.FindAsync(issues.Id);
+            
+            //issue.ReturnDate = DateTime.Now.ToUniversalTime();
+            issue.MemberId = issues.MemberId;
+            issue.StaffId = issues.StaffId;
+            issue.IssuedStatus = issues.IssuedStatus;
+            issue.IssuedDate = issues.IssuedDate.ToUniversalTime();
+            issue.BookId = issues.BookId;
+            issue.IsDeleted = issues.IsDeleted;
+            issue.ReturnDate = issues.ReturnDate;
+            issue.FineRate = issues.FineRate;
+            issue.FineAmount = issues.FineAmount;
+         
+
+            await service.UpdateAsync(issue);
+            return true;
+
         }
     }
 }

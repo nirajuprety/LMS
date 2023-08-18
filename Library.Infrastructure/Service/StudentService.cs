@@ -31,7 +31,7 @@ namespace Library.Infrastructure.Service
             }
             catch (Exception ex)
             {
-                throw ex;
+                return false;
             }
         }
 
@@ -56,7 +56,7 @@ namespace Library.Infrastructure.Service
             }
             catch (Exception ex)
             {
-                throw ex;
+                return false;
             }
         }
 
@@ -68,7 +68,7 @@ namespace Library.Infrastructure.Service
                 var user = await service.FindAsync(id);
                 if (user == null)
                 {
-                    return user;
+                    return null;
                 }
                 return user;
             }

@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
 using AutoMapper.Execution;
+using Common.Kafka.Interfaces;
 using Library.Application.DTO.Request;
 using Library.Application.DTO.Response;
+using Library.Application.Kafka.Interface;
 using Library.Application.Manager.Interface;
 using Library.Domain.Entities;
 using Library.Domain.Interface;
@@ -20,14 +22,15 @@ namespace Library.Application.Manager.Implementation
 {
     public class IssueManager : IIssueManager
     {
-        //HttpClient 
-        Uri baseAddress = new Uri("https://localhost:7234/"); //change this url to FineProject URL
+		//HttpClient 
+        Uri baseAddress = new Uri("https://localhost:44375"); //change this url to FineProject URL
         private readonly HttpClient _httpClient;
 
         private readonly IIssuedService _service;
         private readonly IMemberService _memberService;
         private readonly IMapper _mapper;
         private readonly ILogger<IssueManager> _logger;
+        private readonly IAddIssueDetailsProducer _producer;
 
 
         public IssueManager()
@@ -35,7 +38,7 @@ namespace Library.Application.Manager.Implementation
             _httpClient = new HttpClient();
             _httpClient.BaseAddress = baseAddress;
         }
-        public IssueManager(IIssuedService issueService, IMapper mapper, ILogger<IssueManager> logger,IMemberService memberService)
+        public IssueManager(IIssuedService issueService, IMapper mapper, ILogger<IssueManager> logger,IMemberService memberService, IAddIssueDetailsProducer producer)
         {
             _service = issueService;
             _mapper = mapper;
@@ -43,6 +46,8 @@ namespace Library.Application.Manager.Implementation
             _memberService = memberService;
             _httpClient = new HttpClient();
             _httpClient.BaseAddress = baseAddress;
+            _producer = producer;
+
         }
 
         public async Task<ServiceResult<bool>> AddIssue(IssueRequest issueRequest, string Id)
@@ -69,8 +74,11 @@ namespace Library.Application.Manager.Implementation
                     issueParser.IsDeleted = false;
                     issueParser.FineAmount = rate * days;
                     var result = await _service.AddIssuedService(issueParser);
+                    
+                    //Kafka producer added
+					await _producer.AddIssue(issueParser, Id);
 
-                    _logger.LogInformation("Book Issues added Successfully" + JsonConvert.SerializeObject(issueParser));
+					_logger.LogInformation("Book Issues added Successfully" + JsonConvert.SerializeObject(issueParser));
 
                     serviceResult.Status = result ? StatusType.Success : StatusType.Failure;
                     serviceResult.Message = result ? "Issues added successfully" : "Failed to add Issue";

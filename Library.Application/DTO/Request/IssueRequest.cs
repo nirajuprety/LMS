@@ -15,7 +15,7 @@ namespace Library.Application.DTO.Request
         public DateTime ReturnDate { get; set; }
         public IssuedStatus IssuedStatus { get; set; }
         public int BookId { get; set; }
-        public int StudentId { get; set; }
+        public int MemberId { get; set; }
         //public int StaffId { get; set; }
     }
 }

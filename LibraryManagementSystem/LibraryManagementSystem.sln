@@ -16,7 +16,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Library.Application", "..\L
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Library.UnitTest", "..\Library.UnitTest\Library.UnitTest.csproj", "{6410DE55-4E8E-4A0A-B0F2-977267564C5A}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Common.Kafka", "..\..\..\..\.Net Practices\Kafka Implementation\Common.Kafka (1)\Common.Kafka\Common.Kafka.csproj", "{A0F8D6F0-D446-4B84-BC79-ABE8B9EFB015}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Common.Kafka", "..\..\..\Projects\FineSystemBackup\LibraryFineSystem\LibraryFineSystem\Common.Kafka\Common.Kafka.csproj", "{AC8A82CE-FA6B-47A4-A3A0-E0F4D3B58059}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -44,10 +44,10 @@ Global
 		{6410DE55-4E8E-4A0A-B0F2-977267564C5A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6410DE55-4E8E-4A0A-B0F2-977267564C5A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6410DE55-4E8E-4A0A-B0F2-977267564C5A}.Release|Any CPU.Build.0 = Release|Any CPU
-		{A0F8D6F0-D446-4B84-BC79-ABE8B9EFB015}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A0F8D6F0-D446-4B84-BC79-ABE8B9EFB015}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A0F8D6F0-D446-4B84-BC79-ABE8B9EFB015}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A0F8D6F0-D446-4B84-BC79-ABE8B9EFB015}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AC8A82CE-FA6B-47A4-A3A0-E0F4D3B58059}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AC8A82CE-FA6B-47A4-A3A0-E0F4D3B58059}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AC8A82CE-FA6B-47A4-A3A0-E0F4D3B58059}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AC8A82CE-FA6B-47A4-A3A0-E0F4D3B58059}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

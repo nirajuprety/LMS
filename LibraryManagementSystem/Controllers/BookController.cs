@@ -23,7 +23,7 @@ namespace LibraryManagementSystem.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles = "Admin")]
+        //[Authorize(Roles = "Admin")]
         public async Task<IActionResult> AddBook(BookRequest bookRequest)
         {
             var result = await _bookManager.AddBook(bookRequest);

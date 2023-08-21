@@ -17,6 +17,7 @@ using Library.Domain.Entities;
 using Library.Application.DTO.Request;
 using Library.UnitTest.Infrastructure.Data;
 using Library.Application.DTO.Response;
+using Library.Application.Kafka.Interface;
 
 namespace Library.UnitTest.Application.Manager
 {
@@ -25,13 +26,15 @@ namespace Library.UnitTest.Application.Manager
         private readonly IssueManager _issueManager;
         private readonly Mock<IIssuedService> _issueService = new Mock<IIssuedService>();
         private readonly Mock<IMemberService> _memberService = new Mock<IMemberService>();
+        private readonly Mock<IAddIssueDetailsProducer> _detailproducer = new Mock<IAddIssueDetailsProducer>();
+        
 
         private readonly Mock<ILogger<IssueManager>> _logger= new Mock<ILogger<IssueManager>>();
         private readonly Mock<IMapper> _mapperMock = new Mock<IMapper>();
 
         public IssueManagerTest() 
         {
-            _issueManager = new IssueManager(_issueService.Object, _mapperMock.Object, _logger.Object,_memberService.Object);
+            _issueManager = new IssueManager(_issueService.Object, _mapperMock.Object, _logger.Object,_memberService.Object,_detailproducer.Object);
         }
         [Fact]
         public async Task AddIssue_OnSuccess_ReturnTrue()

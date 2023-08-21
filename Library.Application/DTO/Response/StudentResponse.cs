@@ -14,5 +14,7 @@ namespace Library.Application.DTO.Response
         public string Faculty { get; set; }
         public int RollNo { get; set; }
         public int StudentCode { get; set; }
+        public bool IsDeleted{ get; set; }
+        
     }
 }

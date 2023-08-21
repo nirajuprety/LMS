@@ -291,7 +291,49 @@ namespace Library.UnitTest.Application.Manager
 		}
 
 		[Fact]
-		public async Task DeleteStudent_OnFailure_ReturnFalse_WithUserNotFoundMsg()
+		public async Task GetStudentByID_OnFailure_ReturnUserNotFound()
+		{
+			//Arrange
+			int id = 1;
+			StudentSettingDataInfo.init();
+			var eStudent = StudentSettingDataInfo.eStudent;
+			var Expected_Result = new ServiceResult<StudentResponse>()
+			{
+				Data = new StudentResponse() { Id = id },
+				Status = StatusType.Failure,
+				Message = "User not found"
+			};
+			_serviceStudentMock.Setup(x => x.GetStudentByID(id));
+			//Act
+			var Actual_Result = await _studentManager.GetStudentByID(id);
+			//Assert
+			Assert.Equivalent(Expected_Result, Actual_Result);
+		}
+
+        //revisit
+		[Fact]
+		public async Task GetByID_OnFailure_ReturnUserWasDeleted()
+		{
+			//Arrange
+			int id = 1;
+            StudentSettingDataInfo.init();
+            var eStudent= StudentSettingDataInfo.eStudent;
+            eStudent.IsDeleted = true;
+			var Expected_Result = new ServiceResult<StudentResponse>()
+			{
+				Data = new StudentResponse() { Id = id },
+				Status = StatusType.Failure,
+				Message = "User was deleted"
+			};
+			_serviceStudentMock.Setup(x => x.GetStudentByID(id)).ReturnsAsync(eStudent);
+			//Act
+			var Actual_Result = await _studentManager.GetStudentByID(id);
+			//Assert
+			Assert.Equivalent(Expected_Result, Actual_Result);
+		}
+
+		[Fact]
+		public async Task DeleteStudent_OnFailure_ReturnUserNotFound()
 		{
 			//Arrange
 			int id = 1;
@@ -307,7 +349,6 @@ namespace Library.UnitTest.Application.Manager
 			//Assert
 			Assert.Equivalent(Expected_Result, Actual_Result);
 		}
-
 		[Fact]
 		public async Task DeleteStudent_OnFailure_ReturnFalse()
 		{
@@ -344,6 +385,49 @@ namespace Library.UnitTest.Application.Manager
 			var Actual_Result = await _studentManager.UpdateStudent(request);
 			//Assert
 			Assert.Equivalent(Expected_Result, Actual_Result);
+		}
+
+		[Fact]
+		public async Task UpdateStudent_OnFailure_ReturnException()
+		{
+			//Arrange
+			StudentSettingDataInfo.init();
+			var request = StudentSettingDataInfo.studentRequest;
+			var Expected_Result = new ServiceResult<bool>()
+			{
+				Data = false,
+				Status = StatusType.Failure,
+				Message = "Something went wrong"
+			};
+			_mapperMock.Setup(x => x.Map<EStudent>(It.IsAny<StudentRequest>())).Throws(new Exception());
+			//Act
+			var Actual_Result = await _studentManager.UpdateStudent(request);
+			//Assert
+			Assert.Equivalent(Expected_Result, Actual_Result);
+		}
+
+		[Fact]
+		public async Task AddStudent_OnFailure_ReturnNullException()
+		{
+			//Arrange
+			StudentSettingDataInfo.init();
+			var request = StudentSettingDataInfo.studentRequest;
+
+			var eStudent = StudentSettingDataInfo.eStudent;
+			var expectedResult = new ServiceResult<bool>()
+			{
+				Data = false,
+				Status = StatusType.Failure,
+				Message = "Error while mapping"
+			};
+
+			//Act
+			// Map the eStudent entity to the StudentRequest DTO
+			_mapperMock.Setup(x => x.Map<EStudent>(It.IsAny<StudentRequest>()));
+			var actualResult = await _studentManager.CreateStudent(request);
+
+			//Assert
+			Assert.Equivalent(expectedResult, actualResult);
 		}
 	}
 }

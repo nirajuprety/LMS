@@ -8,6 +8,7 @@ namespace Library.Application.Kafka.Topic
 {
     public class KafkaTopic
     {
-        public static string FineCollectionById => "finecollection-by-id";
+        public static string FineCollection => "fine-collection";
+
     }
 }

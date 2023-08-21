@@ -36,9 +36,6 @@ namespace Library.Application.Manager.Implementation
 			try
 			{
 				var model = _mapper.Map<EStudent>(studentRequest);
-				model.IsActive = true;
-				model.IsDeleted = false;
-				model.CreatedDate = DateTime.Now.ToUniversalTime();  //Done due to handle UTC Exceptions
 
 				if (model == null)
 				{
@@ -46,9 +43,13 @@ namespace Library.Application.Manager.Implementation
 					{
 						Data = false,
 						Status = StatusType.Failure,
-						Message = "Error while parsing"
+						Message = "Error while mapping"
 					};
 				}
+				model.IsActive = true;
+				model.IsDeleted = false;
+				model.CreatedDate = DateTime.Now.ToUniversalTime();  //Done due to handle UTC Exceptions
+
 				if (!IsValidEmail(model.Email))
 				{
 					return new ServiceResult<bool>()
@@ -223,19 +224,19 @@ namespace Library.Application.Manager.Implementation
 		{
 			try
 			{
-				//var model = _mapper.Map<EStudent>(studentRequest);
+				var model = _mapper.Map<EStudent>(studentRequest);
 				//model.Id = studentRequest.Id;
 
-				var model = new EStudent()
-				{
-					Id = studentRequest.Id,
-					Email = studentRequest.Email,
-					FullName = studentRequest.FullName,
-					Faculty = studentRequest.Faculty,
-					RollNo = studentRequest.RollNo,
-					StudentCode = studentRequest.StudentCode,
-					UpdatedBy = studentRequest.UpdatedBy,
-				};
+				//var model = new EStudent()
+				//{
+				//	Id = studentRequest.Id,
+				//	Email = studentRequest.Email,
+				//	FullName = studentRequest.FullName,
+				//	Faculty = studentRequest.Faculty,
+				//	RollNo = studentRequest.RollNo,
+				//	StudentCode = studentRequest.StudentCode,
+				//	UpdatedBy = studentRequest.UpdatedBy,
+				//};
 
 				var user = await _service.UpdateStudent(model);
 				return new ServiceResult<bool>()

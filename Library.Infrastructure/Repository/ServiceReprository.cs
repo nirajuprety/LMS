@@ -25,6 +25,8 @@ namespace Library.Infrastructure.Repository
         public async Task<List<t>> ListAsync()
         {
             var result = await entity.AsNoTracking().ToListAsync();
+
+
             return result;
         }
         public async Task<t> UpdateAsync(t model)
@@ -34,6 +36,7 @@ namespace Library.Infrastructure.Repository
 
             try
             {
+                db.ChangeTracker.Clear();
                 var newEntity = entity.Update(model);
                 var newEntityToRet = newEntity.Entity;
                 db.SaveChanges();

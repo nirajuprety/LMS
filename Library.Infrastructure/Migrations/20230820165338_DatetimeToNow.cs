@@ -7,7 +7,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Library.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class Init : Migration
+    public partial class DatetimeToNow : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -43,8 +43,11 @@ namespace Library.Infrastructure.Migrations
                     ReturnDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
                     IssuedStatus = table.Column<int>(type: "integer", nullable: false),
                     BookId = table.Column<int>(type: "integer", nullable: false),
-                    StudentId = table.Column<int>(type: "integer", nullable: false),
-                    StaffId = table.Column<int>(type: "integer", nullable: false)
+                    MemberId = table.Column<int>(type: "integer", nullable: false),
+                    StaffId = table.Column<int>(type: "integer", nullable: false),
+                    FineRate = table.Column<double>(type: "double precision", nullable: false),
+                    FineAmount = table.Column<double>(type: "double precision", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "boolean", nullable: false)
                 },
                 constraints: table =>
                 {

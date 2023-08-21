@@ -19,7 +19,7 @@ namespace Library.Application.Kafka.Handler
         }
         public Task HandleAsync(string key, IssueRequest issueRequest) 
         {
-            _manager.AddIssue(issueRequest);
+            //_manager.AddIssue(issueRequest);
             return Task.CompletedTask;
         }
     }

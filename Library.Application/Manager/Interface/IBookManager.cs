@@ -16,6 +16,6 @@ namespace Library.Application.Manager.Interface
         Task<ServiceResult<BookResponse>> GetBookById(int id);
         Task<ServiceResult<List<BookResponse>>> GetBooks();
         Task<ServiceResult<bool>> UpdateBook(BookRequest bookRequest);
-        Task<ServiceResult<bool>> BorrowBook(int bookId, int memberId);
+        
     }
 }

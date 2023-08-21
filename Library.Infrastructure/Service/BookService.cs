@@ -32,23 +32,7 @@ namespace Library.Infrastructure.Service
             catch (Exception ex) { throw ex; }
         }
 
-        public async Task<bool> BorrowBook(int id, int memberId)
-        {
-            var bookservice = _factory.GetInstance<EBook>();
-            var memberService = _factory.GetInstance<EMember>();
-            var book = await bookservice.FindAsync(id);
-            if (book == null || !book.IsActive)
-            {
-                return false;
-            }
-
-            var member = await memberService.FindAsync(id);
-            if (member == null)
-            {
-                return false;
-            }
-            return true;
-        }
+        
 
         public async Task<bool> DeleteBook(int id)
         {

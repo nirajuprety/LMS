@@ -85,13 +85,15 @@ namespace Library.Infrastructure.Service
         public async Task<bool> DeleteStaff(int id)
         {
             var service = _factory.GetInstance<EStaff>();
-            var result = await service.FindAsync(id);
-            //await service.RemoveAsync(result);
+            var result =  service.ListAsync().Result.FirstOrDefault(x=>x.Id == id);
+            
 
             if (result != null)
             {
                 result.IsDeleted = true;
                 result.IsActive = false;
+                result.UpdatedDate = DateTime.Now;
+                //result.UpdatedDate=DateTime.Now;
                 await service.UpdateAsync(result);
                 return true;
             }
@@ -115,9 +117,15 @@ namespace Library.Infrastructure.Service
 
         public async Task<bool> IsUniqueEmail(string email)
         {
-            var staff = await _factory.GetInstance<EStaff>().ListAsync();
-            var result = staff.Where(staff => staff.Email == email).Any();
-            return result;
+            try
+            {
+                var staff = await _factory.GetInstance<EStaff>().ListAsync();
+                var result = staff.Where(staff => staff.Email == email).Any();
+                return result;
+            }catch(Exception e)
+            {
+                throw e;
+            }
         }
 
         public async Task<bool> IsUniqueStaffCode(int StaffCode)

@@ -17,6 +17,7 @@ using System.Text.Json;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using static Library.Infrastructure.Service.Common;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Model;
 
 namespace Library.Application.Manager.Implementation
 {
@@ -105,28 +106,6 @@ namespace Library.Application.Manager.Implementation
                     };
                 }
 
-                // Validate that the first character of the name starts with a capital letter
-                if (!char.IsUpper(staffRequest.Name.FirstOrDefault()))
-                {
-                    return new ServiceResult<bool>()
-                    {
-                        Data = false,
-                        Message = "Name should start with a capital letter",
-                        Status = StatusType.Failure
-                    };
-                }
-
-
-                // Validate that the first character of the username starts with a capital letter
-                if (!char.IsUpper(staffRequest.Username.FirstOrDefault()))
-                {
-                    return new ServiceResult<bool>()
-                    {
-                        Data = false,
-                        Message = "Username should start with a capital letter",
-                        Status = StatusType.Failure
-                    };
-                }
 
 
                 var vm = _mapper.Map<EStaff>(staffRequest);
@@ -134,8 +113,10 @@ namespace Library.Application.Manager.Implementation
                 vm.Password = hashedPassword;
                 vm.IsActive = true;
 
-                vm.CreatedDate = DateTime.Now.ToUniversalTime();
-                vm.UpdatedDate = DateTime.Now.ToUniversalTime();
+                //vm.CreatedDate = DateTime.Now.ToUniversalTime();
+                //vm.UpdatedDate = DateTime.Now.ToUniversalTime();
+                vm.CreatedDate = DateTime.UtcNow;
+                vm.UpdatedDate = DateTime.UtcNow;
 
 
                 int staffId = await _service.AddStaff(vm);
@@ -236,13 +217,12 @@ namespace Library.Application.Manager.Implementation
                               Username = s.Username,
                               Password = s.Password,
                               Email = s.Email,
-                              CreatedDate = s.CreatedDate,
                               UpdatedDate = s.UpdatedDate,
+                              CreatedDate = s.CreatedDate,
                               IsDeleted = s.IsDeleted,
                               IsActive = s.IsActive,
                               StaffCode = s.StaffCode,
                               StaffType = s.StaffType
-
                           }).ToList();
             return new ServiceResult<List<StaffResponse>>()
             {
@@ -290,6 +270,30 @@ namespace Library.Application.Manager.Implementation
 
         public async Task<ServiceResult<bool>> UpdateStaff(StaffUpdateRequest staffRequest)
         {
+            //Email validation
+            bool validateEmail = IsEmailValid(staffRequest.Email);
+            if (!validateEmail)
+            {
+                Log.Information("Email validation failed for: " + staffRequest.Email);
+                return new ServiceResult<bool>()
+                {
+                    Data = false,
+                    Message = "Email is not valid",
+                    Status = StatusType.Failure
+                };
+            }
+
+            // Password validation
+            if (!IsPasswordValid(staffRequest.Password))
+            {
+                Log.Information("Password validation failed for: " + staffRequest.Password);
+                return new ServiceResult<bool>()
+                {
+                    Data = false,
+                    Message = "Password is not valid",
+                    Status = StatusType.Failure
+                };
+            }
             var staffList = await _service.GetStaffById(staffRequest.Id);
             if (staffList == null)
             {
@@ -301,7 +305,7 @@ namespace Library.Application.Manager.Implementation
                 };
             }
             var vm = _mapper.Map<EStaff>(staffRequest);
-    
+
 
             var result = await _service.UpdateStaff(vm);
 
@@ -323,7 +327,7 @@ namespace Library.Application.Manager.Implementation
                 Message = result == true ? "Staff Updated Successfully!" : "Unable to Update Staff",
                 Status = result == true ? StatusType.Success : StatusType.Failure
             };
-        } 
+        }
         public async Task<ServiceResult<bool>> DeleteStaff(int id)
         {
             var staffList = await _service.DeleteStaff(id);

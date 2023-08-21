@@ -2,6 +2,7 @@
 using Common.Kafka.Model;
 using Confluent.Kafka;
 using Library.Application.DTO.Request;
+using Library.Application.Kafka.Topic;
 using Microsoft.Extensions.Hosting;
 using System;
 using System.Collections.Generic;
@@ -32,11 +33,11 @@ namespace Library.Application.Kafka.Consumer
         {
             try
             {
-                await _consumer.Consume(KafkaTopic.UserSignUpUpdate, stoppingToken, model);
+                await _consumer.Consume(KafkaTopic.FineCollectionById, stoppingToken, model);
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"{(int)HttpStatusCode.InternalServerError} ConsumeFailedOnTopic - {KafkaTopic.UserSignUpUpdate}, {ex}");
+                Console.WriteLine($"{(int)HttpStatusCode.InternalServerError} ConsumeFailedOnTopic - {KafkaTopic.FineCollectionById}, {ex}");
             }
         }
 

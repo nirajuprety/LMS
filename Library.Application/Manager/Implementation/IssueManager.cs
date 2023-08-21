@@ -75,17 +75,22 @@ namespace Library.Application.Manager.Implementation
                     issueParser.FineAmount = rate * days;
                     var result = await _service.AddIssuedService(issueParser);
 
-                    //var parse2 = new EIssueTable()
-                    //{
-                    //    FineAmount = issueParser.FineAmount,
-                    //    BookId = issueParser.BookId,
-                    //    FineRate = rate,
-                    //    Id = userId
-                    //};
-                    var issueParser2 = _mapper.Map<IssueProducerRequest>(issueParser);
+                    var parse2 = new IssueProducerRequest() {
+                        FineAmount = issueParser.FineAmount,
+                        BookId = issueParser.BookId,
+                        FineRate = issueParser.FineRate,
+                        IsDeleted = issueParser.IsDeleted,
+                        IssuedDate = issueParser.IssuedDate,    
+                        ReturnDate = issueParser.ReturnDate,
+                        MemberId = issueParser.MemberId,
+                        IssuedStatus = issueParser.IssuedStatus,
+                        StaffId = issueParser.StaffId,
+                        
+                    };
+                    //var issueParser2 = _mapper.Map<IssueProducerRequest>(issueParser);
 
                     //Kafka producer added
-                    await _producer.AddIssue(issueParser2, Id);
+                    await _producer.AddIssue(parse2, Id);
 
 					_logger.LogInformation("Book Issues added Successfully" + JsonConvert.SerializeObject(issueParser));
 

@@ -69,6 +69,10 @@ namespace Library.Application.Manager.Implementation
                     TimeSpan difference = issueRequest.ReturnDate - issueRequest.IssuedDate;
                     int days = difference.Days;
 
+                    if (days <= 15) {
+                        days = 0;
+                    }
+
                     issueParser.StaffId = userId;
                     issueParser.FineRate = rate;
                     issueParser.IsDeleted = false;
@@ -85,9 +89,9 @@ namespace Library.Application.Manager.Implementation
                         MemberId = issueParser.MemberId,
                         IssuedStatus = issueParser.IssuedStatus,
                         StaffId = issueParser.StaffId,
+                        Days = days
                         
                     };
-                    //var issueParser2 = _mapper.Map<IssueProducerRequest>(issueParser);
 
                     //Kafka producer added
                     await _producer.AddIssue(parse2, Id);

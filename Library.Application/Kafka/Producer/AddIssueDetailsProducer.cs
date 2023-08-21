@@ -13,13 +13,13 @@ namespace Library.Application.Kafka.Producer
 {
 	public class AddIssueDetailsProducer : IAddIssueDetailsProducer
 	{
-		private readonly IKafkaProducer<string, EIssueTable> _kafkaProducer;
-		public AddIssueDetailsProducer(IKafkaProducer<string, EIssueTable> kafkaProducer)
+		private readonly IKafkaProducer<string, IssueProducerRequest> _kafkaProducer;
+		public AddIssueDetailsProducer(IKafkaProducer<string, IssueProducerRequest> kafkaProducer)
 		{
 			_kafkaProducer = kafkaProducer;
 		}
 
-		public async Task AddIssue(EIssueTable eIssueRequest,string Id)
+		public async Task AddIssue(IssueProducerRequest eIssueRequest,string Id)
 		{
 			await _kafkaProducer.ProduceAsync(KafkaTopic.FineCollection, null , eIssueRequest);
 		}

@@ -32,6 +32,8 @@ namespace Library.Application.Mapper
 
             CreateMap<IssueRequest, EIssueTable>();
             CreateMap<EIssueTable, IssueResponse>();
+
+            CreateMap<IssueProducerRequest, EIssueTable>();
         }
     }
 }

@@ -20,5 +20,6 @@ namespace Library.Application.DTO.Request
         public double FineRate { get; set; }
         public double FineAmount { get; set; }
         public bool IsDeleted { get; set; }
+        public int Days { get; set; }
     }
 }

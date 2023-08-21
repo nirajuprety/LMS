@@ -116,7 +116,7 @@ namespace Library.Application.Manager.Implementation
                 //vm.CreatedDate = DateTime.Now.ToUniversalTime();
                 //vm.UpdatedDate = DateTime.Now.ToUniversalTime();
                 vm.CreatedDate = DateTime.UtcNow;
-                vm.UpdatedDate = DateTime.UtcNow;
+                //vm.UpdatedDate = DateTime.Now.ToUniversalTime();
 
 
                 int staffId = await _service.AddStaff(vm);
@@ -331,7 +331,8 @@ namespace Library.Application.Manager.Implementation
         public async Task<ServiceResult<bool>> DeleteStaff(int id)
         {
             var staffList = await _service.DeleteStaff(id);
-            await _memberService.DeleteMember(id);
+           
+            var data = await _memberService.DeleteMember(id);
             await _service.DeleteUser(id);
             if (staffList == false)
                 return new ServiceResult<bool>()

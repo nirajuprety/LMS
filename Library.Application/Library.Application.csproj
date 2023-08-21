@@ -29,7 +29,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Projects\FineSystemBackup\LibraryFineSystem\LibraryFineSystem\Common.Kafka\Common.Kafka.csproj" />
+    <ProjectReference Include="..\..\..\..\.Net Practices\Kafka Implementation\Common.Kafka (1)\Common.Kafka\Common.Kafka.csproj" />
     <ProjectReference Include="..\Library.Domain\Library.Domain.csproj" />
     <ProjectReference Include="..\Library.Infrastructure\Library.Infrastructure.csproj" />
   </ItemGroup>

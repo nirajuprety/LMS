@@ -18,8 +18,8 @@ namespace Library.Domain.Entities
         public string Email { get; set; }
         public bool IsDeleted { get; set; }
         public bool IsActive { get; set; }
-        public DateTime CreatedDate { get; set; }=DateTime.Now;
-        public DateTime UpdatedDate { get; set; }=DateTime.Now;
+        public DateTime CreatedDate { get; set; }
+        public DateTime? UpdatedDate { get; set; }
         public int StaffCode { get; set; }
         public StaffType StaffType { get; set; }
 

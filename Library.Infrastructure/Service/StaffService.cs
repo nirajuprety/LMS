@@ -71,7 +71,7 @@ namespace Library.Infrastructure.Service
             result.Name = eStaff.Name;
             result.Email = eStaff.Email;
             result.UpdatedDate = DateTime.Now.ToUniversalTime();
-            result.CreatedDate =eStaff.CreatedDate.ToUniversalTime();
+            result.CreatedDate = eStaff.CreatedDate.ToUniversalTime();
             result.StaffCode = eStaff.StaffCode;
             result.StaffType = eStaff.StaffType;
 
@@ -85,14 +85,14 @@ namespace Library.Infrastructure.Service
         public async Task<bool> DeleteStaff(int id)
         {
             var service = _factory.GetInstance<EStaff>();
-            var result =  service.ListAsync().Result.FirstOrDefault(x=>x.Id == id);
-            
+            var result = service.ListAsync().Result.FirstOrDefault(x => x.Id == id);
+
 
             if (result != null)
             {
                 result.IsDeleted = true;
                 result.IsActive = false;
-                result.UpdatedDate = DateTime.Now;
+                result.UpdatedDate = DateTime.Now.ToUniversalTime();
                 //result.UpdatedDate=DateTime.Now;
                 await service.UpdateAsync(result);
                 return true;
@@ -101,9 +101,11 @@ namespace Library.Infrastructure.Service
         }
         public async Task<bool> DeleteUser(int id)
         {
-            var service = _factory.GetInstance<ELogin>();
-            var result = await service.FindAsync(id);
-            await service.RemoveAsync(result);
+            var member = _factory.GetInstance<ELogin>();
+            var service = await _factory.GetInstance<ELogin>().ListAsync();
+            var result = service.FirstOrDefault(x => x.StaffId == id);
+            var data = member.RemoveAsync(result);
+
 
             //if (result != null)
             //{
@@ -122,7 +124,8 @@ namespace Library.Infrastructure.Service
                 var staff = await _factory.GetInstance<EStaff>().ListAsync();
                 var result = staff.Where(staff => staff.Email == email).Any();
                 return result;
-            }catch(Exception e)
+            }
+            catch (Exception e)
             {
                 throw e;
             }

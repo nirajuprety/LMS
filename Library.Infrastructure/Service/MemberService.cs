@@ -55,13 +55,13 @@ namespace Library.Infrastructure.Service
         public async Task<bool> UpdateMember(EMember member)
         {
             var service = _factory.GetInstance<EMember>();
-            var result =  service.ListAsync().Result.Where(x=>x.ReferenceId == member.ReferenceId).FirstOrDefault();
+            var result = service.ListAsync().Result.Where(x => x.ReferenceId == member.ReferenceId).FirstOrDefault();
 
             result.FullName = member.FullName;
             result.Email = member.Email;
             result.MemberType = member.MemberType;
             result.MemberCode = member.MemberCode;
-            
+
             await service.UpdateAsync(result);
 
             return true;
@@ -69,9 +69,10 @@ namespace Library.Infrastructure.Service
         }
         public async Task<bool> DeleteMember(int id)
         {
-            var service = _factory.GetInstance<EMember>();
-            var result = await service.FindAsync(id);
-            await service.RemoveAsync(result);
+            var member = _factory.GetInstance<EMember>();
+            var service = await _factory.GetInstance<EMember>().ListAsync();
+            var result = service.FirstOrDefault(x => x.ReferenceId == id);
+            var data = member.RemoveAsync(result);
 
             //if (result != null)
             //{

@@ -38,7 +38,7 @@ namespace Library.Infrastructure.Repository
             {
                 db.ChangeTracker.Clear();
                 var newEntity = entity.Update(model);
-                var newEntityToRet = newEntity.Entity;
+                var newEntityToRet = newEntity.Entity; 
                 db.SaveChanges();
 
                 return newEntityToRet;

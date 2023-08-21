@@ -77,7 +77,7 @@ namespace Library.UnitTest.Application.Manager
                 Status = StatusType.Success
             };
             _issueService.Setup(x => x.GetIssuedServiceById(1)).ReturnsAsync(issueTableRequest);
-            _issueService.Setup(x => x.DeleteIssuedService(1)).ReturnsAsync(true);
+            _issueService.Setup(x => x.UpdateIssuedService(issueTableRequest)).ReturnsAsync(true);
 
 
             //act

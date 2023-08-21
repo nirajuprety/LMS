@@ -195,7 +195,7 @@ namespace Library.Infrastructure.Migrations
                     b.Property<int>("StaffType")
                         .HasColumnType("integer");
 
-                    b.Property<DateTime>("UpdatedDate")
+                    b.Property<DateTime?>("UpdatedDate")
                         .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("Username")

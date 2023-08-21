@@ -8,21 +8,21 @@ using System.Threading.Tasks;
 
 namespace Library.Domain.Entities
 {
-    public  class EStaff
+    public class EStaff
     {
         [Key]
-        public int Id{ get; set; }
+        public int Id { get; set; }
         public string Username { get; set; }
         public string Password { get; set; }
-        public string Name{ get; set; }
+        public string Name { get; set; }
         public string Email { get; set; }
         public bool IsDeleted { get; set; }
         public bool IsActive { get; set; }
-        public DateTime CreatedDate{ get; set; } = DateTime.UtcNow;    
-        public DateTime UpdatedDate { get; set; } = DateTime.UtcNow;
-        public int StaffCode{ get; set;}
-        public StaffType StaffType { get; set; } 
+        public DateTime CreatedDate { get; set; }
+        public DateTime? UpdatedDate { get; set; }
+        public int StaffCode { get; set; }
+        public StaffType StaffType { get; set; }
 
-    }    
     }
+}
 

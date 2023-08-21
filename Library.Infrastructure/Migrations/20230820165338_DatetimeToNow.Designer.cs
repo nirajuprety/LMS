@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Library.Infrastructure.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20230803111018_Init")]
-    partial class Init
+    [Migration("20230820165338_DatetimeToNow")]
+    partial class DatetimeToNow
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -80,19 +80,28 @@ namespace Library.Infrastructure.Migrations
                     b.Property<int>("BookId")
                         .HasColumnType("integer");
 
+                    b.Property<double>("FineAmount")
+                        .HasColumnType("double precision");
+
+                    b.Property<double>("FineRate")
+                        .HasColumnType("double precision");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("boolean");
+
                     b.Property<DateTime>("IssuedDate")
                         .HasColumnType("timestamp without time zone");
 
                     b.Property<int>("IssuedStatus")
                         .HasColumnType("integer");
 
+                    b.Property<int>("MemberId")
+                        .HasColumnType("integer");
+
                     b.Property<DateTime>("ReturnDate")
                         .HasColumnType("timestamp without time zone");
 
                     b.Property<int>("StaffId")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("StudentId")
                         .HasColumnType("integer");
 
                     b.HasKey("Id");

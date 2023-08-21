@@ -11,6 +11,6 @@ namespace Library.Application.Kafka.Interface
 {
 	public interface IAddIssueDetailsProducer
 	{
-		Task AddIssue(EIssueTable issueRequest, string Id);
+		Task AddIssue(IssueProducerRequest issueRequest, string Id);
 	}
 }
